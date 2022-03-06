@@ -17,25 +17,25 @@ var garageState = 'unknown'
 var garageStateSince = new Date().toISOString()
 
 var startDashboard = function() {
-  console.log('Started!!!')
 }
 
 setTimeout(function() {
   startDashboard()
 }, startupDelay);
 
+// MyQ
 setInterval(function() {
-  myq.refreshDevices().then(e => {
-    let device = myq.getDevice('CG08503460EE')
-    if (device != null) {
-      garageState = device.state.door_state
-      garageStateSince = device.state.last_update
-    } else {
-      garageState = 'unknown'
-      garageStateSince = new Date().toISOString()
-    }
-  })
-}, 3000);
+  // myq.refreshDevices().then(e => {
+  //   let device = myq.getDevice('CG08503460EE')
+  //   if (device != null) {
+  //     garageState = device.state.door_state
+  //     garageStateSince = device.state.last_update
+  //   } else {
+  //     garageState = 'unknown'
+  //     garageStateSince = new Date().toISOString()
+  //   }
+  // })
+}, 5000);
 
 
 
@@ -95,8 +95,7 @@ app.get('/testNotification', async (req, res) => {
 //   server.use(express.static(__dirname))
 // });
 
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {})
 
 
