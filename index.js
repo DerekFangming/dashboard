@@ -1,9 +1,9 @@
-import { myQApi } from "@hjdhjd/myq"
 import express from 'express'
 import path from 'path'
 import { startNicehash, getNicehashStatus } from './nicehash.js'
+import { startMyq, getMyqStatus } from './myq.js'
 
-const myq = new myQApi('synfm123@gmail.com', process.env.MYQ_PASSWORD)
+
 const app = express()
 const __dirname = path.resolve()
 
@@ -11,10 +11,8 @@ const port = '9002'
 const production = process.env.PRODUCTION == 'true'
 let startupDelay = production ? 5000 : 0
 
-var garageState = 'unknown'
-var garageStateSince = new Date().toISOString()
 
-// console.log(getUsdBalance())
+// startMyq()
 startNicehash()
 
 // startNicehash.startNicehash()
@@ -27,26 +25,16 @@ setTimeout(function() {
 
 // MyQ
 setInterval(function() {
-  // myq.refreshDevices().then(e => {
-  //   let device = myq.getDevice('CG08503460EE')
-  //   if (device != null) {
-  //     garageState = device.state.door_state
-  //     garageStateSince = device.state.last_update
-  //   } else {
-  //     garageState = 'unknown'
-  //     garageStateSince = new Date().toISOString()
-  //   }
-  // })
 }, 5000)
 
 setInterval(function() {
-  console.log(getNicehashStatus())
+  // console.log(getNicehashStatus())
 }, 1000) // 30 minutes 1800000
 
 
 
 app.get('/status', async (req, res) => {
-  res.status(200).json({garageState: garageState, garageStateSince: garageStateSince, nh: getNicehashStatus()})
+  res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus()})
 })
 
 app.get('/test', async (req, res) => {

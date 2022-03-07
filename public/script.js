@@ -5,7 +5,6 @@ $( document ).ready(function() {
   var statusFailedCount = 0
 
   var garageState
-  var garageOpenedSince
 
   loadStatus();
   setInterval(function() {
@@ -22,9 +21,9 @@ $( document ).ready(function() {
 
         statusFailedCount = 0
         lastStatusDate = new Date()
-        setServerState(true)
 
-        setGarageState(data.garageState, data.garageStateSince)
+        setServerState(true)
+        setGarageState(data.myq.state, data.myq.since)
 
       },
       error: function(xhr, status, errMsg){
