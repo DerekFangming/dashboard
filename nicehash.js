@@ -6,14 +6,14 @@ var btc = 0.0
 var usd = 0.0
 
 var minor = {status: 'STOPPED', speed: 0, devices:[]}
-var desltop = {status: 'STOPPED', speed: 0, devices:[]}
+var desktop = {status: 'STOPPED', speed: 0, devices:[]}
 
 export function getNicehashStatus() {
   return {
     btc: btc,
     usd: usd,
     minor: minor,
-    desltop: desltop
+    desktop: desktop
   }
 }
 
@@ -28,7 +28,7 @@ export function startNicehash() {
   getRigStatus()
   setInterval(function() {
     getRigStatus()
-  }, 15000)
+  }, 5000)
 
 }
 
@@ -54,21 +54,23 @@ function getRigStatus() {
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        minor.devices.push({name: d.name, temp: d.temperature, power: d.powerUsage, speed: speed})
+        let name = d.name.split('GeForce ')[1]
+        minor.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
         minor.speed += speed
       }
     }
 
     rigs = response.data.miningRigs.filter(r => r.rigId == '0-XC35BxW-3FK+VaIsOSyInA')
     if (rigs.length == 1) {
-      desltop.status = rigs[0].minerStatus
-      desltop.devices = []
-      desltop.speed = 0
+      desktop.status = rigs[0].minerStatus
+      desktop.devices = []
+      desktop.speed = 0
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        desltop.devices.push({name: d.name, temp: d.temperature, power: d.powerUsage, speed: speed})
-        desltop.speed += speed
+        let name = d.name.split('GeForce ')[1]
+        desktop.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
+        desktop.speed += speed
       }
     }
   }).catch(function (error) {

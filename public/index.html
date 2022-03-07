@@ -16,7 +16,7 @@
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="col server-status" style="background-color: #c3e6cb;">
+      <div class="col server-status border" style="background-color: #c3e6cb;">
         <div class="card my-2 border-0 server-status" style="background-color: #c3e6cb;">
           <div class="row no-gutters">
             <div class="col-auto">
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="col garage-status" style="background-color: #c3e6cb;">
+      <div class="col garage-status border" style="background-color: #c3e6cb;">
         <div class="card my-2 border-0 garage-status" style="background-color: #c3e6cb;">
           <div class="row no-gutters">
             <div class="col-auto">
@@ -48,11 +48,65 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-2 border" style="background-color: #c3e6cb;">
+        <div class="card my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/dotty/64/000000/bitcoin.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b>Nicehash</b></span></p>
+                <p class="lead mb-0"><small id="nhBtcTxt">BTC : 0</small></p>
+                <p class="lead mb-0"><small id="nhUsdTxt">USD: 0</small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 minor-status border" style="background-color: #c3e6cb;">
+        <div class="card minor-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-mining-finance-flatart-icons-outline-flatarticons.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b id="nhMinorStatTxt">Minor</b></span></p>
+                <div id="nhMinorDevicesBlk"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 desktop-status border" style="background-color: #c3e6cb;">
+        <div class="card desktop-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/external-icongeek26-outline-icongeek26/64/000000/external-desktop-devices-icongeek26-outline-icongeek26.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b id="nhDesktopStatTxt">Desktop</b></span></p>
+                <div id="nhDesktopDevicesBlk"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
   <div class="d-none">
     <a href="https://icons8.com/icon/66466/garage-door">Garage Door icon by Icons8</a>
     <a href="https://icons8.com/icon/4qX0ZSlRgn5B/server">Server icon by Icons8</a>
+    <a href="https://icons8.com/icon/44259/bitcoin">Bitcoin icon by Icons8</a>
+    <a href="https://icons8.com/icon/9T8Gef2DVZ89/mining">Mining icon by Icons8</a>
+    <a href="https://icons8.com/icon/O4RhxDarVAg2/desktop">Desktop icon by Icons8</a>
   </div>
 </body>
 </html>

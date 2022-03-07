@@ -15,8 +15,6 @@ let startupDelay = production ? 5000 : 0
 // startMyq()
 startNicehash()
 
-// startNicehash.startNicehash()
-
 
 setTimeout(function() {
   // console.log(22)
