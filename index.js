@@ -13,7 +13,7 @@ let startupDelay = production ? 5000 : 0
 
 
 // startMyq()
-startNicehash()
+// startNicehash()
 
 
 setTimeout(function() {
@@ -21,12 +21,7 @@ setTimeout(function() {
   //startDashboard()
 }, startupDelay);
 
-// MyQ
 setInterval(function() {
-}, 5000)
-
-setInterval(function() {
-  // console.log(getNicehashStatus())
 }, 1000) // 30 minutes 1800000
 
 

@@ -11,10 +11,12 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="script.js"></script>
 </head>
 <body>
   <div class="container-fluid">
+    <!-- Server status and garage door status -->
     <div class="row">
       <div class="col server-status border" style="background-color: #c3e6cb;">
         <div class="card my-2 border-0 server-status" style="background-color: #c3e6cb;">
@@ -49,12 +51,13 @@
       </div>
     </div>
 
+    <!-- Nicehash status -->
     <div class="row">
       <div class="col-2 border" style="background-color: #c3e6cb;">
         <div class="card my-2 border-0" style="background-color: #c3e6cb;">
           <div class="row no-gutters">
             <div class="col-auto">
-              <img src="https://img.icons8.com/dotty/64/000000/bitcoin.png"/>
+              <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
             </div>
             <div class="col">
               <div class="card-block px-2">
@@ -98,6 +101,70 @@
       </div>
     </div>
 
+    <!-- Stock status -->
+    <div class="row">
+      <div class="col-3 voo-status border" style="background-color: #c3e6cb;">
+        <div class="card voo-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/ios/64/000000/combo-chart--v1.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b>S&P 500</b></span></p>
+                <p class="lead mb-0" id="vooStateTxt"><big>$ 0</big></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 sail-status border" style="background-color: #c3e6cb;">
+        <div class="card sail-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/dotty/64/000000/sailing-ship-medium.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b>SailPoint</b></span></p>
+                <p class="lead mb-0" id="sailStateTxt"><big>$ 0</big></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 btc-status border" style="background-color: #c3e6cb;">
+        <div class="card btc-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/dotty/64/000000/bitcoin.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b>Bitcoin</b></span></p>
+                <p class="lead mb-0" id="btcStateTxt"><big>$ 0</big></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 eth-status border" style="background-color: #c3e6cb;">
+        <div class="card eth-status my-2 border-0" style="background-color: #c3e6cb;">
+          <div class="row no-gutters">
+            <div class="col-auto">
+              <img src="https://img.icons8.com/wired/64/000000/ethereum.png"/>
+            </div>
+            <div class="col">
+              <div class="card-block px-2">
+                <p class="card-text mb-0 lead"><span class=" mr-2"><b>Ethereum</b></span></p>
+                <p class="lead mb-0" id="ethStateTxt"><big>$ 0</big></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 
@@ -107,6 +174,10 @@
     <a href="https://icons8.com/icon/44259/bitcoin">Bitcoin icon by Icons8</a>
     <a href="https://icons8.com/icon/9T8Gef2DVZ89/mining">Mining icon by Icons8</a>
     <a href="https://icons8.com/icon/O4RhxDarVAg2/desktop">Desktop icon by Icons8</a>
+    <a href="https://icons8.com/icon/3005/combo-chart">Combo Chart icon by Icons8</a>
+    <a href="https://icons8.com/icon/77439/hash">Hash icon by Icons8</a>
+    <a href="https://icons8.com/icon/104370/ethereum">Ethereum icon by Icons8</a>
+    <a href="https://icons8.com/icon/53502/sail">Sail icon by Icons8</a>
   </div>
 </body>
 </html>

@@ -28,7 +28,7 @@ export function startNicehash() {
   getRigStatus()
   setInterval(function() {
     getRigStatus()
-  }, 5000)
+  }, 15000)
 
 }
 
