@@ -132,19 +132,19 @@ $( document ).ready(function() {
   function loadStocks() {
     axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=VOO&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
       $('.voo-status').css('background-color', response.data.dp < 0 ? bgRed : bgGreen)
-      $('#vooStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><small class="ml-3"> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
+      $('#vooStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
     axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=SAIL&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
       $('.sail-status').css('background-color', response.data.dp < 0 ? bgRed : bgGreen)
-      $('#sailStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><small class="ml-3"> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
+      $('#sailStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
     axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
       $('.btc-status').css('background-color', response.data.dp < 0 ? bgRed : bgGreen)
-      $('#btcStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><small class="ml-3"> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
+      $('#btcStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
     axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=ETH-USD&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
       $('.eth-status').css('background-color', response.data.dp < 0 ? bgRed : bgGreen)
-      $('#ethStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><small class="ml-3"> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
+      $('#ethStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
   }
 

@@ -11,18 +11,14 @@ const port = '9002'
 const production = process.env.PRODUCTION == 'true'
 let startupDelay = production ? 5000 : 0
 
-
-// startMyq()
-// startNicehash()
-
+startMyq()
+startNicehash()
 
 setTimeout(function() {
-  // console.log(22)
-  //startDashboard()
 }, startupDelay);
 
 setInterval(function() {
-}, 1000) // 30 minutes 1800000
+}, 1000)
 
 
 
