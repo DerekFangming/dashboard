@@ -1,9 +1,9 @@
-// const express = require('express')
-// const axios = require('axios')
-// const myQApi = require('@hjdhjd/myq')
 import { myQApi } from "@hjdhjd/myq"
 import express from 'express'
-import path from 'path';
+import path from 'path'
+import axios from "axios"
+import { v4 as uuidv4 } from 'uuid'
+import crypto from 'crypto'
 
 const myq = new myQApi('synfm123@gmail.com', process.env.MYQ_PASSWORD)
 const app = express()
@@ -16,10 +16,30 @@ let startupDelay = production ? 5000 : 0
 var garageState = 'unknown'
 var garageStateSince = new Date().toISOString()
 
+var nhBtcBalance = 0.0
+var nhUsdBalance = 0.0
+
 var startDashboard = function() {
+  
+  nicehash('/main/api/v2/accounting/accounts2', 'fiat=USD').then(function (response) {
+    // let btcBalance = response.data.total.totalBalance
+    // console.log(btcBalance)
+    let btc = response.data.currencies.filter(c => c.currency == 'BTC')
+    if (btc.length == 1) {
+      // console.log(btc[0].totalBalance)
+      // console.log(btc[0].fiatRate)
+      nhBtcBalance = parseFloat(btc[0].totalBalance)
+      nhUsdBalance = nhBtcBalance * btc[0].fiatRate
+      console.log(nhUsdBalance)
+    }
+  }).catch(function (error) {
+    console.log(error);
+    console.log('Failed');
+  });
 }
 
 setTimeout(function() {
+  // console.log(22)
   startDashboard()
 }, startupDelay);
 
@@ -35,65 +55,45 @@ setInterval(function() {
   //     garageStateSince = new Date().toISOString()
   //   }
   // })
-}, 5000);
+}, 5000)
 
+setInterval(function() {
+  //console.log(11)
+}, 5000) // 30 minutes 1800000
 
+function nicehash(url, query = undefined) {
+  let time = '' + Date.now()
+  let nonce = uuidv4()
 
-// app.get('/', (req, res) => {res.sendFile(__dirname + '/index.html')})
-// app.get('/script.js', (req, res) => {res.sendFile(__dirname + '/script.js')})
-// app.get('/extra.js', (req, res) => {production ? res.sendFile(__dirname + '/extra-prod.js') : res.sendFile(__dirname + '/extra-dev.js')})
-// app.get('/style.css', (req, res) => {res.sendFile(__dirname + '/style.css')})
-// app.get('/favicon.ico', (req, res) => {res.sendFile(__dirname + '/favicon.ico')})
-// app.get('/alert.mp3', (req, res) => {res.sendFile(__dirname + '/alert.mp3')})
+  var authBuf =  Buffer.concat([new Buffer.from(process.env.NH_API_KEY), new Buffer.alloc(1)])
+  authBuf = Buffer.concat([authBuf, new Buffer.from(time), new Buffer.alloc(1)])
+  authBuf = Buffer.concat([authBuf, new Buffer.from(nonce), new Buffer.alloc(1), new Buffer.alloc(1)])
+  authBuf = Buffer.concat([authBuf, new Buffer.from(process.env.NH_ORG_ID), new Buffer.alloc(1), new Buffer.alloc(1)])
+  authBuf = Buffer.concat([authBuf, new Buffer.from('GET'), new Buffer.alloc(1)])
+  authBuf = Buffer.concat([authBuf, new Buffer.from(url), new Buffer.alloc(1)])
+  if (query != undefined) authBuf = Buffer.concat([authBuf, new Buffer.from(query)])
 
+  let auth = crypto.createHmac('sha256', process.env.NH_API_SECRET).update(authBuf).digest('hex')
 
-
-app.get('/t1', (req, res) => {
-  console.log(myq.getDevice('CG08503460EE').state.door_state)
-  res.sendStatus(200)
-})
-
-app.get('/t2', (req, res) => {
-  myq.refreshDevices().then(e => {
-    console.log(myq.getDevice('CG08503460EE').state.door_state)
+  let fullUrl = query == undefined ? 'https://api2.nicehash.com' + url : 'https://api2.nicehash.com' + url + '?' + query
+  return axios.get(fullUrl, {
+    headers: {
+      'x-time': time,
+      'x-nonce': nonce,
+      'x-organization-id': process.env.NH_ORG_ID,
+      'x-request-id': uuidv4(),
+      'x-auth': process.env.NH_API_KEY + ':' + auth
+    }
   })
-  res.sendStatus(200)
-})
+}
 
 app.get('/status', async (req, res) => {
-  // checkPoint = (Math.random() + 1).toString(36).substring(7)
-  // sellerCards = []
-  // storeCards = []
-  // highlightCards = []
-
   res.status(200).json({garageState: garageState, garageStateSince: garageStateSince})
 })
 
 app.get('/test', async (req, res) => {
-
-  // console.log(cache('key'))
-  // cache.set({key: 123}, 5)
-  // console.log(cache('key'))
-
-  
-  // checkPoint = (Math.random() + 1).toString(36).substring(7)
-  
-
   res.sendStatus(200)
 })
-
-app.get('/testNotification', async (req, res) => {
-
-  // processCard({item: 'GIGABYTE GeForce lHR RTX 3060 Ti LHR GAMING OC 1.0 8G GDDR6 Video Card (GV-N306TGAMING...', model: '2060ti', price: '900', location: 'us', store: 'evga'}, true)
-  
-  res.sendStatus(200)
-})
-
-// app.configure(function(){
-//   // server.use('/media', express.static(__dirname + '/media'));
-//   // server.use(express.static(__dirname + '/public'));
-//   server.use(express.static(__dirname))
-// });
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {})
