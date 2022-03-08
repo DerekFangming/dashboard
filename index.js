@@ -10,8 +10,8 @@ const __dirname = path.resolve()
 const port = '9002'
 const production = process.env.PRODUCTION == 'true'
 
-// startMyq()
-// startNicehash()
+startMyq()
+startNicehash()
 startWeather()
 
 app.get('/status', async (req, res) => {
