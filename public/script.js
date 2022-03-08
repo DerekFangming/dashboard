@@ -29,6 +29,7 @@ $( document ).ready(function() {
         setServerState(true)
         setGarageState(data.myq)
         setNicehashState(data.nh)
+        setWeatherState(data.weather)
 
       },
       error: function(xhr, status, errMsg){
@@ -118,10 +119,21 @@ $( document ).ready(function() {
         $('.desktop-status').css('background-color', bgRed)
         $('#nhDesktopStatTxt').html('Desktop - Stopped')
         $('#nhDesktopDevicesBlk').html('')
-        
       }
     }
     
+  }
+
+  var weatherState
+  function setWeatherState(weather) {
+    if (weatherState == weather[1].time) return
+    weatherState = weather[1].time
+
+    let html = ''
+    for (let w of weather) {
+      html += `<div class="col"><p class="mb-0 ml-1">${w.time}</p><img src="http://openweathermap.org/img/wn/${w.icon}.png"/><p class="mb-0 ml-2">${w.temp} °C</p></div>`
+    }
+    $('#weather').html(html)
   }
   
   loadStocks()

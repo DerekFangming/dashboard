@@ -10,32 +10,33 @@ export function getWeather() {
 }
 
 export function startWeather() {
+  updateWeather()
+  setInterval(function() {
+    updateWeather()
+  }, 1800000)
+}
+
+function updateWeather() {
   axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=30.35&lon=-97.60&exclude=minutely,daily&appid=' + appId).then(function (response) {
-    // console.log(response.data)
     weather = []
-    // console.log((response.data.current.temp - tempOffset).toFixed(1))
 
-    processWeather(response.data.current)
+    processWeather(response.data.current, 'Now')
 
+    let counter = 0
     for (let t of response.data.hourly) {
-      // console.log(new Date(t.dt * 1000).toISOString() + ' --  ' + new Date(t.dt * 1000).getHours())
-      // let hour = new Date(t.dt * 1000).getHours() + 1
-      // let hourStr = hour == 24 ? '12AM' : hour == 12 ? '12PM' : hour > 12 ? (hour % 12) + 'PM' : hour + 'AM'
-      // console.log(hourStr + ' - ' + (t.temp - tempOffset).toFixed(1) )
-
-      processWeather(t)
+      if (counter >= 20) break
+      if (counter % 2 == 0) processWeather(t)
+      counter ++
     }
-
-    console.log(weather)
   })
 }
 
-function processWeather(w) {
+function processWeather(w, time = undefined) {
   let hour = new Date(w.dt * 1000).getHours() + 1
   let hourStr = hour == 24 ? '12AM' : hour == 12 ? '12PM' : hour > 12 ? (hour % 12) + 'PM' : hour + 'AM'
   let temp = (w.temp - tempOffset).toFixed(1)
   weather.push({
-    time: hourStr,
+    time: time == undefined ? hourStr : time,
     temp: temp,
     icon: w.weather[0].icon
   })
