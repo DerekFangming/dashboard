@@ -2,32 +2,20 @@ import express from 'express'
 import path from 'path'
 import { startNicehash, getNicehashStatus } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
-
+import { startWeather, getWeather } from './weather.js'
 
 const app = express()
 const __dirname = path.resolve()
 
 const port = '9002'
 const production = process.env.PRODUCTION == 'true'
-let startupDelay = production ? 5000 : 0
 
-startMyq()
-startNicehash()
-
-setTimeout(function() {
-}, startupDelay);
-
-setInterval(function() {
-}, 1000)
-
-
+// startMyq()
+// startNicehash()
+startWeather()
 
 app.get('/status', async (req, res) => {
-  res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus()})
-})
-
-app.get('/test', async (req, res) => {
-  res.sendStatus(200)
+  res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
 })
 
 app.use(express.static(path.join(__dirname, 'public')));
