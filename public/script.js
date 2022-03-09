@@ -143,20 +143,22 @@ $( document ).ready(function() {
     loadStocks()
   }, 15000)
 
+  var token
   function loadStocks() {
-    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=VOO&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
+    if (token == undefined) token = atob('c2FuZGJveF9jOGoxcWEyYWQzaWZnOHRjNzNlZw==')
+    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=VOO&token=' + token}).then((response) => {
       $('.voo-status').css('background-color', getStockBgColor(response.data.dp))
       $('#vooStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
-    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=SAIL&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
+    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=SAIL&token=' + token}).then((response) => {
       $('.sail-status').css('background-color', getStockBgColor(response.data.dp))
       $('#sailStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
-    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
+    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=' + token}).then((response) => {
       $('.btc-status').css('background-color', getStockBgColor(response.data.dp))
       $('#btcStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
-    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=ETH-USD&token=sandbox_c8j1qa2ad3ifg8tc73eg'}).then((response) => {
+    axios({ method: 'get', url: 'https://finnhub.io/api/v1/quote?symbol=ETH-USD&token=' + token}).then((response) => {
       $('.eth-status').css('background-color', getStockBgColor(response.data.dp))
       $('#ethStateTxt').html(`<big>$ ${response.data.c.toFixed(2)}</big><br /><small> $${response.data.d.toFixed(2)}(${response.data.dp.toFixed(2)}%)</small>`)
     })
