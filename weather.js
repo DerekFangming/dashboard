@@ -9,14 +9,14 @@ export function getWeather() {
   return weather
 }
 
-export function startWeather() {
+export function startWeather(checkPoint) {
   updateWeather()
   setInterval(function() {
     updateWeather()
   }, 1800000)
 }
 
-function updateWeather() {
+function updateWeather(checkPoint = undefined) {
   axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=30.35&lon=-97.60&exclude=minutely,daily&appid=' + appId).then(function (response) {
     weather = []
 
@@ -34,7 +34,7 @@ function updateWeather() {
 function processWeather(w, time = undefined) {
   let hour = new Date(w.dt * 1000).getHours() + 1
   let hourStr = hour == 24 ? '12AM' : hour == 12 ? '12PM' : hour > 12 ? (hour % 12) + 'PM' : hour + 'AM'
-  let temp = (w.temp - tempOffset).toFixed(1)
+  let temp = Math.floor(w.temp - tempOffset)
   weather.push({
     time: time == undefined ? hourStr : time,
     temp: temp,

@@ -17,7 +17,7 @@ export function getNicehashStatus() {
   }
 }
 
-export function startNicehash() {
+export function startNicehash(checkPoint) {
   // Get balance every hour
   getBalance()
   setInterval(function() {

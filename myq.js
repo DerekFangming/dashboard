@@ -12,22 +12,30 @@ export function getMyqStatus() {
   }
 }
 
-export function startMyq() {
-  callMyq()
+export function startMyq(checkPoint, production) {
+  callMyq(checkPoint)
   setInterval(function() {
-    callMyq()
-  }, 5000)
+    callMyq(checkPoint)
+  }, production ? 5000 : 10000)
 }
 
-function callMyq() {
+function callMyq(checkPoint = undefined) {
   myq.refreshDevices().then(e => {
     let device = myq.getDevice('CG08503460EE')
     if (device != null) {
-      state = device.state.door_state
-      since = device.state.last_update
+      updateState(device.state.door_state, device.state.last_update, checkPoint)
     } else {
-      state = 'unknown'
-      since = new Date().toISOString()
+      updateState('unknown', new Date().toISOString(), checkPoint)
     }
   })
+}
+
+function updateState(doorState, lastUpdate, checkPoint) {
+  if (state != doorState || since != lastUpdate ) {
+    if (checkPoint != undefined) {
+      checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    }
+  }
+  state = doorState
+  since = lastUpdate
 }

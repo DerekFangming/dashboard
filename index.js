@@ -10,11 +10,16 @@ const __dirname = path.resolve()
 const port = '9002'
 const production = process.env.PRODUCTION == 'true'
 
-startMyq()
-startNicehash()
-startWeather()
+var checkPoint = {
+  "hash": ""
+}
+
+startMyq(checkPoint, production)
+startNicehash(checkPoint)
+startWeather(checkPoint)
 
 app.get('/status', async (req, res) => {
+  console.log(checkPoint)
   res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
 })
 
