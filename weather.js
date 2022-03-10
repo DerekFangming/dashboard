@@ -12,7 +12,7 @@ export function getWeather() {
 export function startWeather(checkPoint) {
   updateWeather()
   setInterval(function() {
-    updateWeather()
+    updateWeather(checkPoint)
   }, 1800000)
 }
 
@@ -28,6 +28,8 @@ function updateWeather(checkPoint = undefined) {
       if (counter % 2 == 0) processWeather(t)
       counter ++
     }
+    
+    if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
   })
 }
 

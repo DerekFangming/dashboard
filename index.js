@@ -11,7 +11,7 @@ const port = '9002'
 const production = process.env.PRODUCTION == 'true'
 
 var checkPoint = {
-  "hash": ""
+  "hash": (Math.random() + 1).toString(36).substring(7)
 }
 
 startMyq(checkPoint, production)
@@ -20,7 +20,11 @@ startWeather(checkPoint)
 
 app.get('/status', async (req, res) => {
   console.log(checkPoint)
-  res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
+  if (req.query.checkPoint == undefined || req.query.checkPoint != checkPoint.hash) {
+    res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
+  } else {
+    res.status(200).json({})
+  }
 })
 
 app.use(express.static(path.join(__dirname, 'public')));

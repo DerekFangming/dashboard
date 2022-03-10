@@ -97,7 +97,7 @@ $( document ).ready(function() {
         $('#nhMinorDevicesBlk').html(html)
       } else {
         $('.minor-status').css('background-color', bgRed)
-        $('#nhMinorStatTxt').html('Minor - Stopped')
+        $('#nhMinorStatTxt').html('Minor - ' + state.minor.status)
         $('#nhMinorDevicesBlk').html('')
         
       }
@@ -119,7 +119,7 @@ $( document ).ready(function() {
         $('#nhDesktopDevicesBlk').html(html)
       } else {
         $('.desktop-status').css('background-color', bgRed)
-        $('#nhDesktopStatTxt').html('Desktop - Stopped')
+        $('#nhDesktopStatTxt').html('Desktop - ' + state.desktop.status)
         $('#nhDesktopDevicesBlk').html('')
       }
     }

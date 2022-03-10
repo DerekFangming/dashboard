@@ -21,57 +21,68 @@ export function startNicehash(checkPoint) {
   // Get balance every hour
   getBalance()
   setInterval(function() {
-    getBalance()
+    getBalance(checkPoint)
   }, 3600000)
 
   // Get status every 15 seconds
   getRigStatus()
   setInterval(function() {
-    getRigStatus()
+    getRigStatus(checkPoint)
   }, 15000)
 
 }
 
-function getBalance() {
+function getBalance(checkPoint = undefined) {
   callNicehash('/main/api/v2/accounting/accounts2', 'fiat=USD').then(function (response) {
     let btcBalance = response.data.currencies.filter(c => c.currency == 'BTC')
     if (btcBalance.length == 1) {
       btc = parseFloat(btcBalance[0].totalBalance)
       usd = btc * btcBalance[0].fiatRate
     }
+    if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
   }).catch(function (error) {
     console.log(error)
   });
 }
 //MINING STOPPED
-function getRigStatus() {
+function getRigStatus(checkPoint = undefined) {
   callNicehash('/main/api/v2/mining/rigs2').then(function (response) {
     let rigs = response.data.miningRigs.filter(r => r.rigId == '0-W6SLxnUkR1mLgRrxqZiZHQ')
     if (rigs.length == 1) {
-      minor.status = rigs[0].minerStatus
+      let status = rigs[0].minerStatus
+      let totalSpeed = 0.0
       minor.devices = []
-      minor.speed = 0
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
         let name = d.name.split('GeForce ')[1]
         minor.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
-        minor.speed += speed
+        totalSpeed += speed
       }
+      if (minor.status != status || minor.speed != totalSpeed) {
+        if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+      }
+      minor.status = status
+      minor.speed = totalSpeed
     }
 
     rigs = response.data.miningRigs.filter(r => r.rigId == '0-XC35BxW-3FK+VaIsOSyInA')
     if (rigs.length == 1) {
-      desktop.status = rigs[0].minerStatus
+      let status = rigs[0].minerStatus
+      let totalSpeed = 0.0
       desktop.devices = []
-      desktop.speed = 0
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
         let name = d.name.split('GeForce ')[1]
         desktop.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
-        desktop.speed += speed
+        totalSpeed += speed
       }
+      if (desktop.status != status || desktop.speed != totalSpeed) {
+        if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+      }
+      desktop.status = status
+      desktop.speed = totalSpeed
     }
   }).catch(function (error) {
     console.log(error)
