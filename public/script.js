@@ -1,5 +1,7 @@
 $( document ).ready(function() {
 
+  var checkPoint = ''
+
   var serverState
   var lastStatusDate = new Date()
   var statusFailedCount = 0
@@ -19,19 +21,27 @@ $( document ).ready(function() {
 
   function loadStatus() {
     $.ajax({
-      url: 'status',
+      url: 'status?checkPoint=' + checkPoint,
       type: 'GET',
       dataType: 'json',
       contentType: 'application/json',
       success: function(data, textStatus, request) {
-
+        // Reset server status
         statusFailedCount = 0
         lastStatusDate = new Date()
-
         setServerState(true)
-        setGarageState(data.myq)
-        setNicehashState(data.nh)
-        setWeatherState(data.weather)
+
+
+        if (data.checkPoint) {
+          console.log(data.checkPoint)
+          checkPoint = data.checkPoint
+
+          setGarageState(data.myq)
+          setNicehashState(data.nh)
+          setWeatherState(data.weather)
+        } else {
+          console.log('do not change')
+        }
 
       },
       error: function(xhr, status, errMsg){
