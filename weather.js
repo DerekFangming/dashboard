@@ -9,11 +9,11 @@ export function getWeather() {
   return weather
 }
 
-export function startWeather(checkPoint) {
+export function startWeather(checkPoint, production) {
   updateWeather()
   setInterval(function() {
     updateWeather(checkPoint)
-  }, 1800000)
+  }, production ? 1800000 : 10000)
 }
 
 function updateWeather(checkPoint = undefined) {
@@ -28,8 +28,9 @@ function updateWeather(checkPoint = undefined) {
       if (counter % 2 == 0) processWeather(t)
       counter ++
     }
-    
+
     if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    console.log('New hash from weather ' + (checkPoint == undefined ? '' : checkPoint.hash))
   })
 }
 

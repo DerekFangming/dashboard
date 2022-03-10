@@ -16,10 +16,9 @@ var checkPoint = {
 
 startMyq(checkPoint, production)
 startNicehash(checkPoint)
-startWeather(checkPoint)
+startWeather(checkPoint, production)
 
 app.get('/status', async (req, res) => {
-  console.log(checkPoint)
   if (req.query.checkPoint == undefined || req.query.checkPoint != checkPoint.hash) {
     res.status(200).json({myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
   } else {

@@ -61,6 +61,7 @@ function getRigStatus(checkPoint = undefined) {
       }
       if (minor.status != status || minor.speed != totalSpeed) {
         if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+        console.log('New hash from nciehash ' + (checkPoint == undefined ? '' : checkPoint.hash))
       }
       minor.status = status
       minor.speed = totalSpeed
