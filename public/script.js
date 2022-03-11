@@ -144,7 +144,7 @@ $( document ).ready(function() {
     let html = ''
     for (let w of weather) {
       let style = w.temp <= 3 ? `style="background-color:${bgYellow}"` : ''
-      html += `<div class="col py-2" ${style}><p class="mb-0 ml-1">${w.time}</p><img src="http://openweathermap.org/img/wn/${w.icon}.png"/><p class="mb-0 ml-2">${w.temp} °C</p></div>`
+      html += `<div class="col py-2 text-center" ${style}><p class="mb-0">${w.time}</p><img src="http://openweathermap.org/img/wn/${w.icon}.png"/><p class="mb-0 ml-2">${w.temp} °C</p></div>`
     }
     $('#weather').html(html)
   }
