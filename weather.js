@@ -13,7 +13,7 @@ export function startWeather(checkPoint, production) {
   updateWeather()
   setInterval(function() {
     updateWeather(checkPoint)
-  }, production ? 1800000 : 10000)
+  }, production ? 1800000 : 15000)
 }
 
 function updateWeather(checkPoint = undefined) {
@@ -30,7 +30,6 @@ function updateWeather(checkPoint = undefined) {
     }
 
     if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
-    console.log('New hash from weather ' + (checkPoint == undefined ? '' : checkPoint.hash))
   })
 }
 

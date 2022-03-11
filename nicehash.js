@@ -17,7 +17,7 @@ export function getNicehashStatus() {
   }
 }
 
-export function startNicehash(checkPoint) {
+export function startNicehash(checkPoint, production) {
   // Get balance every hour
   getBalance()
   setInterval(function() {
@@ -28,7 +28,7 @@ export function startNicehash(checkPoint) {
   getRigStatus()
   setInterval(function() {
     getRigStatus(checkPoint)
-  }, 15000)
+  }, production ? 15000 : 30000)
 
 }
 
@@ -61,7 +61,6 @@ function getRigStatus(checkPoint = undefined) {
       }
       if (minor.status != status || minor.speed != totalSpeed) {
         if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
-        console.log('New hash from nciehash ' + (checkPoint == undefined ? '' : checkPoint.hash))
       }
       minor.status = status
       minor.speed = totalSpeed

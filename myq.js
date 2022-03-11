@@ -33,7 +33,6 @@ function callMyq(checkPoint = undefined) {
 function updateState(doorState, lastUpdate, checkPoint) {
   if (state != doorState || since != lastUpdate ) {
     if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
-    console.log('New hash from myq ' + (checkPoint == undefined ? '' : checkPoint.hash))
   }
   state = doorState
   since = lastUpdate

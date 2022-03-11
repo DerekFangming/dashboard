@@ -15,7 +15,7 @@ var checkPoint = {
 }
 
 startMyq(checkPoint, production)
-startNicehash(checkPoint)
+startNicehash(checkPoint, production)
 startWeather(checkPoint, production)
 
 app.get('/status', async (req, res) => {
@@ -28,5 +28,3 @@ app.get('/status', async (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {})
-
-
