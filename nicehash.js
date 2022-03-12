@@ -55,7 +55,7 @@ function getRigStatus(checkPoint = undefined) {
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        let name = d.name.split('GeForce ')[1]
+        let name = d.name.split('TX ')[1]
         miner.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
         totalSpeed += speed
       }
@@ -74,7 +74,7 @@ function getRigStatus(checkPoint = undefined) {
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        let name = d.name.split('GeForce ')[1]
+        let name = d.name.split('TX ')[1]
         desktop.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
         totalSpeed += speed
       }

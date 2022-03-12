@@ -91,19 +91,17 @@ $( document ).ready(function() {
       $('#nhUsdTxt').html(`USD: ${state.usd.toFixed(2)}`)
     }
 
-    if (minerState != state.miner.speed) {
-      minerState = state.miner.speed
+    if (minerState != state.miner.status + state.miner.speed) {
+      minerState = state.miner.status + state.miner.speed
       if (state.miner.status == 'MINING') {
         $('.miner-status').css('background-color', bgGreen)
         $('#nhMinerStatTxt').html(`Miner - Mining - ${Math.floor(state.miner.speed)} MH/s`)
         let html = ''
-        let deviceDead = false
         for (let d of state.miner.devices) {
-          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp'
-          html += `<p class="mb-0">${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power} W </p>`
-          if (d.speed == 0) deviceDead = true
+          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
+          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
+          html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
         }
-        if (deviceDead || state.miner.devices.length < 7) $('.miner-status').css('background-color', bgYellow)
         $('#nhMinerDevicesBlk').html(html)
       } else {
         $('.miner-status').css('background-color', bgRed)
@@ -113,19 +111,17 @@ $( document ).ready(function() {
       }
     }
 
-    if (desktopState != state.desktop.speed) {
-      desktopState = state.desktop.speed
+    if (desktopState != state.desktop.status + state.desktop.speed) {
+      desktopState = state.desktop.status + state.desktop.speed
       if (state.desktop.status == 'MINING') {
         $('.desktop-status').css('background-color', bgGreen)
         $('#nhDesktopStatTxt').html(`Desktop - Mining - ${Math.floor(state.desktop.speed)} MH/s`)
         let html = ''
-        let deviceDead = false
         for (let d of state.desktop.devices) {
-          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp'
-          html += `<p class="mb-0">${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power} W </p>`
-          if (d.speed == 0) deviceDead = true
+          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
+          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
+          html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
         }
-        if (deviceDead || state.desktop.devices.length < 1) $('.desktop-status').css('background-color', bgYellow)
         $('#nhDesktopDevicesBlk').html(html)
       } else {
         $('.desktop-status').css('background-color', bgRed)
