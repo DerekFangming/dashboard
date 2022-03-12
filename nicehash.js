@@ -5,14 +5,14 @@ import crypto from 'crypto'
 var btc = 0.0
 var usd = 0.0
 
-var minor = {status: 'STOPPED', speed: 0, devices:[]}
+var miner = {status: 'STOPPED', speed: 0, devices:[]}
 var desktop = {status: 'STOPPED', speed: 0, devices:[]}
 
 export function getNicehashStatus() {
   return {
     btc: btc,
     usd: usd,
-    minor: minor,
+    miner: miner,
     desktop: desktop
   }
 }
@@ -51,19 +51,19 @@ function getRigStatus(checkPoint = undefined) {
     if (rigs.length == 1) {
       let status = rigs[0].minerStatus
       let totalSpeed = 0.0
-      minor.devices = []
+      miner.devices = []
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
         let name = d.name.split('GeForce ')[1]
-        minor.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
+        miner.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
         totalSpeed += speed
       }
-      if (minor.status != status || minor.speed != totalSpeed) {
+      if (miner.status != status || miner.speed != totalSpeed) {
         if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
       }
-      minor.status = status
-      minor.speed = totalSpeed
+      miner.status = status
+      miner.speed = totalSpeed
     }
 
     rigs = response.data.miningRigs.filter(r => r.rigId == '0-XC35BxW-3FK+VaIsOSyInA')
