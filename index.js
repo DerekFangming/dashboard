@@ -18,9 +18,22 @@ startMyq(checkPoint, production)
 startNicehash(checkPoint, production)
 startWeather(checkPoint, production)
 
+var alerts
+
+setInterval(function() {
+  if (alerts == undefined) {
+    alerts = {
+      "level": "alert",
+      "msg": "Tash can needs to be colected"
+    }
+  } else {
+    alerts = undefined
+  }
+}, 10000)
+
 app.get('/status', async (req, res) => {
   if (req.query.checkPoint == undefined || req.query.checkPoint != checkPoint.hash) {
-    res.status(200).json({checkPoint: checkPoint.hash, myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather()})
+    res.status(200).json({checkPoint: checkPoint.hash, myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather(), alerts: alerts})
   } else {
     res.status(200).json({})
   }

@@ -82,7 +82,7 @@ $( document ).ready(function() {
   }
 
   var nhBtcState
-  var minorState
+  var minerState
   var desktopState
   function setNicehashState(state) {
     if (nhBtcState != state.btc) {
@@ -91,24 +91,24 @@ $( document ).ready(function() {
       $('#nhUsdTxt').html(`USD: ${state.usd.toFixed(2)}`)
     }
 
-    if (minorState != state.minor.speed) {
-      minorState = state.minor.speed
-      if (state.minor.status == 'MINING') {
-        $('.minor-status').css('background-color', bgGreen)
-        $('#nhMinorStatTxt').html(`Minor - Mining - ${Math.floor(state.minor.speed)} MH/s`)
+    if (minerState != state.miner.speed) {
+      minerState = state.miner.speed
+      if (state.miner.status == 'MINING') {
+        $('.miner-status').css('background-color', bgGreen)
+        $('#nhMinerStatTxt').html(`Miner - Mining - ${Math.floor(state.miner.speed)} MH/s`)
         let html = ''
         let deviceDead = false
-        for (let d of state.minor.devices) {
+        for (let d of state.miner.devices) {
           let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp'
           html += `<p class="mb-0">${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power} W </p>`
           if (d.speed == 0) deviceDead = true
         }
-        if (deviceDead || state.minor.devices.length < 7) $('.minor-status').css('background-color', bgYellow)
-        $('#nhMinorDevicesBlk').html(html)
+        if (deviceDead || state.miner.devices.length < 7) $('.miner-status').css('background-color', bgYellow)
+        $('#nhMinerDevicesBlk').html(html)
       } else {
-        $('.minor-status').css('background-color', bgRed)
-        $('#nhMinorStatTxt').html('Minor - ' + state.minor.status)
-        $('#nhMinorDevicesBlk').html('')
+        $('.miner-status').css('background-color', bgRed)
+        $('#nhMinerStatTxt').html('Miner - ' + state.miner.status)
+        $('#nhMinerDevicesBlk').html('')
         
       }
     }
