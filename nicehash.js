@@ -5,8 +5,8 @@ import crypto from 'crypto'
 var btc = 0.0
 var usd = 0.0
 
-var miner = {status: 'STOPPED', speed: 0, devices:[]}
-var desktop = {status: 'STOPPED', speed: 0, devices:[]}
+var miner = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
+var desktop = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
 
 export function getNicehashStatus() {
   return {
@@ -52,6 +52,7 @@ function getRigStatus(checkPoint = undefined) {
       let status = rigs[0].minerStatus
       let totalSpeed = 0.0
       miner.devices = []
+      miner.joined = rigs[0].joinTime * 1000
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
@@ -71,6 +72,7 @@ function getRigStatus(checkPoint = undefined) {
       let status = rigs[0].minerStatus
       let totalSpeed = 0.0
       desktop.devices = []
+      desktop.joined = rigs[0].joinTime * 1000
       for (let d of rigs[0].devices) {
         if (d.deviceType.enumName == 'CPU') continue
         let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
