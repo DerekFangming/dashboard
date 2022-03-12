@@ -102,7 +102,7 @@ $( document ).ready(function() {
       if (state[name].status == 'MINING') {
         $(`.${name}-status`).css('background-color', bgGreen)
         $(`#nh${displayName}StatTxt`).html(displayName + ` - Mining - ${state[name].speed.toFixed(2)} MH/s`)
-        let html = `<p class="mb-0"><b>Joined since ${new Date(state[name].joined).toLocaleString()}</b></p>`
+        let html = `<p class="mb-0"><b>Joined for ${(Math.abs(new Date() - new Date(state[name].joined)) / 36e5).toFixed(2)} hours</b></p>`
         for (let d of state[name].devices) {
           let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
           let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''

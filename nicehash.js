@@ -47,48 +47,43 @@ function getBalance(checkPoint = undefined) {
 //MINING STOPPED
 function getRigStatus(checkPoint = undefined) {
   callNicehash('/main/api/v2/mining/rigs2').then(function (response) {
-    let rigs = response.data.miningRigs.filter(r => r.rigId == '0-W6SLxnUkR1mLgRrxqZiZHQ')
-    if (rigs.length == 1) {
-      let status = rigs[0].minerStatus
-      let totalSpeed = 0.0
-      miner.devices = []
-      miner.joined = rigs[0].joinTime * 1000
-      for (let d of rigs[0].devices) {
-        if (d.deviceType.enumName == 'CPU') continue
-        let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        let name = d.name.split('TX ')[1]
-        miner.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
-        totalSpeed += speed
-      }
-      if (miner.status != status || miner.speed != totalSpeed) {
-        if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
-      }
-      miner.status = status
-      miner.speed = totalSpeed
+    let updateCheckpoint = false
+
+    let minorRig = buildRig(response, '0-W6SLxnUkR1mLgRrxqZiZHQ')
+    if (miner.status != minorRig.status || miner.speed != minorRig.speed) {
+      miner = minorRig
+      updateCheckpoint = true
     }
 
-    rigs = response.data.miningRigs.filter(r => r.rigId == '0-XC35BxW-3FK+VaIsOSyInA')
-    if (rigs.length == 1) {
-      let status = rigs[0].minerStatus
-      let totalSpeed = 0.0
-      desktop.devices = []
-      desktop.joined = rigs[0].joinTime * 1000
-      for (let d of rigs[0].devices) {
-        if (d.deviceType.enumName == 'CPU') continue
-        let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
-        let name = d.name.split('TX ')[1]
-        desktop.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
-        totalSpeed += speed
-      }
-      if (desktop.status != status || desktop.speed != totalSpeed) {
-        if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
-      }
-      desktop.status = status
-      desktop.speed = totalSpeed
+    let desktopRig = buildRig(response, '0-XC35BxW-3FK+VaIsOSyInA')
+    if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
+      desktop = desktopRig
+      updateCheckpoint = true
     }
+
+    if (updateCheckpoint && checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
   }).catch(function (error) {
     console.log(error)
   });
+}
+
+function buildRig(response, id) {
+  let rig = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
+  let rigs = response.data.miningRigs.filter(r => r.rigId == id)
+    if (rigs.length == 1) {
+      let totalSpeed = 0.0
+      rig.joined = rigs[0].joinTime * 1000
+      rig.status = rigs[0].minerStatus
+      for (let d of rigs[0].devices) {
+        if (d.deviceType.enumName == 'CPU') continue
+        let speed = d.speeds.length == 0 ? 0 : parseFloat(d.speeds[0].speed)
+        let name = d.name.split('TX ')[1]
+        rig.devices.push({name: name, temp: d.temperature, power: d.powerUsage, speed: speed})
+        totalSpeed += speed
+      }
+      rig.speed = totalSpeed
+    }
+    return rig
 }
 
 function callNicehash(url, query = undefined) {
