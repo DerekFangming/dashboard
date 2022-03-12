@@ -90,46 +90,31 @@ $( document ).ready(function() {
       $('#nhBtcTxt').html(`BTC : ${state.btc.toFixed(5)}`)
       $('#nhUsdTxt').html(`USD: ${state.usd.toFixed(2)}`)
     }
-
-    if (minerState != state.miner.status + state.miner.speed) {
-      minerState = state.miner.status + state.miner.speed
-      if (state.miner.status == 'MINING') {
-        $('.miner-status').css('background-color', bgGreen)
-        $('#nhMinerStatTxt').html(`Miner - Mining - ${Math.floor(state.miner.speed)} MH/s`)
-        let html = ''
-        for (let d of state.miner.devices) {
-          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
-          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
-          html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
-        }
-        $('#nhMinerDevicesBlk').html(html)
-      } else {
-        $('.miner-status').css('background-color', bgRed)
-        $('#nhMinerStatTxt').html('Miner - ' + state.miner.status)
-        $('#nhMinerDevicesBlk').html('')
-        
-      }
-    }
-
-    if (desktopState != state.desktop.status + state.desktop.speed) {
-      desktopState = state.desktop.status + state.desktop.speed
-      if (state.desktop.status == 'MINING') {
-        $('.desktop-status').css('background-color', bgGreen)
-        $('#nhDesktopStatTxt').html(`Desktop - Mining - ${Math.floor(state.desktop.speed)} MH/s`)
-        let html = ''
-        for (let d of state.desktop.devices) {
-          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
-          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
-          html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
-        }
-        $('#nhDesktopDevicesBlk').html(html)
-      } else {
-        $('.desktop-status').css('background-color', bgRed)
-        $('#nhDesktopStatTxt').html('Desktop - ' + state.desktop.status)
-        $('#nhDesktopDevicesBlk').html('')
-      }
-    }
     
+    setMinerState(minerState, state, 'miner')
+    setMinerState(desktopState, state, 'desktop')
+  }
+  
+  function setMinerState(preState, state, name) {
+    if (preState != state[name].status + state[name].speed) {
+      preState = state[name].status + state[name].speed
+      let displayName = capitalize(name)
+      if (state[name].status == 'MINING') {
+        $(`.${name}-status`).css('background-color', bgGreen)
+        $(`#nh${displayName}StatTxt`).html(displayName + ` - Mining - ${Math.floor(state[name].speed)} MH/s`)
+        let html = ''
+        for (let d of state[name].devices) {
+          let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
+          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
+          html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
+        }
+        $(`#nh${displayName}DevicesBlk`).html(html)
+      } else {
+        $(`.${name}-status`).css('background-color', bgRed)
+        $(`#nh${displayName}StatTxt`).html(displayName + ' - ' + capitalize(state[name].status))
+        $(`#nh${displayName}DevicesBlk`).html('')
+      }
+    }
   }
 
   var weatherState
@@ -176,6 +161,10 @@ $( document ).ready(function() {
     if (dp < 0) return bgRed
     if (dp < 5) return bgGreen
     return bgDarkGreen
+  }
+
+  function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
   }
 
 });
