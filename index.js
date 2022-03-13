@@ -19,10 +19,13 @@ startNicehash(checkPoint, production)
 startWeather(checkPoint, production)
 
 var alerts
-
 // Check every 5 seconds for alerts
 setInterval(function() {
-
+  if (alert) {
+    alerts = [alert]
+  } else {
+    alerts = undefined
+  }
 }, 5000)
 
 // Check hourly for trash collection
@@ -56,6 +59,11 @@ app.get('/status', async (req, res) => {
   } else {
     res.status(200).json({})
   }
+})
+
+app.get('/test', async (req, res) => {
+  
+  res.status(200).json({})
 })
 
 app.use(express.static(path.join(__dirname, 'public')));

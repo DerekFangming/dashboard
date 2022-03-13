@@ -33,14 +33,12 @@ $( document ).ready(function() {
 
 
         if (data.checkPoint) {
-          console.log(data.checkPoint)
           checkPoint = data.checkPoint
 
           setGarageState(data.myq)
           setNicehashState(data.nh)
           setWeatherState(data.weather)
-        } else {
-          console.log('do not change')
+          setAlertState(data.alerts)
         }
 
       },
@@ -128,6 +126,28 @@ $( document ).ready(function() {
       html += `<div class="col py-2 px-1 text-center" ${style}><p class="mb-0">${w.time}</p><img src="http://openweathermap.org/img/wn/${w.icon}.png"/><p class="mb-0">${w.temp} °C</p><p class="mb-0">${w.wind} MPH</p></div>`
     }
     $('#weather').html(html)
+  }
+
+  var alertsState
+  function setAlertState(alerts) {
+    if (alertsState == alerts) return
+    alertsState = alerts
+
+    let html = ''
+    if (alerts != undefined) {
+      for (let a of alerts) {
+        html += `<div class="col-12">
+                  <div class="card" style="background-color: ${a.level == 'info' ? bgGreen : a.level == 'warn' ? bgYellow : bgRed};">
+                    <div class="card-body py-2">
+                      <div class="text-center">
+                        <p class="card-text mb-0 lead"><span class=" mr-2"><b>${a.msg}</b></span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>`
+      }
+    }
+    $('#alerts').html(html)
   }
   
   loadStocks()
