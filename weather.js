@@ -40,6 +40,7 @@ function processWeather(w, time = undefined) {
   weather.push({
     time: time == undefined ? hourStr : time,
     temp: temp,
+    wind: Math.ceil(w.wind_gust),
     icon: w.weather[0].icon
   })
 }

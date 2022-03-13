@@ -20,16 +20,35 @@ startWeather(checkPoint, production)
 
 var alerts
 
+// Check every 5 seconds for alerts
 setInterval(function() {
-  if (alerts == undefined) {
-    alerts = {
-      "level": "alert",
-      "msg": "Tash can needs to be colected"
+
+}, 5000)
+
+// Check hourly for trash collection
+var alert
+setInterval(function() {
+
+  let bothWendesday = new Date(1646805600000)
+  let now = new Date()
+
+  if (now.getDay() == 3 && now.getHours() > 12) {
+    const diff = Math.floor(Math.ceil(Math.abs(now - bothWendesday) / 86400000) / 7)
+    if (diff % 2 == 0) {
+      alert = {
+        "level": "info",
+        "msg": "Both trash and recycle will be collected tomorrow"
+      }
+    } else {
+      alert = {
+        "level": "info",
+        "msg": "Trash will be collected tomorrow"
+      }
     }
   } else {
-    alerts = undefined
+    alert = undefined
   }
-}, 10000)
+}, 3600000)
 
 app.get('/status', async (req, res) => {
   if (req.query.checkPoint == undefined || req.query.checkPoint != checkPoint.hash) {
