@@ -55,7 +55,7 @@ function getRigStatus(checkPoint = undefined) {
       updateCheckpoint = true
     }
 
-    let desktopRig = buildRig(response, '0-XC35BxW-3FK+VaIsOSyInA')
+    let desktopRig = buildRig(response, '0-VabHkOCiY1uFwrEBWAkhGQ')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
       updateCheckpoint = true
