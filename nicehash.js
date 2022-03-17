@@ -8,6 +8,11 @@ var usd = 0.0
 var miner = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
 var desktop = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
 
+var minerStopped
+var desktopStopped
+var minerAlert
+var desktoplert
+
 export function getNicehashStatus() {
   return {
     btc: btc,
@@ -15,6 +20,14 @@ export function getNicehashStatus() {
     miner: miner,
     desktop: desktop
   }
+}
+
+export function getNicehashAlerts() {
+  let alerts = []
+  if (minerAlert != undefined) alerts.push(minerAlert)
+  if (desktoplert != undefined) alerts.push(desktoplert)
+
+  return alerts
 }
 
 export function startNicehash(checkPoint, production) {
@@ -28,6 +41,24 @@ export function startNicehash(checkPoint, production) {
   getRigStatus()
   setInterval(function() {
     getRigStatus(checkPoint)
+
+    if (minerStopped != undefined && Math.abs(new Date() - minerStopped) > 900000) {
+      minerAlert = {
+        "level": "error",
+        "msg": "Miner has stopped for 15 minutes"
+      }
+    } else {
+      minerAlert = undefined
+    }
+    if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 900000) {
+      desktoplert = {
+        "level": "error",
+        "msg": "Desktop has stopped for 15 minutes"
+      }
+    } else {
+      desktoplert = undefined
+    }
+     
   }, production ? 15000 : 30000)
 
 }
@@ -49,16 +80,28 @@ function getRigStatus(checkPoint = undefined) {
   callNicehash('/main/api/v2/mining/rigs2').then(function (response) {
     let updateCheckpoint = false
 
-    let minorRig = buildRig(response, '0-W6SLxnUkR1mLgRrxqZiZHQ')
-    if (miner.status != minorRig.status || miner.speed != minorRig.speed) {
-      miner = minorRig
+    let minerRig = buildRig(response, '0-W6SLxnUkR1mLgRrxqZiZHQ')
+    if (miner.status != minerRig.status || miner.speed != minerRig.speed) {
+      miner = minerRig
       updateCheckpoint = true
+
+      if (minerRig.status == 'STOPPED') {
+        if (minerStopped == undefined) minerStopped = new Date()
+      } else {
+        minerStopped = undefined
+      }
     }
 
     let desktopRig = buildRig(response, '0-VabHkOCiY1uFwrEBWAkhGQ')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
       updateCheckpoint = true
+
+      if (desktopRig.status == 'STOPPED') {
+        if (desktopStopped == undefined) desktopStopped = new Date()
+      } else {
+        desktopStopped = undefined
+      }
     }
 
     if (updateCheckpoint && checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)

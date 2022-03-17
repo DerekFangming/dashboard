@@ -1,6 +1,6 @@
 import express from 'express'
 import path from 'path'
-import { startNicehash, getNicehashStatus } from './nicehash.js'
+import { startNicehash, getNicehashStatus, getNicehashAlerts } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
 import { restartMiner } from './smartthings.js'
@@ -22,11 +22,9 @@ startWeather(checkPoint, production)
 var alerts
 // Check every 5 seconds for alerts
 setInterval(function() {
-  if (alert) {
-    alerts = [alert]
-  } else {
-    alerts = undefined
-  }
+  let tempAlerts = getNicehashAlerts()
+  if (alert) tempAlerts.push(alert)
+  alerts = tempAlerts.length == 0 ? undefined : tempAlerts
 }, 5000)
 
 // Check hourly for trash collection

@@ -13,7 +13,7 @@ export function startWeather(checkPoint, production) {
   updateWeather()
   setInterval(function() {
     updateWeather(checkPoint)
-  }, production ? 1800000 : 15000)
+  }, production ? 1800000 : 30000)
 }
 
 function updateWeather(checkPoint = undefined) {
