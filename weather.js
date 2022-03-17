@@ -24,7 +24,7 @@ function updateWeather(checkPoint = undefined) {
 
     let counter = 0
     for (let t of response.data.hourly) {
-      if (counter >= 20) break
+      if (counter >= 22) break
       if (counter % 2 == 0) processWeather(t)
       counter ++
     }
