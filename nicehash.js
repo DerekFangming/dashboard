@@ -4,6 +4,10 @@ import crypto from 'crypto'
 
 var btc = 0.0
 var usd = 0.0
+var fiatRate = 0.0
+var usd = 0.0
+var profit = 0.0
+var profitUsd = 0.0
 
 var miner = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
 var desktop = {status: 'STOPPED', speed: 0, joined: 0, devices:[]}
@@ -17,6 +21,8 @@ export function getNicehashStatus() {
   return {
     btc: btc,
     usd: usd,
+    p: profit,
+    pu: profitUsd,
     miner: miner,
     desktop: desktop
   }
@@ -68,17 +74,22 @@ function getBalance(checkPoint = undefined) {
     let btcBalance = response.data.currencies.filter(c => c.currency == 'BTC')
     if (btcBalance.length == 1) {
       btc = parseFloat(btcBalance[0].totalBalance)
-      usd = btc * btcBalance[0].fiatRate
+      fiatRate = btcBalance[0].fiatRate
+      usd = btc * fiatRate
     }
     if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
   }).catch(function (error) {
     console.log(error)
   });
 }
-//MINING STOPPED
+
+// Status: MINING STOPPED
 function getRigStatus(checkPoint = undefined) {
   callNicehash('/main/api/v2/mining/rigs2').then(function (response) {
     let updateCheckpoint = false
+
+    profit = response.data.totalProfitability
+    profitUsd = profit * fiatRate
 
     let minerRig = buildRig(response, '0-W6SLxnUkR1mLgRrxqZiZHQ')
     if (miner.status != minerRig.status || miner.speed != minerRig.speed) {

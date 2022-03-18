@@ -83,10 +83,12 @@ $( document ).ready(function() {
   var minerState
   var desktopState
   function setNicehashState(state) {
-    if (nhBtcState != state.btc) {
-      nhBtcState = state.btc
-      $('#nhBtcTxt').html(`BTC : ${state.btc.toFixed(5)}`)
-      $('#nhUsdTxt').html(`USD: ${state.usd.toFixed(2)}`)
+    if (nhBtcState != state.p) {
+      nhBtcState = state.p
+      $('#nhBtcTxt').html(state.btc.toFixed(8))
+      $('#nhUsdTxt').html(state.usd.toFixed(2))
+      $('#nhProfitTxt').html(state.p.toFixed(8))
+      $('#nhProfitUsdTxt').html(state.pu.toFixed(2))
     }
     
     setMinerState(minerState, state, 'miner')
@@ -122,7 +124,7 @@ $( document ).ready(function() {
 
     let html = ''
     for (let w of weather) {
-      let style = (w.temp <= 3 || w.wind > 10) ? `style="background-color:${bgYellow}"` : ''
+      let style = (w.temp <= 3 || w.wind >= 15) ? `style="background-color:${bgYellow}"` : ''
       html += `<div class="col py-2 px-1 text-center" ${style}><p class="mb-0">${w.time}</p><img src="http://openweathermap.org/img/wn/${w.icon}.png"/><p class="mb-0">${w.temp} °C</p><p class="mb-0">${w.wind} MPH</p></div>`
     }
     $('#weather').html(html)
