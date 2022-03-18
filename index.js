@@ -4,7 +4,7 @@ import { startNicehash, getNicehashStatus, getNicehashAlerts } from './nicehash.
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
 import { restartMiner } from './smartthings.js'
-
+import { startServerStatus, getServerStatus } from './server.js'
 const app = express()
 const __dirname = path.resolve()
 
@@ -18,6 +18,7 @@ var checkPoint = {
 startMyq(checkPoint, production)
 startNicehash(checkPoint, production)
 startWeather(checkPoint, production)
+startServerStatus(production)
 
 var alerts
 // Check every 5 seconds for alerts
@@ -54,7 +55,7 @@ setInterval(function() {
 
 app.get('/status', async (req, res) => {
   if (req.query.checkPoint == undefined || req.query.checkPoint != checkPoint.hash) {
-    res.status(200).json({checkPoint: checkPoint.hash, myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather(), alerts: alerts})
+    res.status(200).json({checkPoint: checkPoint.hash, myq: getMyqStatus(), nh: getNicehashStatus(), weather: getWeather(), server: getServerStatus(), alerts: alerts})
   } else {
     res.status(200).json({})
   }

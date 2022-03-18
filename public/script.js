@@ -29,7 +29,7 @@ $( document ).ready(function() {
         // Reset server status
         statusFailedCount = 0
         lastStatusDate = new Date()
-        setServerState(true)
+        setServerState(true, data.server)
 
 
         if (data.checkPoint) {
@@ -45,19 +45,19 @@ $( document ).ready(function() {
       error: function(xhr, status, errMsg){
         statusFailedCount ++;
         if (statusFailedCount >= 5) {
-          setServerState(false, lastStatusDate)
+          setServerState(false, undefined, lastStatusDate)
         }
       }
     });
   }
 
-  function setServerState(state, time = undefined) {
+  function setServerState(state, states, time = undefined) {
     
     if (serverState == state) return
       serverState = state
     if (serverState) {
       $('.server-status').css('background-color', bgGreen)
-      $('#serverStateTxt').html('<big>Connected</big>')
+      $('#serverStateTxt').html(`<big>CPU: ${states.cpu.toFixed(2)} % - MEM: ${states.mem.toFixed(2)} GB</big>`)
     } else {
       $('.server-status').css('background-color', bgRed)
       $('#serverStateTxt').html(`<big>Disconnected</big><small class="ml-1">Last seen ${time.toLocaleTimeString()}</small>`)
