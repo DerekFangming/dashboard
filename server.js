@@ -1,5 +1,6 @@
 
 import os from 'os-utils'
+import fs from 'fs'
 
 var cpu = 0.0
 var mem = 0.0
@@ -12,18 +13,27 @@ export function getServerStatus() {
 }
 
 export function startServerStatus(production) {
-  getStatus()
+  process.memoryUsage()
+  getStatus(production)
   setInterval(function() {
-    getStatus()
+    getStatus(production)
   }, production ? 5000 : 10000)
 }
 
-function getStatus() {
+function getStatus(production) {
   os.cpuUsage(function(v){
     cpu = v * 100
   })
 
-  mem = (os.totalmem() - os.freemem()) / 1000
+  var memUsed = 0.0
+  var memTotal = os.totalmem()
+  if (production) {
+    memUsed = Number(/Active:[ ]+(\d+)/.exec(fs.readFileSync('/proc/meminfo', 'utf8'))[1]) / 1000
+  } else {
+    memUsed = memTotal - os.freemem()
+  }
+
+  mem = memUsed / memTotal * 100
 }
   
 

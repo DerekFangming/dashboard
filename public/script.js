@@ -57,7 +57,7 @@ $( document ).ready(function() {
       serverState = state
     if (serverState) {
       $('.server-status').css('background-color', bgGreen)
-      $('#serverStateTxt').html(`<big>CPU: ${states.cpu.toFixed(2)} % - MEM: ${states.mem.toFixed(2)} GB</big>`)
+      $('#serverStateTxt').html(`<big>CPU: ${states.cpu.toFixed(2)} % - MEM: ${states.mem.toFixed(2)} %</big>`)
     } else {
       $('.server-status').css('background-color', bgRed)
       $('#serverStateTxt').html(`<big>Disconnected</big><small class="ml-1">Last seen ${time.toLocaleTimeString()}</small>`)
