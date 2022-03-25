@@ -14,6 +14,16 @@ $( document ).ready(function() {
   const bgRed = '#f8d7da'
   const bgDarkRed = '#dc3545'
 
+  const cardRateMin = new Map()
+  cardRateMin.set('1070', 22)
+  cardRateMin.set('1080', 22)
+  cardRateMin.set('2080 Ti', 57)
+  // cardRateMin.set('3060', 47)
+  cardRateMin.set('3060', 33)
+  cardRateMin.set('3060 Ti', 58)
+  cardRateMin.set('3070', 61)
+  cardRateMin.set('3070 Ti', 40)
+
   loadStatus();
   setInterval(function() {
     loadStatus();
@@ -105,8 +115,9 @@ $( document ).ready(function() {
         let html = `<p class="mb-0"><b>Joined for ${(Math.abs(new Date() - new Date(state[name].joined)) / 36e5).toFixed(2)} hours</b></p>`
         for (let d of state[name].devices) {
           let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
-          let style = (d.speed <= 0 || d.temp >= 75) ?  `style="background-color:${bgYellow}"` : ''
+          let style = (d.speed <= 0 || d.temp >= 75 || cardRateMin.get(d.name) > d.speed) ?  `style="background-color:${bgYellow}"` : ''
           html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
+          console.log(d.name)
         }
         $(`#nh${displayName}DevicesBlk`).html(html)
       } else {
