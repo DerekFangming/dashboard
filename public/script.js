@@ -61,13 +61,16 @@ $( document ).ready(function() {
     });
   }
 
-  function setServerState(state, states, time = undefined) {
-    
-    if (serverState == state) return
-      serverState = state
+  function setServerState(state, status, time = undefined) {
+    let newState = '' + state + (status == undefined ? 'undefined' : status.cpu)
+    if (serverState == newState) return
+    serverState = newState
+
     if (serverState) {
-      $('.server-status').css('background-color', bgGreen)
-      $('#serverStateTxt').html(`<big>CPU: ${states.cpu.toFixed(2)} % - MEM: ${states.mem.toFixed(2)} %</big>`)
+      if (status) {
+        $('.server-status').css('background-color', bgGreen)
+        $('#serverStateTxt').html(`<big>CPU: ${status.cpu.toFixed(2)} % - MEM: ${status.mem.toFixed(2)} %</big>`)
+      }
     } else {
       $('.server-status').css('background-color', bgRed)
       $('#serverStateTxt').html(`<big>Disconnected</big><small class="ml-1">Last seen ${time.toLocaleTimeString()}</small>`)
@@ -117,7 +120,6 @@ $( document ).ready(function() {
           let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
           let style = (d.speed <= 0 || d.temp >= 75 || cardRateMin.get(d.name) > d.speed) ?  `style="background-color:${bgYellow}"` : ''
           html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
-          console.log(d.name)
         }
         $(`#nh${displayName}DevicesBlk`).html(html)
       } else {
