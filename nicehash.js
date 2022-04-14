@@ -49,6 +49,15 @@ export function startNicehash(checkPoint, production) {
     getRigStatus(checkPoint)
 
     if (minerStopped != undefined && Math.abs(new Date() - minerStopped) > 900000) {
+
+      // Notify. Attempt to restart during night time
+      let hour = new Date().getHours()
+      let dayTime = hour >= 8 && hour <= 23
+
+      if (production && minerAlert == undefined) {
+        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: '🚨🚨🚨 Miner has stopped for 15 min'})
+      }
+
       minerAlert = {
         "level": "error",
         "msg": "Miner has stopped for 15 minutes"
@@ -56,7 +65,13 @@ export function startNicehash(checkPoint, production) {
     } else {
       minerAlert = undefined
     }
+
     if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 900000) {
+
+      if (production && desktoplert == undefined) {
+        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: '🚨🚨🚨 Desktop has stopped for 15 min'})
+      }
+
       desktoplert = {
         "level": "error",
         "msg": "Desktop has stopped for 15 minutes"
@@ -96,7 +111,7 @@ function getRigStatus(checkPoint = undefined) {
       miner = minerRig
       updateCheckpoint = true
 
-      if (minerRig.status == 'STOPPED') {
+      if (minerRig.status != 'MINING') {
         if (minerStopped == undefined) minerStopped = new Date()
       } else {
         minerStopped = undefined
@@ -108,7 +123,7 @@ function getRigStatus(checkPoint = undefined) {
       desktop = desktopRig
       updateCheckpoint = true
 
-      if (desktopRig.status == 'STOPPED') {
+      if (desktopRig.status != 'MINING') {
         if (desktopStopped == undefined) desktopStopped = new Date()
       } else {
         desktopStopped = undefined
