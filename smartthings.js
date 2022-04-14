@@ -24,7 +24,7 @@ const turnOff = {
 
 export function restartMiner() {
   // Force shut down
-  toggelSwitch(5000).then(function() {
+  toggelSwitch(5500).then(function() {
 
     // Start yo
     setTimeout(async function() {
@@ -44,10 +44,5 @@ async function toggelSwitch(timeout) {
     }, timeout)
   })
   
-  // setTimeout(function () {
-  //   axios.post('https://api.smartthings.com/v1/devices/d602faa9-e713-434f-819e-ad18e650012e/commands', turnOff, header).then(function (response) {
-      
-  //     console.log(3)
-  //   })
-  // }, 5000);
+
 }

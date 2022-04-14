@@ -1,6 +1,7 @@
 import axios from "axios"
 import { v4 as uuidv4 } from 'uuid'
 import crypto from 'crypto'
+import { restartMiner } from './smartthings.js'
 
 var btc = 0.0
 var usd = 0.0
@@ -56,6 +57,10 @@ export function startNicehash(checkPoint, production) {
 
       if (production && minerAlert == undefined) {
         axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: '🚨🚨🚨 Miner has stopped for 15 min'})
+
+        if (!dayTime) {
+          restartMiner()
+        }
       }
 
       minerAlert = {
