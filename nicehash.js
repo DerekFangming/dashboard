@@ -48,7 +48,10 @@ export function startNicehash(checkPoint, production) {
   getRigStatus()
   setInterval(function() {
     getRigStatus(checkPoint)
+  }, production ? 15000 : 30000)
 
+  // Check status every 15 minutes
+  setInterval(function() {
     if (minerStopped != undefined && Math.abs(new Date() - minerStopped) > 900000) {
 
       // Notify. Attempt to restart during night time
@@ -84,8 +87,7 @@ export function startNicehash(checkPoint, production) {
     } else {
       desktoplert = undefined
     }
-     
-  }, production ? 15000 : 30000)
+  }, 900000)
 
 }
 
