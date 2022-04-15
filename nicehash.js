@@ -52,14 +52,15 @@ export function startNicehash(checkPoint, production) {
 
   // Check status every 15 minutes
   setInterval(function() {
-    if (minerStopped != undefined && Math.abs(new Date() - minerStopped) > 900000) {
+    if (minerStopped != undefined && Math.abs(new Date() - minerStopped) > 300000) {
 
       // Notify. Attempt to restart during night time
       let hour = new Date().getHours()
       let dayTime = hour >= 8 && hour <= 23
 
-      if (production && minerAlert == undefined) {
-        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: '🚨🚨🚨 Miner has stopped for 15 min'})
+      let stoppedMinutes = (new Date() - minerStopped) / 60000
+      if (production) {
+        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Miner has stopped for ${stoppedMinutes} min`})
 
         if (!dayTime) {
           restartMiner()
@@ -68,21 +69,22 @@ export function startNicehash(checkPoint, production) {
 
       minerAlert = {
         "level": "error",
-        "msg": "Miner has stopped for 15 minutes"
+        "msg": `Miner has stopped for ${ stoppedMinutes } minutes`
       }
     } else {
       minerAlert = undefined
     }
 
-    if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 900000) {
+    if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 300000) {
 
-      if (production && desktoplert == undefined) {
-        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: '🚨🚨🚨 Desktop has stopped for 15 min'})
+      let stoppedMinutes = (new Date() - desktopStopped) / 60000
+      if (production) {
+        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Desktop has stopped for ${stoppedMinutes} min`})
       }
 
       desktoplert = {
         "level": "error",
-        "msg": "Desktop has stopped for 15 minutes"
+        "msg": `Desktop has stopped for ${stoppedMinutes} minutes`
       }
     } else {
       desktoplert = undefined
