@@ -127,7 +127,7 @@ function getRigStatus(checkPoint = undefined) {
       }
     }
 
-    let desktopRig = buildRig(response, '0-VabHkOCiY1uFwrEBWAkhGQ')
+    let desktopRig = buildRig(response, '0-SAM1mPS36k6qTVPz5cXePw')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
       updateCheckpoint = true
