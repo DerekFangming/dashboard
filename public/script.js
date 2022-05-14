@@ -118,7 +118,7 @@ $( document ).ready(function() {
         let html = `<p class="mb-0"><b>Joined for ${(Math.abs(new Date() - new Date(state[name].joined)) / 36e5).toFixed(2)} hours</b></p>`
         for (let d of state[name].devices) {
           let name = d.name.endsWith('Ti') ? d.name : d.name + '&nbsp&nbsp&nbsp&nbsp'
-          let style = (d.speed <= 0 || d.temp >= 75 || cardRateMin.get(d.name) > d.speed) ?  `style="background-color:${bgYellow}"` : ''
+          let style = (d.speed <= 0 || (d.temp >= 75 && d.temp < 200) || cardRateMin.get(d.name) > d.speed) ?  `style="background-color:${bgYellow}"` : ''
           html += `<p class="mb-0" ${style}>${name} - ${d.speed.toFixed(2)} MH/s - ${d.temp} °C - ${d.power < 0 ? 0 : d.power} W </p>`
         }
         $(`#nh${displayName}DevicesBlk`).html(html)
