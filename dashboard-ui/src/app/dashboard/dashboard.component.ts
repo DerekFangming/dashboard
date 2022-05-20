@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { environment } from 'src/environments/environment'
 
 @Component({
-  selector: 'app-lobby',
-  templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
-export class LobbyComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   gameIdInput = ''
   error = ''
