@@ -3,7 +3,7 @@ import path from 'path'
 import { startNicehash, getNicehashStatus, getNicehashAlerts } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
-import { restartMiner } from './smartthings.js'
+import { restartMiner, toggleMinorFan } from './smartthings.js'
 import { startServerStatus, getServerStatus } from './server.js'
 const app = express()
 const __dirname = path.resolve()
@@ -61,8 +61,11 @@ app.get('/status', async (req, res) => {
   }
 })
 
+var turn = true
+
 app.get('/test', async (req, res) => {
-  restartMiner()
+  toggleMinorFan(turn)
+  turn = !turn
   res.status(200).json({})
 })
 

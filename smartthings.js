@@ -35,6 +35,14 @@ export function restartMiner() {
 
 }
 
+export function toggleMinorFan(turnOnFan) {
+  if (turnOnFan) {
+    axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOn, header)
+  } else {
+    axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOff, header)
+  }
+}
+
 async function toggelSwitch(timeout) {
   return new Promise(async function(resolve) {
     await axios.post('https://api.smartthings.com/v1/devices/d602faa9-e713-434f-819e-ad18e650012e/commands', turnOn, header)
@@ -43,6 +51,5 @@ async function toggelSwitch(timeout) {
       resolve()
     }, timeout)
   })
-  
 
 }
