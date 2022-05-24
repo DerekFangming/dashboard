@@ -49,10 +49,10 @@ var checkPoint = {
   "hash": (Math.random() + 1).toString(36).substring(7)
 }
 
-startMyq(notifyClients, production)
+// startMyq(notifyClients, production)
 // startNicehash(checkPoint, production)
 // startWeather(checkPoint, production)
-// startServerStatus(production)
+startServerStatus(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {

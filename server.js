@@ -6,21 +6,22 @@ var cpu = 0.0
 var mem = 0.0
 
 export function getServerStatus() {
-  return {
-    cpu: cpu,
-    mem: mem
+  return { server: {
+      cpu: cpu,
+      mem: mem
+    }
   }
 }
 
-export function startServerStatus(production) {
+export function startServerStatus(notifyClients, production) {
   process.memoryUsage()
-  getStatus(production)
+  getStatus(notifyClients, production)
   setInterval(function() {
-    getStatus(production)
+    getStatus(notifyClients, production)
   }, production ? 5000 : 10000)
 }
 
-function getStatus(production) {
+function getStatus(notifyClients, production) {
   os.cpuUsage(function(v){
     cpu = v * 100
   })
@@ -34,6 +35,8 @@ function getStatus(production) {
   }
 
   mem = memUsed / memTotal * 100
+
+  notifyClients(getServerStatus())
 }
   
 
