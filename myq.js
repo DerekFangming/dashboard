@@ -6,34 +6,35 @@ var state = 'unknown'
 var since = new Date().toISOString()
 
 export function getMyqStatus() {
-  return {
+  return { myq: {
       state: state,
       since: since
+    }
   }
 }
 
-export function startMyq(checkPoint, production) {
-  callMyq(checkPoint)
+export function startMyq(notifyClients, production) {
+  callMyq(notifyClients)
   setInterval(function() {
-    callMyq(checkPoint)
+    callMyq(notifyClients)
   }, production ? 5000 : 10000)
 }
 
-function callMyq(checkPoint = undefined) {
+function callMyq(notifyClients) {
   myq.refreshDevices().then(e => {
     let device = myq.getDevice('CG08503460EE')
     if (device != null) {
-      updateState(device.state.door_state, device.state.last_update, checkPoint)
+      updateState(notifyClients, device.state.door_state, device.state.last_update)
     } else {
-      updateState('unknown', new Date().toISOString(), checkPoint)
+      updateState(notifyClients, 'unknown', new Date().toISOString())
     }
   })
 }
 
-function updateState(doorState, lastUpdate, checkPoint) {
+function updateState(notifyClients, doorState, lastUpdate) {
   if (state != doorState || since != lastUpdate ) {
-    if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    state = doorState
+    since = lastUpdate
+    notifyClients(getMyqStatus())
   }
-  state = doorState
-  since = lastUpdate
 }

@@ -1,24 +1,71 @@
 import express from 'express'
+import http from 'http'
 import path from 'path'
+import WebSocket, { WebSocketServer } from 'ws'
 import { startNicehash, getNicehashStatus, getNicehashAlerts } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
 import { restartMiner, toggleMinorFan } from './smartthings.js'
 import { startServerStatus, getServerStatus } from './server.js'
 const app = express()
+const server = http.createServer()
 const __dirname = path.resolve()
+
+let clients = []
 
 const port = '9002'
 const production = process.env.PRODUCTION == 'true'
+const clientTimeoutLimit = 60000
+
+
+
+const wss = new WebSocketServer({
+  server: server
+})
+
+server.on('request', app)
+
+
+
+wss.on('connection', function connection(client) {
+  console.log('clientConnected')
+  client.heatbeat = new Date()
+  clients.push(client)
+
+  client.on('message', function message(data) {
+    console.log('received: %s', data)
+    let message = `${data}`
+    console.log(message)
+
+    if (message == 'heatbeat') {
+      client.heatbeat = new Date()
+    }
+  })
+})
+
+
 
 var checkPoint = {
   "hash": (Math.random() + 1).toString(36).substring(7)
 }
 
-startMyq(checkPoint, production)
-startNicehash(checkPoint, production)
-startWeather(checkPoint, production)
-startServerStatus(production)
+startMyq(notifyClients, production)
+// startNicehash(checkPoint, production)
+// startWeather(checkPoint, production)
+// startServerStatus(production)
+
+function notifyClients(msg) {
+  clients = clients.filter(c => {
+    if (new Date() - c.heatbeat > clientTimeoutLimit) {
+      c.close()
+      return false
+    }
+
+    // Send message
+    c.send(JSON.stringify(msg))
+    return true
+  })
+}
 
 var alerts
 // Check every 5 seconds for alerts
@@ -69,5 +116,12 @@ app.get('/test', async (req, res) => {
   res.status(200).json({})
 })
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.listen(port, () => {})
+app.use(express.static(path.join(__dirname, 'public')))
+
+server.listen(port, function() {
+  // console.log(111)
+  // let a = {abc: 'abc'}
+  // let b = {haha: 'haha'}
+  // let merged = {...a, ...b};
+  // console.log(merged)
+})
