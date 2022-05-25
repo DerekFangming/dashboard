@@ -19,13 +19,14 @@ var minerAlert
 var desktoplert
 
 export function getNicehashStatus() {
-  return {
-    btc: btc,
-    usd: usd,
-    p: profit,
-    pu: profitUsd,
-    miner: miner,
-    desktop: desktop
+  return { nh: {
+      btc: btc,
+      usd: usd,
+      p: profit,
+      pu: profitUsd,
+      miner: miner,
+      desktop: desktop
+    }
   }
 }
 
@@ -37,17 +38,20 @@ export function getNicehashAlerts() {
   return alerts
 }
 
-export function startNicehash(checkPoint, production) {
+var notifyClientCopy
+
+export function startNicehash(notifyClients, production) {
+  notifyClientCopy = notifyClients
   // Get balance every hour
   getBalance()
   setInterval(function() {
-    getBalance(checkPoint)
+    getBalance()
   }, 3600000)
 
   // Get status every 15 seconds
   getRigStatus()
   setInterval(function() {
-    getRigStatus(checkPoint)
+    getRigStatus()
   }, production ? 15000 : 30000)
 
   // Check status every 15 minutes
@@ -93,7 +97,7 @@ export function startNicehash(checkPoint, production) {
 
 }
 
-function getBalance(checkPoint = undefined) {
+function getBalance() {
   callNicehash('/main/api/v2/accounting/accounts2', 'fiat=USD').then(function (response) {
     let btcBalance = response.data.currencies.filter(c => c.currency == 'BTC')
     if (btcBalance.length == 1) {
@@ -101,16 +105,16 @@ function getBalance(checkPoint = undefined) {
       fiatRate = btcBalance[0].fiatRate
       usd = btc * fiatRate
     }
-    if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    notifyClientCopy(getNicehashStatus())
   }).catch(function (error) {
     console.log(error)
   });
 }
 
 // Status: MINING STOPPED
-function getRigStatus(checkPoint = undefined) {
+function getRigStatus() {
   callNicehash('/main/api/v2/mining/rigs2').then(function (response) {
-    let updateCheckpoint = false
+    let hasUpdate = false
 
     profit = response.data.totalProfitability
     profitUsd = profit * fiatRate
@@ -118,7 +122,7 @@ function getRigStatus(checkPoint = undefined) {
     let minerRig = buildRig(response, '0-W6SLxnUkR1mLgRrxqZiZHQ')
     if (miner.status != minerRig.status || miner.speed != minerRig.speed) {
       miner = minerRig
-      updateCheckpoint = true
+      hasUpdate = true
 
       if (minerRig.status != 'MINING') {
         if (minerStopped == undefined) minerStopped = new Date()
@@ -130,7 +134,7 @@ function getRigStatus(checkPoint = undefined) {
     let desktopRig = buildRig(response, '0-SAM1mPS36k6qTVPz5cXePw')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
-      updateCheckpoint = true
+      hasUpdate = true
 
       if (desktopRig.status != 'MINING') {
         if (desktopStopped == undefined) desktopStopped = new Date()
@@ -139,7 +143,7 @@ function getRigStatus(checkPoint = undefined) {
       }
     }
 
-    if (updateCheckpoint && checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    if (hasUpdate) notifyClientCopy(getNicehashStatus())
   }).catch(function (error) {
     console.log(error)
   });

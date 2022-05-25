@@ -33,9 +33,7 @@ wss.on('connection', function connection(client) {
   clients.push(client)
 
   client.on('message', function message(data) {
-    console.log('received: %s', data)
-    let message = `${data}`
-    console.log(message)
+    console.log(`${data}`)
 
     if (message == 'heatbeat') {
       client.heatbeat = new Date()
@@ -50,9 +48,9 @@ var checkPoint = {
 }
 
 // startMyq(notifyClients, production)
-// startNicehash(checkPoint, production)
-// startWeather(checkPoint, production)
-startServerStatus(notifyClients, production)
+startNicehash(notifyClients, production)
+// startWeather(notifyClients, production)
+// startServerStatus(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {

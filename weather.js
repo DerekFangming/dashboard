@@ -6,17 +6,17 @@ const tempOffset = 273.15
 var weather = []
 
 export function getWeather() {
-  return weather
+  return {weather: weather}
 }
 
-export function startWeather(checkPoint, production) {
-  updateWeather()
+export function startWeather(notifyClients, production) {
+  updateWeather(notifyClients)
   setInterval(function() {
-    updateWeather(checkPoint)
+    updateWeather(notifyClients)
   }, production ? 1800000 : 30000)
 }
 
-function updateWeather(checkPoint = undefined) {
+function updateWeather(notifyClients) {
   axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=30.35&lon=-97.60&exclude=minutely,daily&appid=' + appId).then(function (response) {
     weather = []
 
@@ -29,7 +29,7 @@ function updateWeather(checkPoint = undefined) {
       counter ++
     }
 
-    if (checkPoint != undefined) checkPoint.hash = (Math.random() + 1).toString(36).substring(7)
+    notifyClients(getWeather())
   })
 }
 
