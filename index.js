@@ -52,7 +52,7 @@ var checkPoint = {
 
 // startMyq(notifyClients, production)
 startNicehash(notifyClients, production)
-// startWeather(notifyClients, production)
+startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 
 function notifyClients(msg) {

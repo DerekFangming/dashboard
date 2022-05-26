@@ -108,12 +108,16 @@
 
   <!-- Weather -->
   <div class="row">
-    <div class="col border px-0" style="background-color: #c3e6cb;">
-      <div class="card border-0" style="background-color: #c3e6cb;">
+    <div class="col border px-0 bg-green">
+      <div class="card border-0 bg-transparent">
         <div class="row no-gutters">
           <div class="col">
             <div class="card-block">
-              <div class="row ml-1" id="weather">
+              <div class="row ms-1" *ngIf="weather">
+                <div class="col py-2 px-1 text-center" *ngFor="let w of weather" [ngClass]="(w.temp <= 3 || w.wind >= 15) ? 'bg-yellow' : 'bg-green'">
+                  <p class="mb-0">{{ w.time }}</p><img [src]="'http://openweathermap.org/img/wn/' + w.icon + '.png'"/>
+                  <p class="mb-0">{{w.temp}} °C</p><p class="mb-0">{{w.wind}} MPH</p>
+                </div>
               </div>
             </div>
           </div>
