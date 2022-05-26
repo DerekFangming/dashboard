@@ -15,7 +15,7 @@ let clients = []
 
 const port = '9002'
 const production = process.env.PRODUCTION == 'true'
-const clientTimeoutLimit = 60000
+const clientTimeoutLimit = 180000
 
 
 
@@ -28,12 +28,15 @@ server.on('request', app)
 
 
 wss.on('connection', function connection(client) {
-  console.log('clientConnected')
   client.heatbeat = new Date()
   clients.push(client)
 
+  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus()}
+  client.send(JSON.stringify(merged))
+
   client.on('message', function message(data) {
-    console.log(`${data}`)
+    let message = `${data}`
+    // console.log(`${data}`)
 
     if (message == 'heatbeat') {
       client.heatbeat = new Date()
@@ -50,7 +53,7 @@ var checkPoint = {
 // startMyq(notifyClients, production)
 startNicehash(notifyClients, production)
 // startWeather(notifyClients, production)
-// startServerStatus(notifyClients, production)
+startServerStatus(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {
