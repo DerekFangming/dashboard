@@ -45,7 +45,7 @@
   <!-- Nicehash status -->
   <div class="row">
     <div class="col-2 border pr-0" style="background-color: #c3e6cb;">
-      <div class="card my-2 border-0" style="background-color: #c3e6cb;">
+      <div class="card my-2 border-0 bg-transparent">
         <div class="row no-gutters">
           <div class="col-12">
             <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
@@ -63,8 +63,9 @@
         </div>
       </div>
     </div>
-    <div class="col-5 miner-status border" style="background-color: #c3e6cb;">
-      <div class="card miner-status my-2 border-0" style="background-color: #c3e6cb;">
+
+    <div class="col-5 miner-status border" [ngClass]="nh && nh.miner.status == 'MINING' ? 'bg-green' : 'bg-red'">
+      <div class="card miner-status my-2 border-0 bg-transparent">
         <div class="row no-gutters">
           <div class="col-auto">
             <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-mining-finance-flatart-icons-outline-flatarticons.png"/>
@@ -72,7 +73,7 @@
           <div class="col">
             <div class="card-block px-2">
               <p class="card-text mb-0 lead"><span class="me-2"><b *ngIf="nh">Miner {{ getMinerStatus('miner') }}</b></span></p>
-              <div *ngIf="nh">
+              <div *ngIf="nh && nh.miner.status == 'MINING'">
                 <p class="mb-0"><b>Joined for {{ getMinerJoinTime('miner') }} hours</b></p>
                 <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.miner.devices" >
                   <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
@@ -83,8 +84,8 @@
         </div>
       </div>
     </div>
-    <div class="col-5 desktop-status border" style="background-color: #c3e6cb;">
-      <div class="card desktop-status my-2 border-0" style="background-color: #c3e6cb;">
+    <div class="col-5 desktop-status border" [ngClass]="nh && nh.desktop.status == 'MINING' ? 'bg-green' : 'bg-red'">
+      <div class="card desktop-status my-2 border-0 bg-transparent">
         <div class="row no-gutters">
           <div class="col-auto">
             <img src="https://img.icons8.com/external-icongeek26-outline-icongeek26/64/000000/external-desktop-devices-icongeek26-outline-icongeek26.png"/>
@@ -92,11 +93,27 @@
           <div class="col">
             <div class="card-block px-2">
               <p class="card-text mb-0 lead"><span class=" me-2"><b *ngIf="nh">Desktop {{ getMinerStatus('desktop') }}</b></span></p>
-              <div *ngIf="nh">
+              <div *ngIf="nh && nh.desktop.status == 'MINING'">
                 <p class="mb-0"><b>Joined for {{ getMinerJoinTime('desktop') }} hours</b></p>
                 <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.desktop.devices" >
                   <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weather -->
+  <div class="row">
+    <div class="col border px-0" style="background-color: #c3e6cb;">
+      <div class="card border-0" style="background-color: #c3e6cb;">
+        <div class="row no-gutters">
+          <div class="col">
+            <div class="card-block">
+              <div class="row ml-1" id="weather">
               </div>
             </div>
           </div>
