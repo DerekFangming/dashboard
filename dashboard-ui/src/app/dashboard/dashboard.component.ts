@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment'
 })
 export class DashboardComponent implements OnInit {
 
-  error = ''
+  connected = true
   ws: WebSocket
   heartbeatInterval
 
@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
     let that = this
 
     this.ws.onopen = function (event) {
+      that.connected = true
 
       // heartbeat
       if (that.heartbeatInterval != undefined) {
@@ -58,6 +59,17 @@ export class DashboardComponent implements OnInit {
       if ('weather' in status) that.weather = status.weather
       if ('server' in status) that.server = status.server
   
+    }
+
+    this.ws.onclose = function (data) {
+      that.connected = false
+      setTimeout(function() {
+        that.connect()
+      }, 5000)
+    }
+
+    this.ws.onerror = function (data) {
+      that.ws.close();
     }
 
   }

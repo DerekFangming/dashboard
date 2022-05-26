@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <!-- Server status and garage door status -->
   <div class="row">
-    <div class="col server-status border" style="background-color: #c3e6cb;">
+    <div class="col server-status border" [ngClass] = "connected ? 'bg-green' : 'bg-red'">
       <div class="card my-2 border-0 bg-transparent">
         <div class="row no-gutters">
           <div class="col-auto">
@@ -10,8 +10,9 @@
           <div class="col">
             <div class="card-block px-2">
               <p class="card-text mb-0 lead"><span class="me-2"><b>Server Status</b></span></p>
-              <p *ngIf="!server" class="lead mb-0">Connected</p>
-              <p *ngIf="server" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} % - MEM: {{server.mem.toFixed(2)}} %</p>
+              <p *ngIf="!server && connected" class="lead mb-0">Connected</p>
+              <p *ngIf="server && connected" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} % - MEM: {{server.mem.toFixed(2)}} %</p>
+              <p *ngIf="!connected" class="lead mb-0">Disconnected</p>
             </div>
           </div>
         </div>
