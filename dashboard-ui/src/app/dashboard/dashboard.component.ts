@@ -10,16 +10,16 @@ export class DashboardComponent implements OnInit {
 
   connected = true
   ws: WebSocket
-  heartbeatInterval
+  heartbeatInterval: any
 
   env = environment
 
-  myq
-  nh
-  weather
-  server
-  stock
-  alerts
+  myq: any
+  nh: any
+  weather: any
+  server: any
+  stock: any
+  alerts: any
 
   cardRateMin = new Map()
 
@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
       }
       that.heartbeatInterval = setInterval(function() {
         that.ws.send('heatbeat')
-      }, 30000)
+      }, 3000)
     }
 
     this.ws.onmessage = function (data) {
@@ -67,6 +67,9 @@ export class DashboardComponent implements OnInit {
 
     this.ws.onclose = function (data) {
       that.connected = false
+      if (that.heartbeatInterval != undefined) {
+        clearInterval(that.heartbeatInterval)
+      }
       setTimeout(function() {
         that.connect()
       }, 5000)
