@@ -75,7 +75,7 @@
               <p class="card-text mb-0 lead"><span class="me-2"><b *ngIf="nh">Miner {{ getMinerStatus('miner') }}</b></span></p>
               <div *ngIf="nh && nh.miner.status == 'MINING'">
                 <p class="mb-0"><b>Joined for {{ getMinerJoinTime('miner') }} hours</b></p>
-                <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.miner.devices" >
+                <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.miner.devices">
                   <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
                 </p>
               </div>
@@ -191,6 +191,20 @@
               <p class="lead mb-0" *ngIf="stock">$ {{ stock.eth.c }}<br />
                 <small> {{stock.eth.d}} ( {{stock.eth.dp}} %)</small>
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-bottom" *ngIf="alerts">
+    <div class="row">
+      <div class="col-12" *ngFor="let a of alerts">
+        <div class="card" [ngClass]="a.level == 'info' ? 'bg-green' : a.level == 'warn' ? 'bg-yellow' : 'bg-red'">
+          <div class="card-body py-2">
+            <div class="text-center">
+              <p class="card-text mb-0 lead"><span class=" mr-2"><b>{{a.msg}}</b></span></p>
             </div>
           </div>
         </div>

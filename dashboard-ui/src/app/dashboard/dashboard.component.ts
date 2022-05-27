@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   weather
   server
   stock
+  alerts
 
   cardRateMin = new Map()
 
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit {
       if ('weather' in status) that.weather = status.weather
       if ('server' in status) that.server = status.server
       if ('stock' in status) that.stock = status.stock
+      if ('alerts' in status) that.alerts = status.alerts
   
     }
 

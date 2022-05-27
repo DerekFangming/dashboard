@@ -1,10 +1,7 @@
 import { getNicehashAlerts } from './nicehash.js'
 
 var alerts = []
-var trashAlert = {
-  "level": "info",
-  "msg": "Trash will be collected tomorrow"
-}
+var trashAlert
 
 export function startAlerts(notifyClients) {
 
@@ -18,7 +15,7 @@ export function startAlerts(notifyClients) {
   // Send alerts every minutes
   setInterval(function() {
     notifyClients({alerts: alerts})
-  }, 6000)
+  }, 60000)
 
   // Check hourly for trash collection
   setInterval(function() {
