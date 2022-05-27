@@ -97,7 +97,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getDeviceStatus(device) {
-    let name = device.name.endsWith('Ti') ? device.name : device.name + '    '
     return ` - ${device.speed.toFixed(2)} MH/s - ${device.temp} °C - ${device.power < 0 ? 0 : device.power} W`
   }
 

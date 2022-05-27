@@ -115,7 +115,7 @@
             <div class="card-block">
               <div class="row ms-1" *ngIf="weather">
                 <div class="col py-2 px-1 text-center" *ngFor="let w of weather" [ngClass]="(w.temp <= 3 || w.wind >= 15) ? 'bg-yellow' : 'bg-green'">
-                  <p class="mb-0">{{ w.time }}</p><img [src]="'http://openweathermap.org/img/wn/' + w.icon + '.png'"/>
+                  <p class="mb-0">{{ w.time }}</p><img [src]="'https://openweathermap.org/img/wn/' + w.icon + '.png'"/>
                   <p class="mb-0">{{w.temp}} °C</p><p class="mb-0">{{w.wind}} MPH</p>
                 </div>
               </div>
