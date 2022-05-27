@@ -7,6 +7,8 @@ import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
 import { restartMiner, toggleMinorFan } from './smartthings.js'
 import { startServerStatus, getServerStatus } from './server.js'
+import { startStock, getStock } from './stock.js'
+
 const app = express()
 const server = http.createServer()
 const __dirname = path.resolve()
@@ -31,7 +33,7 @@ wss.on('connection', function connection(client) {
   client.heatbeat = new Date()
   clients.push(client)
 
-  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus()}
+  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -52,8 +54,9 @@ var checkPoint = {
 
 // startMyq(notifyClients, production)
 startNicehash(notifyClients, production)
-startWeather(notifyClients, production)
+// startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
+startStock(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {

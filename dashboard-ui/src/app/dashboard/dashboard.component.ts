@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   nh
   weather
   server
+  stock
 
   cardRateMin = new Map()
 
@@ -58,6 +59,7 @@ export class DashboardComponent implements OnInit {
       if ('nh' in status) that.nh = status.nh
       if ('weather' in status) that.weather = status.weather
       if ('server' in status) that.server = status.server
+      if ('stock' in status) that.stock = status.stock
   
     }
 
@@ -92,6 +94,13 @@ export class DashboardComponent implements OnInit {
   getDeviceStatus(device) {
     let name = device.name.endsWith('Ti') ? device.name : device.name + '    '
     return ` - ${device.speed.toFixed(2)} MH/s - ${device.temp} °C - ${device.power < 0 ? 0 : device.power} W`
+  }
+
+  getStockStyle(dp) {
+    if (dp <= -5) return 'bg-dark-red'
+    if (dp < 0) return 'bg-red'
+    if (dp < 5) return 'bg-green'
+    return 'bg-dark-green'
   }
 
   
