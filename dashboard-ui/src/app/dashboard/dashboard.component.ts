@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { NotifierService } from 'angular-notifier'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -25,7 +26,8 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
 
-  constructor(private elementRef:ElementRef) { }
+  private readonly notifier: NotifierService;
+  constructor(private elementRef:ElementRef, private notifierService: NotifierService) { this.notifier = notifierService}
 
   ngOnInit() {
     this.cardRateMin.set('2080 Ti', 55)
@@ -79,6 +81,11 @@ export class DashboardComponent implements OnInit {
       that.ws.close();
     }
 
+  }
+
+  restartMiner() {
+    this.ws.send('restartMiner')
+    this.notifier.notify('success', 'Restart miner request sent.');
   }
 
   getMinerStatus(name) {

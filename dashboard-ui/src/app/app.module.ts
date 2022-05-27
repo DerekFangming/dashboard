@@ -5,6 +5,7 @@ import { AppComponent } from './app.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
 import { AppRoutingModule } from './app-routing.module'
 import { FormsModule } from '@angular/forms'
+import { NotifierModule } from 'angular-notifier'
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NotifierModule
   ],
   providers: [],
   bootstrap: [AppComponent]

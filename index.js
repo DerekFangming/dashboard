@@ -8,7 +8,7 @@ import { startWeather, getWeather } from './weather.js'
 import { restartMiner, toggleMinorFan } from './smartthings.js'
 import { startServerStatus, getServerStatus } from './server.js'
 import { startStock, getStock } from './stock.js'
-import { startAlerts } from './alert.js'
+import { startAlerts, getAlerts } from './alert.js'
 
 const app = express()
 const server = http.createServer()
@@ -32,7 +32,7 @@ wss.on('connection', function connection(client) {
   client.heatbeat = new Date()
   clients.push(client)
 
-  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock()}
+  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(), ...getAlerts()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -40,6 +40,8 @@ wss.on('connection', function connection(client) {
 
     if (message == 'heatbeat') {
       client.heatbeat = new Date()
+    } else if (message == 'restartMiner') {
+      restartMiner()
     }
   })
 })
