@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
         clearInterval(that.heartbeatInterval)
       }
       setTimeout(function() {
-        that.connect()
+        if (!that.connected) that.connect()
       }, 5000)
     }
 
