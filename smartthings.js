@@ -54,9 +54,12 @@ export function restartMiner() {
 export function toggleMinorFan() {
   if (fanOn) {
     axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOff, header)
+    fanOn = false
   } else {
     axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOn, header)
+    fanOn = true
   }
+  notifyClients(getSmartthingsStatus())
 }
 
 async function toggelSwitch(timeout) {
