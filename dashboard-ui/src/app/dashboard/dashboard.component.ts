@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   weather: any
   server: any
   stock: any
+  smartthings: any
   alerts: any
 
   cardRateMin = new Map()
@@ -63,6 +64,7 @@ export class DashboardComponent implements OnInit {
       if ('weather' in status) that.weather = status.weather
       if ('server' in status) that.server = status.server
       if ('stock' in status) that.stock = status.stock
+      if ('smartthings' in status) that.smartthings = status.smartthings
       if ('alerts' in status) that.alerts = status.alerts
   
     }
@@ -85,7 +87,12 @@ export class DashboardComponent implements OnInit {
 
   restartMiner() {
     this.ws.send('restartMiner')
-    this.notifier.notify('success', 'Restart miner request sent.');
+    this.notifier.notify('success', 'Restart miner request sent.')
+  }
+
+  toggleMinorFan() {
+    this.ws.send('toggleMinorFan')
+    this.notifier.notify('success', 'Toggle miner fan request sent.')
   }
 
   getMinerStatus(name) {

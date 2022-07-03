@@ -2,10 +2,10 @@ import express from 'express'
 import http from 'http'
 import path from 'path'
 import { WebSocketServer } from 'ws'
-import { startNicehash, getNicehashStatus, getNicehashAlerts } from './nicehash.js'
+import { startNicehash, getNicehashStatus } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
-import { restartMiner, toggleMinorFan } from './smartthings.js'
+import { restartMiner, toggleMinorFan, startSmartthings, getSmartthingsStatus } from './smartthings.js'
 import { startServerStatus, getServerStatus } from './server.js'
 import { startStock, getStock } from './stock.js'
 import { startAlerts, getAlerts } from './alert.js'
@@ -32,7 +32,8 @@ wss.on('connection', function connection(client) {
   client.heatbeat = new Date()
   clients.push(client)
 
-  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(), ...getAlerts()}
+  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
+    ...getAlerts(), ...getSmartthingsStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -42,16 +43,19 @@ wss.on('connection', function connection(client) {
       client.heatbeat = new Date()
     } else if (message == 'restartMiner') {
       restartMiner()
+    } else if (message == 'toggleMinorFan') {
+      toggleMinorFan()
     }
   })
 })
 
-startMyq(notifyClients, production)
-startNicehash(notifyClients, production)
-startWeather(notifyClients, production)
-startServerStatus(notifyClients, production)
-startStock(notifyClients, production)
-startAlerts(notifyClients)
+// startMyq(notifyClients, production)
+// startNicehash(notifyClients, production)
+// startWeather(notifyClients, production)
+// startServerStatus(notifyClients, production)
+// startStock(notifyClients, production)
+// startAlerts(notifyClients)
+startSmartthings(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {
@@ -70,8 +74,6 @@ function notifyClients(msg) {
 var turn = true
 
 app.get('/test', async (req, res) => {
-  toggleMinorFan(turn)
-  turn = !turn
   res.status(200).json({})
 })
 

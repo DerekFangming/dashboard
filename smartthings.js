@@ -21,6 +21,22 @@ const turnOff = {
     }
   ]
 }
+var fanOn = false
+
+export function getSmartthingsStatus() {
+  return {smartthings: {
+    fanOn: fanOn
+  }}
+}
+
+export function startSmartthings(notifyClients, production) {
+  updateDeviceStatus()
+  setInterval(function() {
+    updateDeviceStatus()
+    notifyClients(getSmartthingsStatus())
+  }, production ? 120000 : 10000 )
+
+}
 
 export function restartMiner() {
   // Force shut down
@@ -35,11 +51,11 @@ export function restartMiner() {
 
 }
 
-export function toggleMinorFan(turnOnFan) {
-  if (turnOnFan) {
-    axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOn, header)
-  } else {
+export function toggleMinorFan() {
+  if (fanOn) {
     axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOff, header)
+  } else {
+    axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOn, header)
   }
 }
 
@@ -51,5 +67,9 @@ async function toggelSwitch(timeout) {
       resolve()
     }, timeout)
   })
+}
 
+async function updateDeviceStatus() {
+  let res = await axios.get('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/status', header)
+  fanOn = res.data.components.main.switch.switch.value == 'on'
 }
