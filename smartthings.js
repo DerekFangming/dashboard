@@ -22,6 +22,7 @@ const turnOff = {
   ]
 }
 var fanOn = false
+var notifyClientCopy
 
 export function getSmartthingsStatus() {
   return {smartthings: {
@@ -30,6 +31,7 @@ export function getSmartthingsStatus() {
 }
 
 export function startSmartthings(notifyClients, production) {
+  notifyClientCopy = notifyClients
   updateDeviceStatus()
   setInterval(function() {
     updateDeviceStatus()
@@ -59,7 +61,7 @@ export function toggleMinorFan() {
     axios.post('https://api.smartthings.com/v1/devices/39ef51c9-4c37-4b26-9626-41dfefb26fd2/commands', turnOn, header)
     fanOn = true
   }
-  notifyClients(getSmartthingsStatus())
+  notifyClientCopy(getSmartthingsStatus())
 }
 
 async function toggelSwitch(timeout) {
