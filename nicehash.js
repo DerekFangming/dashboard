@@ -131,7 +131,7 @@ function getRigStatus() {
       }
     }
 
-    let desktopRig = buildRig(response, '0-SAM1mPS36k6qTVPz5cXePw')
+    let desktopRig = buildRig(response, '0-sdRMNpymllmepWKiwoA1fw')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
       hasUpdate = true
