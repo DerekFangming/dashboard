@@ -49,12 +49,12 @@ wss.on('connection', function connection(client) {
   })
 })
 
-// startMyq(notifyClients, production)
-// startNicehash(notifyClients, production)
-// startWeather(notifyClients, production)
-// startServerStatus(notifyClients, production)
-// startStock(notifyClients, production)
-// startAlerts(notifyClients)
+startMyq(notifyClients, production)
+startNicehash(notifyClients, production)
+startWeather(notifyClients, production)
+startServerStatus(notifyClients, production)
+startStock(notifyClients, production)
+startAlerts(notifyClients)
 startSmartthings(notifyClients, production)
 
 function notifyClients(msg) {
