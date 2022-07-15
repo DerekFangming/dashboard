@@ -218,6 +218,8 @@
         <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="restartMiner()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
         <button type="button" class="btn pull-right me-2 mb-2" [ngClass] = "smartthings && smartthings.fanOn ? 'btn-success' : 'btn-outline-success'"
         (click)="toggleMinorFan()"><i class="fa fa-lg fa-snowflake-o" aria-hidden="true"></i></button>
+        <button type="button" class="btn pull-right me-2 mb-2" [ngClass] = "nh && nh.hideAlert ? 'btn-success' : 'btn-outline-success'"
+        (click)="toggleHideAlert()"><i class="fa fa-lg fa-ban" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>

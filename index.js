@@ -2,7 +2,7 @@ import express from 'express'
 import http from 'http'
 import path from 'path'
 import { WebSocketServer } from 'ws'
-import { startNicehash, getNicehashStatus } from './nicehash.js'
+import { startNicehash, getNicehashStatus, toggleHideAlert } from './nicehash.js'
 import { startMyq, getMyqStatus } from './myq.js'
 import { startWeather, getWeather } from './weather.js'
 import { restartMiner, toggleMinorFan, startSmartthings, getSmartthingsStatus } from './smartthings.js'
@@ -45,6 +45,8 @@ wss.on('connection', function connection(client) {
       restartMiner()
     } else if (message == 'toggleMinorFan') {
       toggleMinorFan()
+    } else if (message == 'toggleHideAlert') {
+      toggleHideAlert()
     }
   })
 })

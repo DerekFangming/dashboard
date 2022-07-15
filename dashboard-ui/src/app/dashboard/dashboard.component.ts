@@ -95,6 +95,11 @@ export class DashboardComponent implements OnInit {
     this.notifier.notify('success', 'Toggle miner fan request sent.')
   }
 
+  toggleHideAlert() {
+    this.ws.send('toggleHideAlert')
+    if (this.nh) this.nh.hideAlert = !this.nh.hideAlert
+  }
+
   getMinerStatus(name) {
     if (this.nh[name].status == 'MINING') {
       return ' - Mining - ' + this.nh[name].speed.toFixed(2) + ' MH/s'

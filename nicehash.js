@@ -18,16 +18,23 @@ var desktopStopped
 var minerAlert
 var desktoplert
 
+var hideAlert = false
+
 export function getNicehashStatus() {
   return { nh: {
       btc: btc,
       usd: usd,
+      hideAlert: hideAlert,
       p: profit,
       pu: profitUsd,
       miner: miner,
       desktop: desktop
     }
   }
+}
+
+export function toggleHideAlert() {
+  hideAlert = !hideAlert
 }
 
 export function getNicehashAlerts() {
@@ -82,7 +89,7 @@ export function startNicehash(notifyClients, production) {
     if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 300000) {
 
       let stoppedMinutes = (new Date() - desktopStopped) / 60000
-      if (production) {
+      if (production && !hideAlert) {
         axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Desktop has stopped for ${stoppedMinutes} min`})
       }
 
