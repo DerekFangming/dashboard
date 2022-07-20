@@ -116,8 +116,8 @@
                 <p class="card-text mb-0 lead"><span class="me-2"><b>Helium Status</b></span></p>
                 <div *ngIf="helium">
                   <p class="mb-0" *ngFor="let h of helium.data">
-                    <b *ngIf="h.type=='poc_receipts_v2'">Witness {{ getTimeDifferent(h.time) }}</b>
-                    <b *ngIf="h.type=='rewards_v2'">Rewards {{ getTimeDifferent(h.time) }}</b>
+                    <b *ngIf="h.type=='poc_receipts_v2'" class="text-success">Witness {{ getTimeDifferent(h.time) }}</b>
+                    <b *ngIf="h.type=='rewards_v2'" class="text-primary">Rewards {{ getTimeDifferent(h.time) }}</b>
                   </p>
                 </div>
               </div>
