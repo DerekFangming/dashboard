@@ -9,6 +9,7 @@ import { restartMiner, toggleMinorFan, startSmartthings, getSmartthingsStatus } 
 import { startServerStatus, getServerStatus } from './server.js'
 import { startStock, getStock } from './stock.js'
 import { startAlerts, getAlerts } from './alert.js'
+import { startHelium, getHeliumStatus } from './helium.js'
 
 const app = express()
 const server = http.createServer()
@@ -33,7 +34,7 @@ wss.on('connection', function connection(client) {
   clients.push(client)
 
   let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
-    ...getAlerts(), ...getSmartthingsStatus()}
+    ...getAlerts(), ...getSmartthingsStatus(), ...getHeliumStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -58,6 +59,7 @@ startStock(notifyClients, production)
 startAlerts(notifyClients)
 startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
+startHelium(notifyClients, production)
 
 function notifyClients(msg) {
   clients = clients.filter(c => {

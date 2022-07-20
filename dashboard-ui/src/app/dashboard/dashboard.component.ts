@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   stock: any
   smartthings: any
   alerts: any
+  helium: any
 
   cardRateMin = new Map()
 
@@ -66,6 +67,7 @@ export class DashboardComponent implements OnInit {
       if ('stock' in status) that.stock = status.stock
       if ('smartthings' in status) that.smartthings = status.smartthings
       if ('alerts' in status) that.alerts = status.alerts
+      if ('helium' in status) that.helium = status.helium
   
     }
 
@@ -126,6 +128,14 @@ export class DashboardComponent implements OnInit {
     return 'bg-dark-green'
   }
 
+  getTimeDifferent(sec) {
+    let date = new Date(0)
+    date.setUTCSeconds(sec);
+
+    let diff = Math.abs(new Date().valueOf() - date.valueOf()) / 36e5
+    return diff.toFixed(2) + ' hours ago'
+    // return date.toLocaleTimeString()
+  }
   
   readableDate(string) {
     return new Date(string).toLocaleTimeString()
