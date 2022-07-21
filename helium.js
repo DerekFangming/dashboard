@@ -21,28 +21,35 @@ function getStatus() {
     axios.get(`https://api.helium.io/v1/hotspots//112n1rehHZRo1qxqD9ksd5zzdBAVtJaAMopo6BeWX3tjxpc3zeQd/roles?cursor=` + cursor).then( res => {
       let rawData = res.data.data.sort((a, b) => a - b)
 
-      // for (const rd of rawData) {
-      //   let date = new Date(0)
-      //   date.setUTCSeconds(rd.time);
-    
-      //   let diff = Math.abs(new Date().valueOf() - date.valueOf()) / 36e5
-      //   console.log(rd.type + ' ' + diff.toFixed(2) + ' hours ago')
-      // }
-
-      if (rawData.length > 20) rawData = rawData.slice(0, 20)
-
-      data = []
+      let newData = []
       for (const rd of rawData) {
-        data.push({type: rd.type, time: rd.time})
+        let date = new Date(0)
+        date.setUTCSeconds(rd.time);
+    
+        if (Math.abs(new Date().valueOf() - date.valueOf()) / 36e5 < 25) newData.push({type: rd.type, time: rd.time})
       }
 
-      notifyClientCopy(getHeliumStatus())
+      if (newData.length != data.length) {
+        data = newData
+        notifyClientCopy(getHeliumStatus())
+      } else {
+        for(var i = 0; i< newData.length; i++){
+          if (newData[i].time != data[i].time) {
+            data = newData
+            notifyClientCopy(getHeliumStatus())
+            break
+          }
+        }
+      }
+      
     }).catch(e => {
       status = 'Failed to retrieve rewards.'
+      console.log(e)
       notifyClientCopy(getHeliumStatus())
     })
   }).catch(e => {
     status = 'Failed to retrieve cursor.'
+    console.log(e)
     notifyClientCopy(getHeliumStatus())
   })
 

@@ -74,7 +74,7 @@
             <div class="card-block px-2">
               <p class="card-text mb-0 lead"><span class="me-2"><b *ngIf="nh">Miner {{ getMinerStatus('miner') }}</b></span></p>
               <div *ngIf="nh && nh.miner.status == 'MINING'">
-                <p class="mb-0"><b>Joined for {{ getMinerJoinTime('miner') }} hours</b></p>
+                <p class="mb-0"><b>{{ getMinerJoinTime('miner') }}</b></p>
                 <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.miner.devices">
                   <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
                 </p>
@@ -95,7 +95,7 @@
               <div class="card-block px-2">
                 <p class="card-text mb-0 lead"><span class=" me-2"><b *ngIf="nh">Desktop {{ getMinerStatus('desktop') }}</b></span></p>
                 <div *ngIf="nh && nh.desktop.status == 'MINING'">
-                  <p class="mb-0"><b>Joined for {{ getMinerJoinTime('desktop') }} hours</b></p>
+                  <p class="mb-0"><b>{{ getMinerJoinTime('desktop') }}</b></p>
                   <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.desktop.devices" >
                     <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
                   </p>
@@ -110,8 +110,7 @@
           <div class="row no-gutters">
             <div class="col">
               <div class="card-block px-2">
-                <div style="height: 150px"><canvas id="heliumChart"></canvas></div>
-                <div class="d-none" *ngIf="helium">{{ updateChart() }}</div>
+                <div style="height: 120px"><canvas id="heliumChart"></canvas></div>
               </div>
             </div>
           </div>

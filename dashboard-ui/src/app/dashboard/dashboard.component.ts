@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
   connected = true
   ws: WebSocket
   heartbeatInterval: any
+  heliumChart: any
 
   env = environment
 
@@ -42,6 +43,8 @@ export class DashboardComponent implements OnInit {
     this.cardRateMin.set('3070', 61)
     this.cardRateMin.set('3070 Ti', 40)
     this.connect()
+    
+    setInterval(()=> { this.updateChart() }, 300000)
   }
 
   connect() {
@@ -71,7 +74,10 @@ export class DashboardComponent implements OnInit {
       if ('stock' in status) that.stock = status.stock
       if ('smartthings' in status) that.smartthings = status.smartthings
       if ('alerts' in status) that.alerts = status.alerts
-      if ('helium' in status) that.helium = status.helium
+      if ('helium' in status) {
+        that.helium = status.helium
+        that.updateChart()
+      }
   
     }
 
@@ -133,6 +139,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChart() {
+    if (this.helium == null) return
     let witnesses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     let rewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     this.helium.data.forEach(h=> {
@@ -147,9 +154,11 @@ export class DashboardComponent implements OnInit {
       else if (h.type=='rewards_v2') rewards[diff] = rewards[diff] + 1
     })
 
+    if (this.heliumChart != null) this.heliumChart.destroy()
 
-    const barCanvasEle: any = document.getElementById('heliumChart')
-    const barChart = new Chart(barCanvasEle.getContext('2d'), {
+    let barCanvasEle: any = document.getElementById('heliumChart')
+    console.log('Calling this')
+    this.heliumChart = new Chart(barCanvasEle.getContext('2d'), {
       type: 'bar',
       data: {
         labels: ['24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'],
@@ -167,12 +176,6 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        // plugins: {
-        //   title: {
-        //     display: true,
-        //     text: 'Helium Status'
-        //   },
-        // },
         scales: {
             x: {
               stacked: true,
@@ -199,7 +202,6 @@ export class DashboardComponent implements OnInit {
 
     let diff = Math.abs(new Date().valueOf() - date.valueOf()) / 36e5
     return diff.toFixed(2) + ' hours ago'
-    // return date.toLocaleTimeString()
   }
   
   readableDate(string) {
