@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { NotifierService } from 'angular-notifier'
 import { environment } from 'src/environments/environment'
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +30,10 @@ export class DashboardComponent implements OnInit {
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
 
   private readonly notifier: NotifierService;
-  constructor(private elementRef:ElementRef, private notifierService: NotifierService) { this.notifier = notifierService}
+  constructor(private elementRef:ElementRef, private notifierService: NotifierService) {
+    this.notifier = notifierService
+    Chart.register(...registerables);
+  }
 
   ngOnInit() {
     this.cardRateMin.set('2080 Ti', 55)
@@ -126,6 +130,67 @@ export class DashboardComponent implements OnInit {
     if (dp < 0) return 'bg-red'
     if (dp < 5) return 'bg-green'
     return 'bg-dark-green'
+  }
+
+  updateChart() {
+    let witnesses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let rewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    this.helium.data.forEach(h=> {
+      let date = new Date(0)
+      date.setUTCSeconds(h.time)
+
+      let diff = Math.floor(Math.abs(new Date().valueOf() - date.valueOf()) / 36e5)
+      if (diff > 23) diff = 0
+      else diff = 23 - diff
+
+      if (h.type=='poc_receipts_v2') witnesses[diff] = witnesses[diff] + 1
+      else if (h.type=='rewards_v2') rewards[diff] = rewards[diff] + 1
+    })
+
+
+    const barCanvasEle: any = document.getElementById('heliumChart')
+    const barChart = new Chart(barCanvasEle.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'],
+        datasets: [{
+          label: 'Witness',
+          data: witnesses,
+          backgroundColor: "#50c878",
+        }, 
+        {
+          label: 'Rewards',
+          data: rewards,
+          backgroundColor: "#36a2eb",
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        // plugins: {
+        //   title: {
+        //     display: true,
+        //     text: 'Helium Status'
+        //   },
+        // },
+        scales: {
+            x: {
+              stacked: true,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              stacked: true,
+              grid: {
+                display: false
+              }
+            }
+        }
+      }
+    })
+
+    return this.helium.status
   }
 
   getTimeDifferent(sec) {

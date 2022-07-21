@@ -29,7 +29,7 @@ function getStatus() {
       //   console.log(rd.type + ' ' + diff.toFixed(2) + ' hours ago')
       // }
 
-      if (rawData.length > 6) rawData = rawData.slice(0, 6)
+      if (rawData.length > 20) rawData = rawData.slice(0, 20)
 
       data = []
       for (const rd of rawData) {
