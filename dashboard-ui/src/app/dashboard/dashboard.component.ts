@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { NotifierService } from 'angular-notifier'
 import { environment } from 'src/environments/environment'
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables } from 'chart.js'
 
 @Component({
   selector: 'app-dashboard',
