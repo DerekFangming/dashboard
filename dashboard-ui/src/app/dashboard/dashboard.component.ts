@@ -157,24 +157,20 @@ export class DashboardComponent implements OnInit {
     if (this.heliumChart != null) this.heliumChart.destroy()
 
     let barCanvasEle: any = document.getElementById('heliumChart')
-    console.log('Calling this')
     this.heliumChart = new Chart(barCanvasEle.getContext('2d'), {
       type: 'bar',
       data: {
         labels: ['24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'],
         datasets: [{
-          label: 'Witness',
           data: witnesses,
           backgroundColor: "#50c878",
         }, 
         {
-          label: 'Rewards',
           data: rewards,
           backgroundColor: "#36a2eb",
         }]
       },
       options: {
-        responsive: true,
         maintainAspectRatio: false,
         scales: {
             x: {
@@ -189,6 +185,11 @@ export class DashboardComponent implements OnInit {
                 display: false
               }
             }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
         }
       }
     })
