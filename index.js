@@ -10,6 +10,7 @@ import { startServerStatus, getServerStatus } from './server.js'
 import { startStock, getStock } from './stock.js'
 import { startAlerts, getAlerts } from './alert.js'
 import { startHelium, getHeliumStatus } from './helium.js'
+import { startTesla } from './tesla.js'
 
 const app = express()
 const server = http.createServer()
@@ -60,6 +61,7 @@ startAlerts(notifyClients)
 startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
+startTesla()
 
 function notifyClients(msg) {
   clients = clients.filter(c => {
@@ -73,9 +75,6 @@ function notifyClients(msg) {
     return true
   })
 }
-
-
-var turn = true
 
 app.get('/test', async (req, res) => {
   res.status(200).json({})
