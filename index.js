@@ -61,7 +61,7 @@ startAlerts(notifyClients)
 startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
-startTesla()
+
 
 function notifyClients(msg) {
   clients = clients.filter(c => {
