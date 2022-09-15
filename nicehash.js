@@ -137,8 +137,8 @@ function getRigStatus() {
         minerStopped = undefined
       }
     }
-    // let desktopRig = buildRig(response, '0-sdRMNpymllmepWKiwoA1fw')
-    let desktopRig = buildRig(response, '0-Y336wKb12EKz7XMq9B8S1w')
+    // let desktopRig = buildRig(response, '0-Y336wKb12EKz7XMq9B8S1w')
+    let desktopRig = buildRig(response, '0-sdRMNpymllmepWKiwoA1fw')
     if (desktop.status != desktopRig.status || desktop.speed != desktopRig.speed) {
       desktop = desktopRig
       hasUpdate = true
