@@ -70,13 +70,13 @@ export function startNicehash(notifyClients, production) {
       let dayTime = hour >= 8 && hour <= 23
 
       let stoppedMinutes = (new Date() - minerStopped) / 60000
-      if (production) {
-        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Miner has stopped for ${stoppedMinutes} min`})
+      // if (production) {
+      //   axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Miner has stopped for ${stoppedMinutes} min`})
 
-        if (!dayTime) {
-          restartMiner()
-        }
-      }
+      //   if (!dayTime) {
+      //     restartMiner()
+      //   }
+      // }
 
       minerAlert = {
         "level": "error",
@@ -89,9 +89,9 @@ export function startNicehash(notifyClients, production) {
     if (desktopStopped != undefined && Math.abs(new Date() - desktopStopped) > 300000) {
 
       let stoppedMinutes = (new Date() - desktopStopped) / 60000
-      if (production && !hideAlert) {
-        axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Desktop has stopped for ${stoppedMinutes} min`})
-      }
+      // if (production && !hideAlert) {
+      //   axios.post(`https://maker.ifttt.com/trigger/notification/with/key/${process.env.IFTTT_WEBHOOK_KEY}`, {value1: `🚨🚨🚨 Desktop has stopped for ${stoppedMinutes} min`})
+      // }
 
       desktoplert = {
         "level": "error",
