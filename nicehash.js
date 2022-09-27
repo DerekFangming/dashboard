@@ -39,8 +39,8 @@ export function toggleHideAlert() {
 
 export function getNicehashAlerts() {
   let alerts = []
-  if (minerAlert != undefined) alerts.push(minerAlert)
-  if (desktoplert != undefined) alerts.push(desktoplert)
+  // if (minerAlert != undefined) alerts.push(minerAlert)
+  // if (desktoplert != undefined) alerts.push(desktoplert)
 
   return alerts
 }

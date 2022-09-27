@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const token = Buffer.from('c2FuZGJveF9jOGoxcWEyYWQzaWZnOHRjNzNlZw==', 'base64').toString('ascii')
+const token = Buffer.from('YzhqMXFhMmFkM2lmZzh0YzczZTA=', 'base64').toString('ascii')
 
 var voo = {c: 0.0, d: 0.0, dp: 0.0}
 var sail = {c: 0.0, d: 0.0, dp: 0.0}
