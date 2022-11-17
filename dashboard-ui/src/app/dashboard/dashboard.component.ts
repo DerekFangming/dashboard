@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   smartthings: any
   alerts: any
   helium: any
+  scholar: any
 
   cardRateMin = new Map()
 
@@ -78,6 +79,7 @@ export class DashboardComponent implements OnInit {
         that.helium = status.helium
         that.updateChart()
       }
+      if ('scholar' in status) that.scholar = status.scholar
   
     }
 

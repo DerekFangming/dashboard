@@ -11,6 +11,7 @@ import { startStock, getStock } from './stock.js'
 import { startAlerts, getAlerts } from './alert.js'
 import { startHelium, getHeliumStatus } from './helium.js'
 import { startTesla } from './tesla.js'
+import { startScholar, getScholarStatus } from './scholar.js'
 
 const app = express()
 const server = http.createServer()
@@ -35,7 +36,7 @@ wss.on('connection', function connection(client) {
   clients.push(client)
 
   let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
-    ...getAlerts(), ...getSmartthingsStatus(), ...getHeliumStatus()}
+    ...getAlerts(), ...getSmartthingsStatus(), ...getHeliumStatus(), ...getScholarStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -61,6 +62,7 @@ startAlerts(notifyClients)
 startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
+startScholar(notifyClients)
 
 
 function notifyClients(msg) {
