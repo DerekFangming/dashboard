@@ -1,3 +1,4 @@
+import fetch from "node-fetch"
 
 var citation = '0'
 var notifyClientCopy
