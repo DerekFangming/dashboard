@@ -2,20 +2,38 @@ import express from 'express'
 import http from 'http'
 import path from 'path'
 import { WebSocketServer } from 'ws'
-import { startNicehash, getNicehashStatus, toggleHideAlert } from './nicehash.js'
-import { startMyq, getMyqStatus } from './myq.js'
-import { startWeather, getWeather } from './weather.js'
-import { restartMiner, toggleMinorFan, startSmartthings, getSmartthingsStatus } from './smartthings.js'
-import { startServerStatus, getServerStatus } from './server.js'
-import { startStock, getStock } from './stock.js'
-import { startAlerts, getAlerts } from './alert.js'
-import { startHelium, getHeliumStatus } from './helium.js'
-import { startTesla } from './tesla.js'
-import { startScholar, getScholarStatus } from './scholar.js'
+import { startNicehash, getNicehashStatus, toggleHideAlert } from './services/nicehash.js'
+import { startMyq, getMyqStatus } from './services/myq.js'
+import { startWeather, getWeather } from './services/weather.js'
+import { restartMiner, toggleMinorFan, startSmartthings, getSmartthingsStatus } from './services/smartthings.js'
+import { startServerStatus, getServerStatus } from './services/server.js'
+import { startStock, getStock } from './services/stock.js'
+import { startAlerts, getAlerts } from './services/alert.js'
+import { startHelium, getHeliumStatus } from './services/helium.js'
+import { startTesla } from './services/tesla.js'
+import { startScholar, getScholarStatus } from './services/scholar.js'
+import { startCamera, test } from './services/camera.js'
+
+import Stream from 'node-rtsp-stream'
+
+// const stream = new Stream({
+//   name: 'name',
+//   streamUrl: 'rtsp://admin:wlp33cka@10.0.1.158/live',
+//   wsPort: 9999,
+//   ffmpegOptions: { // options ffmpeg flags
+//     '-stats': '', // an option with no neccessary value uses a blank string
+//     '-r': 30 // options with required values specify the value after the key
+//   }
+// })
 
 const app = express()
 const server = http.createServer()
 const __dirname = path.resolve()
+
+app.get('/test1', async (req, res) => {
+  test()
+  res.status(200).json({})
+})
 
 let clients = []
 
@@ -63,6 +81,7 @@ startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
 startScholar(notifyClients)
+startCamera()
 
 
 function notifyClients(msg) {
@@ -84,4 +103,6 @@ app.get('/test', async (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-server.listen(port, function() {})
+server.listen(port, function() {
+  console.log(`Dashboard app started on port ${port}`)
+})
