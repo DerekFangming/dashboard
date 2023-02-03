@@ -4,18 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "ui": "cd dashboard-ui && ng serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "@hjdhjd/myq": "^6.0.7",
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "@hjdhjd/myq": "^6.0.7",
-    "ws": "^8.2.3",
-    "uuid": "^8.3.2",
+    "node-fetch": "^3.3.0",
+    "rtsp-video-recorder": "^2.2.0",
+    "node-rtsp-stream": "^0.0.9",
     "os-utils": "^0.0.14",
-    "node-fetch":"^3.3.0"
+    "uuid": "^8.3.2",
+    "ws": "^8.2.3"
   }
 }
