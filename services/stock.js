@@ -34,11 +34,11 @@ function updateStock() {
     voo.dp = response.data.dp.toFixed(2)
   })
   
-  axios.get('https://finnhub.io/api/v1/quote?symbol=SAIL&token=' + token).then(function (response) {
-    sail.c = response.data.c.toFixed(2)
-    sail.d = response.data.d.toFixed(2)
-    sail.dp = response.data.dp.toFixed(2)
-  })
+  // axios.get('https://finnhub.io/api/v1/quote?symbol=SAIL&token=' + token).then(function (response) {
+  //   sail.c = response.data.c.toFixed(2)
+  //   sail.d = response.data.d.toFixed(2)
+  //   sail.dp = response.data.dp.toFixed(2)
+  // })
   
   axios.get('https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=' + token).then(function (response) {
     btc.c = response.data.c.toFixed(2)

@@ -3,14 +3,18 @@ import Recorder, { RecorderEvents } from 'rtsp-video-recorder'
 var started = false
 var lastProgress = new Date()
 var recorder = null
-const streamURL = 'rtsp://admin:wlp33cka@10.0.1.158/live'
+const rtspURL = `rtsp://admin:${process.env.DATABASE_PASSWORD}@10.0.1.158/live`
 
-export function startCamera() {
+export function startCamera(production) {
+  startRecording(production)
+}
 
-  recorder = new Recorder.Recorder(streamURL, 'D:/Github/dashboard/videos', {
+function startRecording(production) {
+
+  recorder = new Recorder.Recorder(rtspURL, production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos', {
     title: 'Rercordings',
     filePattern: '%Y.%m.%d/%H.%M.%S',
-    segmentTime: 60,
+    segmentTime: 300,
     noAudio: false,
     ffmpegBinary: 'ffmpeg',
   })

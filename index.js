@@ -81,7 +81,7 @@ startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
 startScholar(notifyClients)
-startCamera()
+startCamera(production)
 
 
 function notifyClients(msg) {
