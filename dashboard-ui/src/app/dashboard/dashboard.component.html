@@ -10,7 +10,7 @@
                 <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"/>
               </div>
               <div class="col">
-                <div class="card-block px-2">
+                <div class="card-block">
                   <p *ngIf="!server && connected" class="lead mb-0">Connected</p>
                   <p *ngIf="server && connected" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} %</p>
                   <p *ngIf="server && connected" class="lead mb-0">MEM: {{server.mem.toFixed(2)}} %</p>
@@ -29,7 +29,7 @@
                 <img src="https://img.icons8.com/wired/64/000000/garage-door.png"/>
               </div>
               <div class="col">
-                <div class="card-block px-2">
+                <div class="card-block">
                   <p *ngIf="!myq" class="lead mb-0">Closed</p>
                   <p *ngIf="myq && myq.state == 'open'" class="lead mb-0">
                     Open<br /><small>Since {{ readableDate(myq.since) }}</small>
@@ -51,7 +51,7 @@
                 <img src="https://img.icons8.com/ios/64/null/quote-right.png"/>
               </div>
               <div class="col">
-                <div class="card-block px-2">
+                <div class="card-block">
                   <p class="display-2 mb-0">{{ scholar == null ? 'NaN' : scholar.citation }}</p>
                 </div>
               </div>
@@ -67,7 +67,7 @@
                 <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
               </div>
               <div class="col">
-                <div class="card-block px-2">
+                <div class="card-block">
                   <p class="lead mb-0">Witnesses: {{ heliumWitnesses }}</p>
                   <p class="lead mb-0">Rewards: {{ heliumRewards }}</p>
                 </div>
