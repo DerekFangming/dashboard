@@ -1,14 +1,15 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { NotifierService } from 'angular-notifier'
 import { environment } from 'src/environments/environment'
 import { Chart, registerables } from 'chart.js'
+import { DOCUMENT } from '@angular/common'
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
   connected = true
   ws: WebSocket
@@ -29,10 +30,14 @@ export class DashboardComponent implements OnInit {
 
   cardRateMin = new Map()
 
+  focusLiveStream = false
+  heliumWitnesses = 0
+  heliumRewards = 0
+
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
 
   private readonly notifier: NotifierService;
-  constructor(private elementRef:ElementRef, private notifierService: NotifierService) {
+  constructor(@Inject(DOCUMENT) private document, private elementRef:ElementRef, private notifierService: NotifierService) {
     this.notifier = notifierService
     Chart.register(...registerables);
   }
@@ -44,8 +49,13 @@ export class DashboardComponent implements OnInit {
     this.cardRateMin.set('3070', 61)
     this.cardRateMin.set('3070 Ti', 40)
     this.connect()
-    
-    setInterval(()=> { this.updateChart() }, 300000)
+  }
+
+  ngAfterViewInit() {
+    const s = this.document.createElement('script');
+    s.type = 'text/javascript';
+    s.innerHTML = `player = new JSMpeg.Player('ws://10.0.1.50:9999', { canvas: document.getElementById('camera')})`
+    this.elementRef.nativeElement.appendChild(s);
   }
 
   connect() {
@@ -77,7 +87,13 @@ export class DashboardComponent implements OnInit {
       if ('alerts' in status) that.alerts = status.alerts
       if ('helium' in status) {
         that.helium = status.helium
-        that.updateChart()
+        that.heliumWitnesses = 0
+        that.heliumRewards = 0
+
+        status.helium.data.forEach(h=> {
+          if (h.type=='poc_receipts_v2') that.heliumWitnesses ++
+          else if (h.type=='rewards_v2') that.heliumRewards ++
+        })
       }
       if ('scholar' in status) that.scholar = status.scholar
   
@@ -140,65 +156,6 @@ export class DashboardComponent implements OnInit {
     return 'bg-dark-green'
   }
 
-  updateChart() {
-    if (this.helium == null) return
-    let witnesses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    let rewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    this.helium.data.forEach(h=> {
-      let date = new Date(0)
-      date.setUTCSeconds(h.time)
-
-      let diff = Math.floor(Math.abs(new Date().valueOf() - date.valueOf()) / 36e5)
-      if (diff > 23) diff = 0
-      else diff = 23 - diff
-
-      if (h.type=='poc_receipts_v2') witnesses[diff] = witnesses[diff] + 1
-      else if (h.type=='rewards_v2') rewards[diff] = rewards[diff] + 1
-    })
-
-    if (this.heliumChart != null) this.heliumChart.destroy()
-
-    let barCanvasEle: any = document.getElementById('heliumChart')
-    this.heliumChart = new Chart(barCanvasEle.getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1'],
-        datasets: [{
-          data: witnesses,
-          backgroundColor: "#50c878",
-        }, 
-        {
-          data: rewards,
-          backgroundColor: "#36a2eb",
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-              stacked: true,
-              grid: {
-                display: false
-              }
-            },
-            y: {
-              stacked: true,
-              grid: {
-                display: false
-              }
-            }
-        },
-        plugins: {
-          legend: {
-            display: false
-          }
-        }
-      }
-    })
-
-    return this.helium.status
-  }
-
   getTimeDifferent(sec) {
     let date = new Date(0)
     date.setUTCSeconds(sec);
@@ -208,10 +165,14 @@ export class DashboardComponent implements OnInit {
   }
   
   readableDate(string) {
-    return new Date(string).toLocaleTimeString()
+    return new Date(string).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   }
 
   capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  }
+
+  liveStreamClicked() {
+    this.focusLiveStream = !this.focusLiveStream
   }
 }

@@ -1,12 +1,29 @@
 import Recorder, { RecorderEvents } from 'rtsp-video-recorder'
+import Stream from 'node-rtsp-stream'
 
 var started = false
 var lastProgress = new Date()
 var recorder = null
 const rtspURL = `rtsp://admin:${process.env.DATABASE_PASSWORD}@10.0.1.158/live`
+var stream
 
 export function startCamera(production) {
+  startLiveStream()
   startRecording(production)
+}
+
+function startLiveStream() {
+  stream = new Stream({
+    name: 'Live stream',
+    streamUrl: rtspURL,
+    wsPort: 9999,
+    ffmpegOptions: {
+      '-stats': '',
+      '-r': 30,
+    }
+  })
+
+  
 }
 
 function startRecording(production) {
@@ -14,7 +31,7 @@ function startRecording(production) {
   recorder = new Recorder.Recorder(rtspURL, production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos', {
     title: 'Rercordings',
     filePattern: '%Y.%m.%d/%H.%M.%S',
-    segmentTime: 300,
+    segmentTime: 900,
     noAudio: false,
     ffmpegBinary: 'ffmpeg',
   })
@@ -46,14 +63,17 @@ function startRecording(production) {
   }, 5000)
 }
 
-export function test() {
-  if (started) {
-    started = false
-    recorder.stop();
-    console.log("=============== Stopping")
-  } else {
-    started = true
-    recorder.start();
-    console.log("=============== Starting")
-  }
+export function restartLiveStream() {
+  stream.stop()
+  
+  stream = new Stream({
+    name: 'Live stream',
+    streamUrl: rtspURL,
+    wsPort: 9999,
+    ffmpegOptions: {
+      '-stats': '',
+      '-r': 30,
+    }
+  })
+
 }

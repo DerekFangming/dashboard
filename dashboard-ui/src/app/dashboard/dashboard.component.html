@@ -1,139 +1,41 @@
 <div class="container-fluid">
-  <!-- Server status and garage door status -->
   <div class="row">
-    <div class="col server-status border" [ngClass] = "connected ? 'bg-green' : 'bg-red'">
-      <div class="card my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Server Status</b></span></p>
-              <p *ngIf="!server && connected" class="lead mb-0">Connected</p>
-              <p *ngIf="server && connected" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} % - MEM: {{server.mem.toFixed(2)}} %</p>
-              <p *ngIf="!connected" class="lead mb-0">Disconnected</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="col-3 server-status border" [ngClass] = "connected ? 'bg-green' : 'bg-red'">
 
-    <div class="col border" [ngClass] = "!myq ? 'bg-green' : myq.state == 'closed' ? 'bg-green' : (myq.state == 'closing' || myq.state == 'opening') ? 'bg-yellow' : 'bg-red'">
-      <div class="card my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/wired/64/000000/garage-door.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Garage Door</b></span></p>
-              <p *ngIf="!myq" class="lead mb-0">Closed</p>
-              <p *ngIf="myq && myq.state == 'open'" class="lead mb-0">
-                Open<small class="ms-1">Since {{ readableDate(myq.since) }}</small>
-              </p>
-              <p *ngIf="myq && myq.state != 'open'" class="lead mb-0">
-                {{ capitalize(myq.state) }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Citation and helium status -->
-  <div class="row">
-    <div class="col-3 border pr-0" style="background-color: #c3e6cb;">
-      <div class="card miner-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/ios/64/null/quote-right.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Citations</b></span></p>
-              <p class="display-1">{{ scholar == null ? 'NaN' : scholar.citation }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-9 border pr-0" style="background-color: #c3e6cb;">
-      <div class="card miner-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Helium status</b></span></p>
-              <div class="card-block px-2">
-                <div style="height: 120px"><canvas id="heliumChart"></canvas></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Nicehash status -->
-  <!-- <div class="row">
-    <div class="col-2 border pr-0" style="background-color: #c3e6cb;">
-      <div class="card my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-12">
-            <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
-          </div>
-          <div class="col-12">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class=" me-2"><b>Wallet</b></span></p>
-              <p class="mb-0"><i class="fa fa-btc" aria-hidden="true"></i> <b *ngIf="nh"> {{ nh.btc.toFixed(8) }} </b></p>
-              <p class="mb-0"><i class="fa fa-usd" aria-hidden="true"></i> <b *ngIf="nh"> {{ nh.usd.toFixed(2) }} </b></p>
-              <p class="card-text mb-0 lead"><span class=" me-2"><b>Profitability</b></span></p>
-              <p class="mb-0"><i class="fa fa-btc" aria-hidden="true"></i> <b *ngIf="nh"> {{ nh.p.toFixed(8) }} </b></p>
-              <p class="mb-0"><i class="fa fa-usd" aria-hidden="true"></i> <b *ngIf="nh"> {{ nh.pu.toFixed(2) }} </b></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-5 miner-status border" [ngClass]="nh && nh.miner.status == 'MINING' ? 'bg-green' : 'bg-red'">
-      <div class="card miner-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-mining-finance-flatart-icons-outline-flatarticons.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block px-2">
-              <p class="card-text mb-0 lead"><span class="me-2"><b *ngIf="nh">Miner {{ getMinerStatus('miner') }}</b></span></p>
-              <div *ngIf="nh && nh.miner.status == 'MINING'">
-                <p class="mb-0"><b>{{ getMinerJoinTime('miner') }}</b></p>
-                <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.miner.devices">
-                  <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-5 desktop-status border bg-green">
       <div class="row">
-        <div class="card desktop-status py-2 border-0" [ngClass]="nh && nh.desktop.status == 'MINING' ? 'bg-green' : 'bg-red'">
-          <div class="row no-gutters">
-            <div class="col-auto">
-              <img src="https://img.icons8.com/external-icongeek26-outline-icongeek26/64/000000/external-desktop-devices-icongeek26-outline-icongeek26.png"/>
+        <div class="col">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block px-2">
+                  <p *ngIf="!server && connected" class="lead mb-0">Connected</p>
+                  <p *ngIf="server && connected" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} %</p>
+                  <p *ngIf="server && connected" class="lead mb-0">MEM: {{server.mem.toFixed(2)}} %</p>
+                  <p *ngIf="!connected" class="lead mb-0">Disconnected</p>
+                </div>
+              </div>
             </div>
-            <div class="col">
-              <div class="card-block px-2">
-                <p class="card-text mb-0 lead"><span class=" me-2"><b *ngIf="nh">Desktop {{ getMinerStatus('desktop') }}</b></span></p>
-                <div *ngIf="nh && nh.desktop.status == 'MINING'">
-                  <p class="mb-0"><b>{{ getMinerJoinTime('desktop') }}</b></p>
-                  <p class="mb-0" [ngClass]="getDeviceStyle(d)" *ngFor="let d of nh.desktop.devices" >
-                    <span [ngClass]="d.name.endsWith('Ti') ? 'me-2' : 'me-4'"> {{ d.name }}</span>{{ getDeviceStatus(d) }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col border" [ngClass] = "!myq ? 'bg-green' : myq.state == 'closed' ? 'bg-green' : (myq.state == 'closing' || myq.state == 'opening') ? 'bg-yellow' : 'bg-red'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/wired/64/000000/garage-door.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block px-2">
+                  <p *ngIf="!myq" class="lead mb-0">Closed</p>
+                  <p *ngIf="myq && myq.state == 'open'" class="lead mb-0">
+                    Open<br /><small>Since {{ readableDate(myq.since) }}</small>
+                  </p>
+                  <p *ngIf="myq && myq.state != 'open'" class="lead mb-0">
+                    {{ capitalize(myq.state) }}
                   </p>
                 </div>
               </div>
@@ -142,18 +44,46 @@
         </div>
       </div>
       <div class="row">
-        <div class="card desktop-status my-2 border-0 bg-green">
-          <div class="row no-gutters">
-            <div class="col">
-              <div class="card-block px-2">
-                <div style="height: 120px"><canvas id="heliumChart"></canvas></div>
+        <div class="col border pr-0" style="background-color: #c3e6cb;">
+          <div class="card miner-status my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/ios/64/null/quote-right.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block px-2">
+                  <p class="display-2 mb-0">{{ scholar == null ? 'NaN' : scholar.citation }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block px-2">
+                  <p class="lead mb-0">Witnesses: {{ heliumWitnesses }}</p>
+                  <p class="lead mb-0">Rewards: {{ heliumRewards }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div> -->
+    <!-- <div class="col-9 bg-green">
+      <canvas id="camera" style="height:430px;margin-left: -8px;" (click)="liveStreamClicked()"></canvas>
+    </div> -->
+    <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-9 bg-green'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
+      <canvas id="camera" style="height:580px;margin-left: -8px;" [ngStyle]="{'height': focusLiveStream ? '580px' : '435px' }" (click)="liveStreamClicked()"></canvas>
+    </div>
+  </div>
 
   <!-- Weather -->
   <div class="row">
@@ -162,7 +92,7 @@
         <div class="row no-gutters">
           <div class="col">
             <div class="card-block">
-              <div class="row ms-1" *ngIf="weather">
+              <div class="row me-1" *ngIf="weather">
                 <div class="col py-2 px-1 text-center" *ngFor="let w of weather" [ngClass]="(w.temp <= 3 || w.wind >= 15) ? 'bg-yellow' : 'bg-green'">
                   <p class="mb-0">{{ w.time }}</p><img [src]="'https://openweathermap.org/img/wn/' + w.icon + '.png'"/>
                   <p class="mb-0">{{w.temp}} °C</p><p class="mb-0">{{w.wind}} MPH</p>
@@ -265,10 +195,10 @@
     <div class="row">
       <div class="col-12">
         <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="restartMiner()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
-        <button type="button" class="btn pull-right me-2 mb-2" [ngClass] = "smartthings && smartthings.fanOn ? 'btn-success' : 'btn-outline-success'"
+        <!-- <button type="button" class="btn pull-right me-2 mb-2" [ngClass] = "smartthings && smartthings.fanOn ? 'btn-success' : 'btn-outline-success'"
         (click)="toggleMinorFan()"><i class="fa fa-lg fa-snowflake-o" aria-hidden="true"></i></button>
         <button type="button" class="btn pull-right me-2 mb-2" [ngClass] = "nh && nh.hideAlert ? 'btn-success' : 'btn-outline-success'"
-        (click)="toggleHideAlert()"><i class="fa fa-lg fa-ban" aria-hidden="true"></i></button>
+        (click)="toggleHideAlert()"><i class="fa fa-lg fa-ban" aria-hidden="true"></i></button> -->
       </div>
     </div>
   </div>

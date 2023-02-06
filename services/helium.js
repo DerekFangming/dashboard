@@ -61,5 +61,5 @@ export function startHelium(notifyClients, production) {
   getStatus()
   setInterval(function() {
     getStatus()
-  }, 300000)
+  }, production ? 300000 : 3000000)
 }

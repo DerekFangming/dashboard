@@ -12,28 +12,11 @@ import { startAlerts, getAlerts } from './services/alert.js'
 import { startHelium, getHeliumStatus } from './services/helium.js'
 import { startTesla } from './services/tesla.js'
 import { startScholar, getScholarStatus } from './services/scholar.js'
-import { startCamera, test } from './services/camera.js'
-
-import Stream from 'node-rtsp-stream'
-
-// const stream = new Stream({
-//   name: 'name',
-//   streamUrl: 'rtsp://admin:wlp33cka@10.0.1.158/live',
-//   wsPort: 9999,
-//   ffmpegOptions: { // options ffmpeg flags
-//     '-stats': '', // an option with no neccessary value uses a blank string
-//     '-r': 30 // options with required values specify the value after the key
-//   }
-// })
+import { startCamera, restartLiveStream } from './services/camera.js'
 
 const app = express()
 const server = http.createServer()
 const __dirname = path.resolve()
-
-app.get('/test1', async (req, res) => {
-  test()
-  res.status(200).json({})
-})
 
 let clients = []
 
@@ -63,7 +46,7 @@ wss.on('connection', function connection(client) {
     if (message == 'heatbeat') {
       client.heatbeat = new Date()
     } else if (message == 'restartMiner') {
-      restartMiner()
+      restartLiveStream()
     } else if (message == 'toggleMinorFan') {
       toggleMinorFan()
     } else if (message == 'toggleHideAlert') {
@@ -98,6 +81,11 @@ function notifyClients(msg) {
 }
 
 app.get('/test', async (req, res) => {
+  res.status(200).json({})
+})
+
+app.get('/test1', async (req, res) => {
+  restartLiveStream()
   res.status(200).json({})
 })
 
