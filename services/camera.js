@@ -4,7 +4,7 @@ import Stream from 'node-rtsp-stream'
 var started = false
 var lastProgress = new Date()
 var recorder = null
-const rtspURL = `rtsp://admin:${process.env.DATABASE_PASSWORD}@10.0.1.158/live`
+const rtspURL = `rtsp://synfm:camera@10.0.1.101/live`
 var stream
 
 export function startCamera(production) {
