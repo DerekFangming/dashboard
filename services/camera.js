@@ -1,15 +1,19 @@
 import Recorder, { RecorderEvents } from 'rtsp-video-recorder'
 import Stream from 'node-rtsp-stream'
+import fs from 'fs'
 
 var started = false
 var lastProgress = new Date()
 var recorder = null
 const rtspURL = `rtsp://synfm:camera@10.0.1.101/live`
 var stream
+var recordingPath = ''
 
 export function startCamera(production) {
+  recordingPath = production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos'
   startLiveStream()
-  startRecording(production)
+  startRecording()
+  startCleanupJob(production)
 }
 
 function startLiveStream() {
@@ -22,13 +26,11 @@ function startLiveStream() {
       '-r': 30,
     }
   })
-
-  
 }
 
-function startRecording(production) {
+function startRecording() {
 
-  recorder = new Recorder.Recorder(rtspURL, production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos', {
+  recorder = new Recorder.Recorder(rtspURL, recordingPath, {
     title: 'Rercordings',
     filePattern: '%Y.%m.%d/%H.%M.%S',
     segmentTime: 900,
@@ -61,6 +63,23 @@ function startRecording(production) {
       }
     }
   }, 5000)
+}
+
+function startCleanupJob(production) {
+  setInterval(function() {
+    let files = fs.readdirSync(recordingPath)
+    let now = new Date()
+    for (let f of files) {
+      let filePath = recordingPath + '/' + f
+      let creationDate = fs.statSync(filePath)
+      let diffTime = Math.abs(now - creationDate.birthtime)
+      let diffDays = Math.ceil(diffTime / 86400000)
+
+      if (diffDays >= 30) {
+        fs.rmSync(filePath, { recursive: true, force: true });
+      }
+    }
+  }, production ? 86400000 : 30000)
 }
 
 export function restartLiveStream() {
