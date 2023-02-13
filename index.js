@@ -54,13 +54,13 @@ wss.on('connection', function connection(client) {
     }
   })
 })
+// startNicehash(notifyClients, production)
 
 startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
 startAlerts(notifyClients)
-startNicehash(notifyClients, production)
 startSmartthings(notifyClients, production)
 startHelium(notifyClients, production)
 startScholar(notifyClients)

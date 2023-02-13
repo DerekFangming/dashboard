@@ -14,6 +14,10 @@ export function startCamera(production) {
   startLiveStream()
   startRecording()
   startCleanupJob(production)
+
+  test('/home/server/.pm2/logs')
+  console.log('==================================')
+  test('/home/server/Downloads')
 }
 
 function startLiveStream() {
@@ -76,10 +80,30 @@ function startCleanupJob(production) {
       let diffDays = Math.ceil(diffTime / 86400000)
 
       if (diffDays >= 30) {
+        console.log(`Deleting file because exceeded 30 days(${diffDays}): ${filePath}`)
         fs.rmSync(filePath, { recursive: true, force: true });
+      } else {
+        console.log(`Won't delete file because with 30 days(${diffDays}): ${filePath}`)
       }
     }
   }, production ? 86400000 : 30000)
+}
+
+function test(path) {
+  let files = fs.readdirSync(path)
+    let now = new Date()
+    for (let f of files) {
+      let filePath = path + '/' + f
+      let creationDate = fs.statSync(filePath)
+      let diffTime = Math.abs(now - creationDate.birthtime)
+      let diffDays = Math.ceil(diffTime / 86400000)
+
+      if (diffDays >= 30) {
+        console.log(`TESTING: Deleting file because exceeded 30 days(${diffDays}): ${filePath}`)
+      } else {
+        console.log(`TESTING: Won't delete file because with 30 days(${diffDays}): ${filePath}`)
+      }
+    }
 }
 
 export function restartLiveStream() {
