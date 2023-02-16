@@ -1,4 +1,6 @@
 import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
 import http from 'http'
 import path from 'path'
 import { WebSocketServer } from 'ws'
@@ -15,6 +17,7 @@ import { startScholar, getScholarStatus } from './services/scholar.js'
 import { startCamera, restartLiveStream } from './services/camera.js'
 
 const app = express()
+app.use(bodyParser.json({limit: '100mb'}), cors())
 const server = http.createServer()
 const __dirname = path.resolve()
 
@@ -57,7 +60,7 @@ wss.on('connection', function connection(client) {
 // Deprecated services
 // startNicehash(notifyClients, production)
 
-// Active services
+Active services
 startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
@@ -89,6 +92,11 @@ app.get('/test', async (req, res) => {
 
 app.post('/test', async (req, res) => {
   notifyClients({notification: "messages op: " + req.query.op})
+  res.status(200).json({})
+})
+
+app.post('/testJson', async (req, res) => {
+  notifyClients({notification: req.body})
   res.status(200).json({})
 })
 
