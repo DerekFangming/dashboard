@@ -54,8 +54,10 @@ wss.on('connection', function connection(client) {
     }
   })
 })
+// Deprecated services
 // startNicehash(notifyClients, production)
 
+// Active services
 startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
@@ -81,6 +83,12 @@ function notifyClients(msg) {
 }
 
 app.get('/test', async (req, res) => {
+  notifyClients({notification: "messages get"})
+  res.status(200).json({})
+})
+
+app.post('/test', async (req, res) => {
+  notifyClients({notification: "messages op: " + req.query.op})
   res.status(200).json({})
 })
 
