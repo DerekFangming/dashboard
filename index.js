@@ -60,7 +60,7 @@ wss.on('connection', function connection(client) {
 // Deprecated services
 // startNicehash(notifyClients, production)
 
-Active services
+//Active services
 startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
