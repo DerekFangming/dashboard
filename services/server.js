@@ -24,6 +24,7 @@ export function startServerStatus(notifyClients, production) {
 function getStatus(notifyClients, production) {
   os.cpuUsage(function(v){
     cpu = v * 100
+    cpu = Math.round(cpu * 100) / 100
   })
 
   var memUsed = 0.0
@@ -35,6 +36,7 @@ function getStatus(notifyClients, production) {
   }
 
   mem = memUsed / memTotal * 100
+  mem = Math.round(mem * 100) / 100
 
   notifyClients(getServerStatus())
 }
