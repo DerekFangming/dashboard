@@ -85,8 +85,8 @@ function notifyClients(msg) {
   })
 }
 
-app.get('/test', async (req, res) => {
-  notifyClients({notification: "messages get"})
+app.post('/api/alexa', async (req, res) => {
+  notifyClients({alexa: req.body})
   res.status(200).json({})
 })
 
@@ -97,11 +97,6 @@ app.post('/test', async (req, res) => {
 
 app.post('/testJson', async (req, res) => {
   notifyClients({notification: req.body})
-  res.status(200).json({})
-})
-
-app.get('/test1', async (req, res) => {
-  restartLiveStream()
   res.status(200).json({})
 })
 
