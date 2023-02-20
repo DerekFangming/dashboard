@@ -44,6 +44,23 @@
         </div>
       </div>
       <div class="row">
+        <div class="col border" [ngClass] = "!alexa ? 'bg-green' : alexa.door == 'locked' ? 'bg-green' : alexa.door == 'unlocked' ? 'bg-yellow' : 'bg-red'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/ios/64/null/door-opened.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block">
+                  <p *ngIf="!alexa" class="lead mb-0">Unknown</p>
+                  <p *ngIf="alexa" class="lead mb-0">{{ capitalize(alexa.door) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <div class="col border pr-0" style="background-color: #c3e6cb;">
           <div class="card miner-status my-2 border-0 bg-transparent">
             <div class="row no-gutters">
