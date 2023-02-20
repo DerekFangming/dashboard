@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   alerts: any
   helium: any
   scholar: any
+  alexa: any
 
   cardRateMin = new Map()
 
@@ -97,6 +98,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         })
       }
       if ('scholar' in status) that.scholar = status.scholar
+      if ('alexa' in status) that.alexa = status.alexa
   
     }
 
