@@ -14,6 +14,10 @@ export function startCamera(production) {
   startLiveStream()
   startRecording()
   startCleanupJob(production)
+
+  setInterval(function() {
+    restartLiveStream()
+  }, 1800000)
 }
 
 function startLiveStream() {
