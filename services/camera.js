@@ -12,8 +12,11 @@ var recordingPath = ''
 export function startCamera(production) {
   recordingPath = production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos'
   startLiveStream()
-  startRecording()
   startCleanupJob(production)
+  
+  if (production) {
+    startRecording()
+  }
 
   setInterval(function() {
     restartLiveStream()
@@ -33,7 +36,6 @@ function startLiveStream() {
 }
 
 function startRecording() {
-
   recorder = new Recorder.Recorder(rtspURL, recordingPath, {
     title: 'Rercordings',
     filePattern: '%Y.%m.%d/%H.%M.%S',
