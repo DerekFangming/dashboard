@@ -59,6 +59,7 @@ wss.on('connection', function connection(client) {
 })
 // Deprecated services
 // startNicehash(notifyClients, production)
+// startHelium(notifyClients, production)
 
 //Active services
 startMyq(notifyClients, production)
@@ -67,7 +68,6 @@ startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
 startAlerts(notifyClients)
 startSmartthings(notifyClients, production)
-startHelium(notifyClients, production)
 startScholar(notifyClients)
 startCamera(production)
 
