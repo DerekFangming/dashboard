@@ -22,45 +22,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col border" [ngClass] = "!myq ? 'bg-green' : myq.state == 'closed' ? 'bg-green' : (myq.state == 'closing' || myq.state == 'opening') ? 'bg-yellow' : 'bg-red'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/wired/64/000000/garage-door.png"/>
-              </div>
-              <div class="col">
-                <div class="card-block">
-                  <p *ngIf="!myq" class="lead mb-0">Closed</p>
-                  <p *ngIf="myq && myq.state == 'open'" class="lead mb-0">
-                    Open<br /><small>Since {{ readableDate(myq.since) }}</small>
-                  </p>
-                  <p *ngIf="myq && myq.state != 'open'" class="lead mb-0">
-                    {{ capitalize(myq.state) }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col border" [ngClass] = "!alexa ? 'bg-green' : alexa.door == 'locked' ? 'bg-green' : alexa.door == 'unlocked' ? 'bg-yellow' : 'bg-red'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/ios/64/null/door-opened.png"/>
-              </div>
-              <div class="col">
-                <div class="card-block">
-                  <p *ngIf="!alexa" class="lead mb-0">Closed</p>
-                  <p *ngIf="alexa" class="lead mb-0">{{ capitalize(alexa.door) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
         <div class="col border pr-0" style="background-color: #c3e6cb;">
           <div class="card miner-status my-2 border-0 bg-transparent">
             <div class="row no-gutters">
@@ -77,16 +38,84 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col border" [ngClass] = "!myq ? 'bg-green' : myq.state == 'closed' ? 'bg-green' : (myq.state == 'closing' || myq.state == 'opening') ? 'bg-yellow' : 'bg-red'">
           <div class="card my-2 border-0 bg-transparent">
             <div class="row no-gutters">
               <div class="col-auto">
-                <img src="https://img.icons8.com/dotty/64/000000/hashtag-2.png"/>
+                <img src="https://img.icons8.com/wired/32/000000/garage-door.png"/>
               </div>
               <div class="col">
                 <div class="card-block">
-                  <p class="lead mb-0">Witnesses: {{ heliumWitnesses }}</p>
-                  <p class="lead mb-0">Rewards: {{ heliumRewards }}</p>
+                  <p *ngIf="!myq" class="lead mb-0">Unknown</p>
+                  <p *ngIf="myq" class="lead mb-0">{{ capitalize(myq.state) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stocks -->
+      <div class="row">
+        <div class="col border" [ngClass] = "!alexa ? 'bg-green' : alexa.door == 'locked' ? 'bg-green' : alexa.door == 'unlocked' ? 'bg-yellow' : 'bg-red'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/ios/32/null/door-opened.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block">
+                  <p *ngIf="!alexa" class="lead mb-0">Closed</p>
+                  <p *ngIf="alexa" class="lead mb-0">{{ capitalize(alexa.door) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.voo.dp) : ' bg-green'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg" height="32" width="32"/>
+              </div>
+              <div class="col">
+                <div class="card-block">
+                  <p *ngIf="stock" class="lead mb-0">${{ stock.voo.c }}<span class="fs-6 ms-2">( {{stock.voo.dp}} %)</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.btc.dp) : ' bg-green'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/dotty/32/000000/bitcoin.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block">
+                  <p *ngIf="stock" class="lead mb-0">${{ stock.btc.c }}<span class="fs-6 ms-2">( {{stock.btc.dp}} %)</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.eth.dp) : ' bg-green'">
+          <div class="card my-2 border-0 bg-transparent">
+            <div class="row no-gutters">
+              <div class="col-auto">
+                <img src="https://img.icons8.com/wired/32/000000/ethereum.png"/>
+              </div>
+              <div class="col">
+                <div class="card-block">
+                  <p *ngIf="stock" class="lead mb-0">${{ stock.eth.c }}<span class="fs-6 ms-2">( {{stock.eth.dp}} %)</span></p>
+                  
                 </div>
               </div>
             </div>
@@ -94,6 +123,7 @@
         </div>
       </div>
     </div>
+
     <!-- <div class="col-9 bg-green">
       <canvas id="camera" style="height:430px;margin-left: -8px;" (click)="liveStreamClicked()"></canvas>
     </div> -->
@@ -115,78 +145,6 @@
                   <p class="mb-0">{{w.temp}} °C</p><p class="mb-0">{{w.wind}} MPH</p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stock status -->
-  <div class="row">
-    <div class="col-3 voo-status border" [ngClass] = "stock ? getStockStyle(stock.voo.dp) : ' bg-green'">
-      <div class="card voo-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/ios/64/000000/combo-chart--v1.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>S&P 500</b></span></p>
-              <p class="lead mb-0" *ngIf="stock">$ {{ stock.voo.c }}<br />
-                <small> {{stock.voo.d}} <small>( {{stock.voo.dp}} %)</small></small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-3 sail-status border" [ngClass] = "stock ? getStockStyle(stock.sail.dp) : ' bg-green'">
-      <div class="card sail-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/dotty/64/000000/sailing-ship-medium.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>SailPoint</b></span></p>
-              <p class="lead mb-0" *ngIf="stock">$ {{ stock.sail.c }}<br />
-                <small> {{stock.sail.d}} <small>( {{stock.sail.dp}} %)</small></small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-3 btc-status border" [ngClass] = "stock ? getStockStyle(stock.btc.dp) : ' bg-green'">
-      <div class="card btc-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/dotty/64/000000/bitcoin.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Bitcoin</b></span></p>
-              <p class="lead mb-0" *ngIf="stock">$ {{ stock.btc.c }}<br />
-                <small> {{stock.btc.d}} <small>( {{stock.btc.dp}} %)</small></small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-3 eth-status border" [ngClass] = "stock ? getStockStyle(stock.eth.dp) : ' bg-green'">
-      <div class="card eth-status my-2 border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col-auto">
-            <img src="https://img.icons8.com/wired/64/000000/ethereum.png"/>
-          </div>
-          <div class="col">
-            <div class="card-block">
-              <p class="card-text mb-0 lead"><span class="me-2"><b>Ethereum</b></span></p>
-              <p class="lead mb-0" *ngIf="stock">$ {{ stock.eth.c }}<br />
-                <small> {{stock.eth.d}} <small>( {{stock.eth.dp}} %)</small></small>
-              </p>
             </div>
           </div>
         </div>

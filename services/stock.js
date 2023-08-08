@@ -3,14 +3,12 @@ import axios from "axios"
 const token = Buffer.from('YzhqMXFhMmFkM2lmZzh0YzczZTA=', 'base64').toString('ascii')
 
 var voo = {c: 0.0, d: 0.0, dp: 0.0}
-var sail = {c: 0.0, d: 0.0, dp: 0.0}
 var btc = {c: 0.0, d: 0.0, dp: 0.0}
 var eth = {c: 0.0, d: 0.0, dp: 0.0}
 
 export function getStock() {
   return {stock: {
     voo: voo,
-    sail: sail,
     btc: btc,
     eth: eth
   }}
@@ -34,11 +32,6 @@ function updateStock() {
     voo.dp = response.data.dp.toFixed(2)
   })
   
-  // axios.get('https://finnhub.io/api/v1/quote?symbol=SAIL&token=' + token).then(function (response) {
-  //   sail.c = response.data.c.toFixed(2)
-  //   sail.d = response.data.d.toFixed(2)
-  //   sail.dp = response.data.dp.toFixed(2)
-  // })
   
   axios.get('https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=' + token).then(function (response) {
     btc.c = response.data.c.toFixed(2)
