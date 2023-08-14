@@ -3,6 +3,7 @@ import { NotifierService } from 'angular-notifier'
 import { environment } from 'src/environments/environment'
 import { Chart, registerables } from 'chart.js'
 import { DOCUMENT } from '@angular/common'
+import 'chartjs-adapter-moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   connected = true
   ws: WebSocket
   heartbeatInterval: any
-  heliumChart: any
+  greencardChart: any
 
   env = environment
 
@@ -25,15 +26,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   stock: any
   smartthings: any
   alerts: any
-  helium: any
   scholar: any
   alexa: any
+  greencard: any
 
   cardRateMin = new Map()
-
   focusLiveStream = false
-  heliumWitnesses = 0
-  heliumRewards = 0
 
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
 
@@ -87,19 +85,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if ('stock' in status) that.stock = status.stock
       if ('smartthings' in status) that.smartthings = status.smartthings
       if ('alerts' in status) that.alerts = status.alerts
-      if ('helium' in status) {
-        that.helium = status.helium
-        that.heliumWitnesses = 0
-        that.heliumRewards = 0
-
-        status.helium.data.forEach(h=> {
-          if (h.type=='poc_receipts_v2') that.heliumWitnesses ++
-          else if (h.type=='rewards_v2') that.heliumRewards ++
-        })
-      }
       if ('scholar' in status) that.scholar = status.scholar
       if ('alexa' in status) that.alexa = status.alexa
-  
+      if ('greencard' in status) {
+        that.greencard = status.greencard
+        that.updateChart()
+      }
     }
 
     this.ws.onclose = function (data) {
@@ -177,5 +168,80 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   liveStreamClicked() {
     this.focusLiveStream = !this.focusLiveStream
+  }
+
+  updateChart() {
+    if (this.greencard == null) return
+
+    let label = []
+    let eb1 = []
+    let eb2 = []
+    let eb3 = []
+
+    for (let dp of this.greencard.reverse()) {
+      console.log(dp)
+      label.push(dp.label)
+      eb1.push(new Date(dp.eb1))
+      eb2.push(new Date(dp.eb2))
+      eb3.push(new Date(dp.eb3))
+    }
+
+    // this.greencard.data.forEach(h=> {
+    //   let date = new Date(0)
+    //   date.setUTCSeconds(h.time)
+
+    //   let diff = Math.floor(Math.abs(new Date().valueOf() - date.valueOf()) / 36e5)
+    //   if (diff > 23) diff = 0
+    //   else diff = 23 - diff
+
+      
+    // })
+
+    if (this.greencardChart != null) this.greencardChart.destroy()
+
+    let barCanvasEle: any = document.getElementById('greencardChart')
+    this.greencardChart = new Chart(barCanvasEle.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: label,
+        datasets: [{
+          data: eb1,
+          backgroundColor: "#50c878",
+        }, 
+        {
+          data: eb2,
+          backgroundColor: "#36a2eb",
+        }, 
+        {
+          data: eb3,
+          backgroundColor: "#ff7373",
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+              // grid: {
+              //   display: false
+              // }
+            },
+            y: {
+              type: 'time',
+              min: '08MAY19',
+              max: '08AUG23'
+              // grid: {
+              //   display: false
+              // }
+            }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    })
+
+    // return this.helium.status
   }
 }
