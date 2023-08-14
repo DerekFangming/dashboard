@@ -15,6 +15,7 @@ import { startHelium, getHeliumStatus } from './services/helium.js'
 import { startTesla } from './services/tesla.js'
 import { startScholar, getScholarStatus } from './services/scholar.js'
 import { startCamera, restartLiveStream } from './services/camera.js'
+import { startGreencard, getGreencardStatus } from './services/greencard.js'
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
@@ -39,8 +40,8 @@ wss.on('connection', function connection(client) {
   client.heatbeat = new Date()
   clients.push(client)
 
-  let merged = {...getMyqStatus(), ...getNicehashStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
-    ...getAlerts(), ...getSmartthingsStatus(), ...getHeliumStatus(), ...getScholarStatus()}
+  let merged = {...getMyqStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
+    ...getAlerts(), ...getScholarStatus(), ...getGreencardStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -48,18 +49,15 @@ wss.on('connection', function connection(client) {
 
     if (message == 'heatbeat') {
       client.heatbeat = new Date()
-    } else if (message == 'restartMiner') {
+    } else if (message == 'restartLiveStream') {
       restartLiveStream()
-    } else if (message == 'toggleMinorFan') {
-      toggleMinorFan()
-    } else if (message == 'toggleHideAlert') {
-      toggleHideAlert()
     }
   })
 })
 // Deprecated services
 // startNicehash(notifyClients, production)
 // startHelium(notifyClients, production)
+// startSmartthings(notifyClients, production)
 
 //Active services
 startMyq(notifyClients, production)
@@ -67,9 +65,9 @@ startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
 startAlerts(notifyClients)
-startSmartthings(notifyClients, production)
 startScholar(notifyClients)
 startCamera(production)
+startGreencard(notifyClients)
 
 
 function notifyClients(msg) {

@@ -16,21 +16,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ws: WebSocket
   heartbeatInterval: any
   greencardChart: any
+  weatherChart: any
 
   env = environment
 
   myq: any
-  nh: any
   weather: any
   server: any
   stock: any
-  smartthings: any
   alerts: any
   scholar: any
   alexa: any
   greencard: any
 
-  cardRateMin = new Map()
   focusLiveStream = false
 
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
@@ -42,11 +40,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.cardRateMin.set('2080 Ti', 55)
-    this.cardRateMin.set('3060', 47)
-    this.cardRateMin.set('3060 Ti', 58)
-    this.cardRateMin.set('3070', 61)
-    this.cardRateMin.set('3070 Ti', 40)
     this.connect()
   }
 
@@ -79,17 +72,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       let status = JSON.parse(data.data)
 
       if ('myq' in status) that.myq = status.myq
-      if ('nh' in status) that.nh = status.nh
-      if ('weather' in status) that.weather = status.weather
       if ('server' in status) that.server = status.server
       if ('stock' in status) that.stock = status.stock
-      if ('smartthings' in status) that.smartthings = status.smartthings
       if ('alerts' in status) that.alerts = status.alerts
       if ('scholar' in status) that.scholar = status.scholar
       if ('alexa' in status) that.alexa = status.alexa
       if ('greencard' in status) {
         that.greencard = status.greencard
-        that.updateChart()
+        that.updateGreencardChart()
+      }
+      
+      if ('weather' in status) {
+        that.weather = status.weather
+        that.updateWeatherChart()
       }
     }
 
@@ -109,38 +104,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  restartMiner() {
-    this.ws.send('restartMiner')
-    this.notifier.notify('success', 'Restart miner request sent.')
-  }
-
-  toggleMinorFan() {
-    this.ws.send('toggleMinorFan')
-    this.notifier.notify('success', 'Toggle miner fan request sent.')
-  }
-
-  toggleHideAlert() {
-    this.ws.send('toggleHideAlert')
-    if (this.nh) this.nh.hideAlert = !this.nh.hideAlert
-  }
-
-  getMinerStatus(name) {
-    if (this.nh[name].status == 'MINING') {
-      return ' - Mining - ' + this.nh[name].speed.toFixed(2) + ' MH/s'
-    }
-    return this.capitalize(this.nh[name].status)
-  }
-
-  getMinerJoinTime(name) {
-    return `Joined for ${(Math.abs(new Date().valueOf() - new Date(this.nh[name].joined).valueOf()) / 36e5).toFixed(2)} hours`
-  }
-
-  getDeviceStyle(device) {
-    return (device.speed <= 0 || (device.temp >= 75 && device.temp < 200) || this.cardRateMin.get(device.name) > device.speed) ? 'bg-yellow' : ''
-  }
-
-  getDeviceStatus(device) {
-    return ` - ${device.speed.toFixed(2)} MH/s - ${device.temp} °C - ${device.power < 0 ? 0 : device.power} W`
+  restartLiveStream() {
+    this.ws.send('restartLiveStream')
+    this.notifier.notify('success', 'Restart live stream request sent.')
   }
 
   getStockStyle(dp) {
@@ -150,52 +116,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return 'bg-dark-green'
   }
 
-  getTimeDifferent(sec) {
-    let date = new Date(0)
-    date.setUTCSeconds(sec);
-
-    let diff = Math.abs(new Date().valueOf() - date.valueOf()) / 36e5
-    return diff.toFixed(2) + ' hours ago'
-  }
-  
-  readableDate(string) {
-    return new Date(string).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  }
-
-  capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
-  }
-
   liveStreamClicked() {
     this.focusLiveStream = !this.focusLiveStream
   }
 
-  updateChart() {
+  updateGreencardChart() {
     if (this.greencard == null) return
 
-    let label = []
-    let eb1 = []
-    let eb2 = []
-    let eb3 = []
-
-    for (let dp of this.greencard.reverse()) {
-      console.log(dp)
-      label.push(dp.label)
-      eb1.push(new Date(dp.eb1))
-      eb2.push(new Date(dp.eb2))
-      eb3.push(new Date(dp.eb3))
+    let label = [], eb1 = [], eb2 = [], eb3 = [], nfmPD = [], ONE_MONTH = 2592000000
+    let max = Number.MIN_SAFE_INTEGER, min = Number.MAX_SAFE_INTEGER
+    
+    for (let dp of this.greencard) {
+      max = Math.max.apply(Math, [max, (dp.eb1 ? dp.eb1 : Number.MIN_SAFE_INTEGER), dp.eb2, dp.eb3])
+      min = Math.min.apply(Math, [min, (dp.eb1 ? dp.eb1 : Number.MAX_SAFE_INTEGER), dp.eb2, dp.eb3])
     }
 
-    // this.greencard.data.forEach(h=> {
-    //   let date = new Date(0)
-    //   date.setUTCSeconds(h.time)
-
-    //   let diff = Math.floor(Math.abs(new Date().valueOf() - date.valueOf()) / 36e5)
-    //   if (diff > 23) diff = 0
-    //   else diff = 23 - diff
-
-      
-    // })
+    for (let dp of this.greencard) {
+      label.push(dp.label)// x axis
+      eb1.push(dp.eb1 ? dp.eb1 : max + ONE_MONTH)
+      eb2.push(dp.eb2)
+      eb3.push(dp.eb3)
+      nfmPD.push(1604120400000) // 2020/10/31
+    }
 
     if (this.greencardChart != null) this.greencardChart.destroy()
 
@@ -206,42 +148,125 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         labels: label,
         datasets: [{
           data: eb1,
+          borderWidth:5,
           backgroundColor: "#50c878",
+          borderColor: "#50c878",
+          label: "EB1"
         }, 
         {
           data: eb2,
+          borderWidth:5,
           backgroundColor: "#36a2eb",
+          borderColor: "#36a2eb",
+          label: "EB2"
         }, 
         {
           data: eb3,
+          borderWidth:5,
           backgroundColor: "#ff7373",
+          borderColor: "#ff7373",
+          label: "EB3"
+        }, 
+        {
+          data: nfmPD,
+          borderWidth:5,
+          backgroundColor: "#666666",
+          borderColor: "#666666",
+          label: "PD",
+          pointRadius: 0
         }]
       },
       options: {
+        interaction: {
+          intersect: false
+        },
         maintainAspectRatio: false,
         scales: {
-            x: {
-              // grid: {
-              //   display: false
-              // }
+          x: {
+            ticks: {font: {size: 15, weight: 'bold'} },
+          },
+          y: {
+            type: 'time',
+            min: min - ONE_MONTH,
+            max: max + ONE_MONTH,
+            ticks: {font: {size: 15, weight: 'bold'},
+            // callback: function(l, i, t){
+            //   console.log(typeof l)
+            //   return l
+            // }
             },
-            y: {
-              type: 'time',
-              min: '08MAY19',
-              max: '08AUG23'
-              // grid: {
-              //   display: false
-              // }
-            }
-        },
-        plugins: {
-          legend: {
-            display: false
-          }
+          },
         }
       }
     })
-
-    // return this.helium.status
   }
+
+  updateWeatherChart() {
+    if (this.weather == null) return
+
+    let label = [], temp = [], wind = [], icon = []
+    for (let w of this.weather) {
+      label.push(w.time)
+      temp.push(w.temp)
+      wind.push(w.wind)
+      let img = new Image(30, 30)
+      img.src = `https://openweathermap.org/img/wn/${w.icon}.png`
+      icon.push(img)
+    }
+
+    if (this.weatherChart != null) this.weatherChart.destroy()
+    const img = new Image(30, 30);
+    img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStkCgp2U1hHVVtWcf_SD4tVyLqA49lhgygEed0PPPKOZxcevudk3NZ1trGyhpAAMIJysc&usqp=CAU';
+
+    let barCanvasEle: any = document.getElementById('weatherChart')
+    this.weatherChart = new Chart(barCanvasEle.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: label,
+        datasets: [{
+          data: temp,
+          borderWidth:5,
+          backgroundColor: "#065535",
+          borderColor: "#065535",
+          label: "Temperature (C)",
+          yAxisID: 'yTemp',
+          pointStyle: function(context) {
+            return icon[context.dataIndex]
+          },
+        }, 
+        {
+          data: wind,
+          borderWidth:5,
+          backgroundColor: "#00ced1",
+          borderColor: "#00ced1",
+          label: "Wind (mph)",
+          yAxisID: 'yWind'
+        }]
+      },
+      options: {
+        interaction: {
+          intersect: false
+        },
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: {font: {size: 15, weight: 'bold'} },
+          },
+          yTemp: {
+            position: 'left',
+            ticks: {font: {size: 15, weight: 'bold'}}
+          },
+          yWind: {
+            position: 'right',
+            ticks: {font: {size: 15, weight: 'bold'}}
+          },
+        }
+      }
+    })
+  }
+
+  getReadableDate(d: Date) {
+    return `${d.getMonth() + 1}/${d.getFullYear() % 100}`
+  }
+
 }

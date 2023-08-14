@@ -18,11 +18,11 @@ export function startStock(notifyClients, production) {
   updateStock()
   setInterval(function() {
     updateStock()
-  }, production ? 15000 : 30000)
+  }, production ? 15000 : 1800000)
 
   setInterval(function() {
     notifyClients(getStock())
-  }, production ? 10000 : 10000)
+  }, 10000)
 }
 
 function updateStock() {

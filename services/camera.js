@@ -12,10 +12,10 @@ var recordingPath = ''
 export function startCamera(production) {
   recordingPath = production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos'
   startLiveStream()
-  startCleanupJob(production)
   
   if (production) {
     startRecording()
+    startCleanupJob(production)
   }
 
   setInterval(function() {

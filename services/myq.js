@@ -15,7 +15,7 @@ export function startMyq(notifyClients, production) {
   callMyq(notifyClients)
   setInterval(function() {
     callMyq(notifyClients)
-  }, production ? 5000 : 10000)
+  }, production ? 5000 : 30000)
 }
 
 function callMyq(notifyClients) {

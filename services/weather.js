@@ -13,7 +13,7 @@ export function startWeather(notifyClients, production) {
   updateWeather(notifyClients)
   setInterval(function() {
     updateWeather(notifyClients)
-  }, production ? 1800000 : 30000)
+  }, production ? 1800000 : 3600000)
 }
 
 function updateWeather(notifyClients) {

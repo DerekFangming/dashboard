@@ -18,7 +18,7 @@ export function startServerStatus(notifyClients, production) {
   getStatus(notifyClients, production)
   setInterval(function() {
     getStatus(notifyClients, production)
-  }, production ? 5000 : 10000)
+  }, production ? 5000 : 30000)
 }
 
 function getStatus(notifyClients, production) {
