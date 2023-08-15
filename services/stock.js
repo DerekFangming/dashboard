@@ -30,18 +30,18 @@ function updateStock() {
     voo.c = response.data.c.toFixed(2)
     voo.d = response.data.d.toFixed(2)
     voo.dp = response.data.dp.toFixed(2)
-  })
+  }).catch (function(e){console.error(e)})
   
   
   axios.get('https://finnhub.io/api/v1/quote?symbol=BTC-USD&token=' + token).then(function (response) {
     btc.c = response.data.c.toFixed(2)
     btc.d = response.data.d.toFixed(2)
     btc.dp = response.data.dp.toFixed(2)
-  })
+  }).catch (function(e){console.error(e)})
   
   axios.get('https://finnhub.io/api/v1/quote?symbol=ETH-USD&token=' + token).then(function (response) {
     eth.c = response.data.c.toFixed(2)
     eth.d = response.data.d.toFixed(2)
     eth.dp = response.data.dp.toFixed(2)
-  })
+  }).catch (function(e){console.error(e)})
 }

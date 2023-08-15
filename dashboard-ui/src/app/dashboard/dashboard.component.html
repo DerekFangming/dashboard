@@ -1,159 +1,47 @@
-<div class="container-fluid">
+<div *ngIf="mode=='ipad'" class="container-fluid">
   <div class="row">
-    <div class="col-4 server-status border" [ngClass] = "connected ? 'bg-green' : 'bg-red'">
-
+    <div class="col-4 server-status border bg-green">
+      
       <div class="row">
-        <div class="col">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"/>
-              </div>
-              <div class="col px-0">
-                <div class="card-block">
-                  <p *ngIf="!server && connected" class="lead mb-0">Connected</p>
-                  <p *ngIf="server && connected" class="lead mb-0">CPU: {{server.cpu.toFixed(2)}} %</p>
-                  <p *ngIf="server && connected" class="lead mb-0">MEM: {{server.mem.toFixed(2)}} %</p>
-                  <p *ngIf="!connected" class="lead mb-0">Disconnected</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col border px-0 my-0">
+          <app-card type="server" [data]="server" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
         </div>
-        <div class="col border pr-0" style="background-color: #c3e6cb;">
-          <div class="card miner-status my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/ios/64/null/quote-right.png"/>
-              </div>
-              <div class="col px-0">
-                <div class="card-block">
-                  <p class="display-2 mb-0">{{ scholar == null ? 'NaN' : scholar.citation }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col border" [ngClass] = "!myq ? 'bg-green' : myq.state == 'closed' ? 'bg-green' : (myq.state == 'closing' || myq.state == 'opening') ? 'bg-yellow' : 'bg-red'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/wired/64/000000/garage-door.png"/>
-              </div>
-              <div class="col px-0">
-                <div class="card-block">
-                  <p *ngIf="!myq" class="c mb-0">Unknown</p>
-                  <p *ngIf="myq" class="lead mb-0 text-capitalize">{{ myq.state }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col border" [ngClass] = "!alexa ? 'bg-green' : alexa.door == 'locked' ? 'bg-green' : alexa.door == 'unlocked' ? 'bg-yellow' : 'bg-red'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/ios/64/null/door-opened.png"/>
-              </div>
-              <div class="col px-0">
-                <div class="card-block">
-                  <p *ngIf="!alexa" class="lead mb-0">Closed</p>
-                  <p *ngIf="alexa" class="lead mb-0 text-capitalize">{{ alexa.door }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col border px-0 my-0">
+          <app-card type="scholar" [data]="scholar" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
         </div>
       </div>
 
-
       <div class="row">
+        <div class="col border px-0 my-0">
+          <app-card type="garage" [data]="myq" icon="https://img.icons8.com/wired/64/000000/garage-door.png"></app-card>
+        </div>
+        <div class="col border px-0 my-0">
+          <app-card type="door" [data]="alexa" icon="https://img.icons8.com/ios/64/null/door-opened.png"></app-card>
+        </div>
       </div>
+  
       <div class="row">
-        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.voo.dp) : ' bg-green'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg" height="64" width="64"/>
-              </div>
-              <div class="col px-0">
-                <div *ngIf="stock" class="card-block">
-                  <p class="lead mb-0">${{ stock.voo.c }}</p>
-                  <i class="fa fa-lg" [ngClass]="stock.voo.dp >= 0 ? 'fa-arrow-circle-up' : 'arrow-circle-down'"  [ngStyle]="{'color': stock.voo.dp >= 0 ? '#198754' : '#dc3545' }">
-                    <span class="fs-6 ms-1">$ {{stock.voo.d}} &nbsp;&nbsp; {{stock.voo.dp}} %</span>
-                  </i>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col border px-0 my-0">
+          <app-card type="stock" [data]="stock == null ? null : stock.voo" icon="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg"></app-card>
         </div>
       </div>
       <div class="row">
-        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.btc.dp) : ' bg-green'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/dotty/64/000000/bitcoin.png"/>
-              </div>
-              <div class="col px-0">
-                <div *ngIf="stock" class="card-block">
-                  <p class="lead mb-0">${{ stock.btc.c }}</p>
-                  <i class="fa fa-lg" [ngClass]="stock.btc.dp >= 0 ? 'fa-arrow-circle-up' : 'arrow-circle-down'" [ngStyle]="{'color': stock.btc.dp >= 0 ? '#198754' : '#dc3545' }">
-                    <span class="fs-6 ms-1">$ {{stock.btc.d}} &nbsp;&nbsp; {{stock.btc.dp}} %</span>
-                  </i>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col border px-0 my-0">
+          <app-card type="stock" [data]="stock == null ? null : stock.btc" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
         </div>
       </div>
       <div class="row">
-        <div class="col border" [ngClass] = "stock ? getStockStyle(stock.eth.dp) : ' bg-green'">
-          <div class="card my-2 border-0 bg-transparent">
-            <div class="row no-gutters">
-              <div class="col-auto">
-                <img src="https://img.icons8.com/wired/64/000000/ethereum.png"/>
-              </div>
-              <div class="col px-0">
-                <div *ngIf="stock" class="card-block">
-                  <p class="lead mb-0">${{ stock.eth.c }}</p>
-                  <i class="fa fa-lg" [ngClass]="stock.eth.dp >= 0 ? 'fa-arrow-circle-up' : 'arrow-circle-down'" [ngStyle]="{'color': stock.eth.dp >= 0 ? '#198754' : '#dc3545' }">
-                    <span class="fs-6 ms-1">$ {{stock.eth.d}} &nbsp;&nbsp; {{stock.eth.dp}} %</span>
-                  </i>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="col border px-0 my-0">
+          <app-card type="stock" [data]="stock == null ? null : stock.eth" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
         </div>
       </div>
+      
     </div>
 
     <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
-      <canvas id="camera" style="margin-left: -8px;" [ngStyle]="{'height': focusLiveStream ? '580px' : '515px' }" (click)="liveStreamClicked()"></canvas>
+      <canvas id="camera" style="margin-left:0px;" [ngStyle]="{'height': focusLiveStream ? '580px' : '512px' }" (click)="liveStreamClicked()"></canvas>
     </div>
   </div>
-
-  <!-- Weather -->
-  <!-- <div class="row">
-    <div class="col border px-0 bg-green">
-      <div class="card border-0 bg-transparent">
-        <div class="row no-gutters">
-          <div class="col">
-            <div class="card-block">
-              <div class="row me-1" *ngIf="weather">
-                <div class="col py-2 px-1 text-center" *ngFor="let w of weather" [ngClass]="(w.temp <= 3 || w.wind >= 15) ? 'bg-yellow' : 'bg-green'">
-                  <p class="mb-0">{{ w.time }}</p><img [src]="'https://openweathermap.org/img/wn/' + w.icon + '.png'"/>
-                  <p class="mb-0">{{w.temp}} °C</p><p class="mb-0">{{w.wind}} MPH</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 
   <div class="row">
     <div class="col-6 border px-0 bg-green">
@@ -194,14 +82,24 @@
     </div>
   </div>
 
-  <div class="fixed-bottom">
-    <div class="row">
-      <div class="col-12">
-        <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="restartLiveStream()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
-        
-      </div>
+</div>
+
+
+<div *ngIf="mode=='fridge'" class="container-fluid">
+  <div class="row">
+    <div class="col bg-green">
+      <canvas id="camera" style="margin-left:-16px;width:720px;"></canvas>
     </div>
   </div>
+</div>
 
 
+<div class="fixed-bottom">
+  <div class="row">
+    <div class="col-12">
+      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="reloadPage()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="restartLiveStream()"><i class="fa fa-lg fa-camera" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="showInfo()"><i class="fa fa-lg fa-info px-2" aria-hidden="true"></i></button>
+    </div>
+  </div>
 </div>

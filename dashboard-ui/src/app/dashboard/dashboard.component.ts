@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   alexa: any
   greencard: any
 
+  mode = 'ipad'
   focusLiveStream = false
 
   @ViewChild('errModal', { static: true}) errModal: TemplateRef<any>
@@ -40,6 +41,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    if (window.screen.width == 720) {
+      this.mode = 'fridge'
+    }
     this.connect()
   }
 
@@ -90,6 +94,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.ws.onclose = function (data) {
       that.connected = false
+      that.server = null
       if (that.heartbeatInterval != undefined) {
         clearInterval(that.heartbeatInterval)
       }
@@ -99,7 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
 
     this.ws.onerror = function (data) {
-      that.ws.close();
+      that.ws.close()
     }
 
   }
@@ -118,6 +123,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   liveStreamClicked() {
     this.focusLiveStream = !this.focusLiveStream
+  }
+
+  reloadPage() {
+    location.reload()
+  }
+
+  showInfo() {
+    alert(`Window height: ${window.screen.height}, width: ${window.screen.width}`)
   }
 
   updateGreencardChart() {
@@ -263,10 +276,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       }
     })
-  }
-
-  getReadableDate(d: Date) {
-    return `${d.getMonth() + 1}/${d.getFullYear() % 100}`
   }
 
 }
