@@ -90,6 +90,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         that.weather = status.weather
         that.updateWeatherChart()
       }
+
     }
 
     this.ws.onclose = function (data) {
@@ -164,22 +165,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           borderWidth:5,
           backgroundColor: "#50c878",
           borderColor: "#50c878",
-          label: "EB1"
-        }, 
-        {
-          data: eb2,
-          borderWidth:5,
-          backgroundColor: "#36a2eb",
-          borderColor: "#36a2eb",
-          label: "EB2"
-        }, 
+          label: "EB1",
+          pointRadius: 0
+        },
         {
           data: eb3,
           borderWidth:5,
           backgroundColor: "#ff7373",
           borderColor: "#ff7373",
-          label: "EB3"
-        }, 
+          label: "EB3",
+          pointRadius: 0
+        },
+        {
+          data: eb2,
+          borderWidth:5,
+          backgroundColor: "#36a2eb",
+          borderColor: "#36a2eb",
+          label: "EB2",
+          pointRadius: 0
+        },
         {
           data: nfmPD,
           borderWidth:5,
@@ -253,7 +257,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           backgroundColor: "#00ced1",
           borderColor: "#00ced1",
           label: "Wind (mph)",
-          yAxisID: 'yWind'
+          yAxisID: 'yWind',
+          pointRadius: 0
         }]
       },
       options: {

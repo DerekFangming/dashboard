@@ -3,15 +3,15 @@
     <div class="col-auto">
       <img [src]="icon" height="64" width="64"/>
     </div>
-    <div class="col px-0">
-      <div class="card-block">
+    <div class="col px-0 text-truncate">
+      <div class="card-block" style="height:60px;">
         <ng-container *ngIf="type == 'server'">
           <p *ngIf="data" class="lead mb-0">CPU: {{data.cpu.toFixed(2)}} %</p>
           <p *ngIf="data" class="lead mb-0">MEM: {{data.mem.toFixed(2)}} %</p>
           <p *ngIf="!data" class="lead mb-0">Disconnected</p>
         </ng-container>
         <ng-container *ngIf="type == 'scholar'">
-          <p *ngIf="data" class="display-3 mb-0" style="margin-top:-10px">{{ data.citation }}</p>
+          <p *ngIf="data" class="display-3 mb-0" style="height:70px;overflow:hidden;">{{ data.citation }}</p>
         </ng-container>
         <ng-container *ngIf="type == 'garage'">
           <p *ngIf="!data" class="c mb-0">Unknown</p>
@@ -24,7 +24,7 @@
         <ng-container *ngIf="type == 'stock'">
           <p *ngIf="data" class="lead mb-0">${{ data.c }}</p>
           <i *ngIf="data" class="fa fa-lg" [ngClass]="data.dp >= 0 ? 'fa-arrow-circle-up' : 'fa-arrow-circle-down'" [ngStyle]="{'color': data.dp >= 0 ? '#198754' : '#dc3545' }">
-            <span class="fs-6 ms-1">$ {{data.d}} &nbsp;&nbsp; {{data.dp}} %</span>
+            <span class="fs-6 ms-1">${{data.d}}&nbsp;&nbsp;{{data.dp}}%</span>
           </i>
         </ng-container>
       </div>

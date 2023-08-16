@@ -1,6 +1,6 @@
-<div *ngIf="mode=='ipad'" class="container-fluid">
+<div *ngIf="mode=='ipad'" class="container-fluid bg-green">
   <div class="row">
-    <div class="col-4 server-status border bg-green">
+    <div class="col-4">
       
       <div class="row">
         <div class="col border px-0 my-0">
@@ -39,7 +39,7 @@
     </div>
 
     <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
-      <canvas id="camera" style="margin-left:0px;" [ngStyle]="{'height': focusLiveStream ? '580px' : '512px' }" (click)="liveStreamClicked()"></canvas>
+      <canvas id="camera" style="margin-left:0px;" [ngStyle]="{'height': focusLiveStream ? '770px' : '512px' }" (click)="liveStreamClicked()"></canvas>
     </div>
   </div>
 
@@ -68,31 +68,88 @@
     </div>
   </div>
 
-  <div class="fixed-bottom" *ngIf="alerts">
-    <div class="row">
-      <div class="col-12" *ngFor="let a of alerts">
-        <div class="card" [ngClass]="a.level == 'info' ? 'bg-green' : a.level == 'warn' ? 'bg-yellow' : 'bg-red'">
-          <div class="card-body py-2">
-            <div class="text-center">
-              <p class="card-text mb-0 lead"><span class=" mr-2"><b>{{a.msg}}</b></span></p>
+</div>
+
+
+<div *ngIf="mode=='fridge'" class="container-fluid bg-green">
+  <div class="row">
+    <div class="col">
+      <canvas id="camera" style="margin-left:-16px;width:720px;"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 my-0">
+      <app-card type="server" [data]="server" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
+    </div>
+    <div class="col border px-0 my-0">
+      <app-card type="scholar" [data]="scholar" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 my-0">
+      <app-card type="garage" [data]="myq" icon="https://img.icons8.com/wired/64/000000/garage-door.png"></app-card>
+    </div>
+    <div class="col border px-0 my-0">
+      <app-card type="door" [data]="alexa" icon="https://img.icons8.com/ios/64/null/door-opened.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.voo" icon="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg"></app-card>
+    </div>
+    <div class="col-4 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.btc" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
+    </div>
+    <div class="col-4 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.eth" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 border px-0 bg-green">
+      <div class="card desktop-status my-2 border-0 bg-green">
+        <div class="row no-gutters">
+          <div class="col">
+            <div class="card-block px-2">
+              <div style="height: 300px"><canvas id="greencardChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 border px-0 bg-green">
+      <div class="card desktop-status my-2 border-0 bg-green">
+        <div class="row no-gutters">
+          <div class="col">
+            <div class="card-block px-2">
+              <div style="height: 300px"><canvas id="weatherChart"></canvas></div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
+      
+      
 </div>
 
 
-<div *ngIf="mode=='fridge'" class="container-fluid">
+<div class="fixed-bottom" *ngIf="alerts">
   <div class="row">
-    <div class="col bg-green">
-      <canvas id="camera" style="margin-left:-16px;width:720px;"></canvas>
+    <div class="col-12" *ngFor="let a of alerts">
+      <div class="card" [ngClass]="a.level == 'info' ? 'bg-green' : a.level == 'warn' ? 'bg-yellow' : 'bg-red'">
+        <div class="card-body py-2">
+          <div class="text-center">
+            <p class="card-text mb-0 lead"><span class=" mr-2"><b>{{a.msg}}</b></span></p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
 
 <div class="fixed-bottom">
   <div class="row">
