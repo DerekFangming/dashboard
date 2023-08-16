@@ -54,12 +54,12 @@ wss.on('connection', function connection(client) {
     }
   })
 })
-// Deprecated services
+// =============== Deprecated services ===============
 // startNicehash(notifyClients, production)
 // startHelium(notifyClients, production)
 // startSmartthings(notifyClients, production)
 
-//Active services
+// =============== Active services ===============
 startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
@@ -67,7 +67,7 @@ startStock(notifyClients, production)
 startAlerts(notifyClients)
 startScholar(notifyClients)
 startCamera(production)
-startGreencard(notifyClients)
+startGreencard(notifyClients, production)
 
 
 function notifyClients(msg) {
@@ -88,8 +88,8 @@ app.post('/api/alexa', async (req, res) => {
   res.status(200).json({})
 })
 
-app.post('/test', async (req, res) => {
-  notifyClients({notification: "messages op: " + req.query.op})
+app.get('/test', async (req, res) => {
+  // notifyClients({notification: "messages op: " + req.query.op})
   res.status(200).json({})
 })
 
