@@ -1,5 +1,6 @@
+import { addAlert, HOUR_MS } from './alert.js'
 import fetch from "node-fetch"
-import { load } from 'cheerio';
+import { load } from 'cheerio'
 import pg from 'pg'
 
 var bulletin = []
@@ -68,15 +69,17 @@ export async function getStatus(production) {
         }
       } catch (e) {
         console.error(e)
+        addAlert('greencard', 'error', 'Failed to parse greencard content: ' + e.message, HOUR_MS * 2)
       }
 
       bulletin.push(data)
       if (bulletin.length > 12) bulletin.shift()
-       await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
+      await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
     }
     
   } catch (e) {
     console.error(e)
+    addAlert('greencard', 'error', 'Failed to load greencard: ' + e.message, HOUR_MS * 2)
   } finally {
     await dbClient.end()
   }

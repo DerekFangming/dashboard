@@ -1,25 +1,35 @@
 import { getNicehashAlerts } from './nicehash.js'
 
-var alerts = []
+var alerts = new Map()
+var alertsUpdated = false
 var trashAlert
 
+const HOUR_MS = 3600000
+export { HOUR_MS }
+
 export function getAlerts() {
-  return {alerts: alerts}
+  return {alerts: Array.from(alerts.entries()).map(([k, v]) => v.alert)}
 }
 
 export function startAlerts(notifyClients) {
 
   // Check every 5 seconds for all alerts
   setInterval(function() {
-    let tempAlerts = getNicehashAlerts()
-    if (trashAlert) tempAlerts.push(trashAlert)
-    alerts = tempAlerts.length == 0 ? [] : tempAlerts
-  }, 5000)
+    if (alerts.size == 0) return
 
-  // Send alerts every minutes
-  setInterval(function() {
-    notifyClients(getAlerts())
-  }, 60000)
+    let now = new Date().getTime()
+    for (const [k, v] of alerts.entries()) {
+      if (v.expiry < now) {
+        alertsUpdated = true
+        alerts.delete(k)
+      }
+    }
+
+    if (alertsUpdated) {
+      alertsUpdated = false
+      notifyClients(getAlerts())
+    }
+  }, 5000)
 
   // Check hourly for trash collection
   setInterval(function() {
@@ -43,4 +53,15 @@ export function startAlerts(notifyClients) {
       trashAlert = undefined
     }
   }, 3600000)
+}
+
+export function addAlert(alertKey, level, msg, timeout = 60000) {
+  alertsUpdated = true
+  alerts.set(alertKey, {
+    expiry: new Date().getTime() + timeout,
+    alert: {
+      level: level,
+      msg: `[${new Date().toLocaleString()}] ${msg}`
+    }
+  })
 }
