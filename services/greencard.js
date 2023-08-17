@@ -71,7 +71,8 @@ export async function getStatus(production) {
       }
 
       bulletin.push(data)
-      await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
+      if (bulletin.length > 12) bulletin.shift()
+       await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
     }
     
   } catch (e) {
