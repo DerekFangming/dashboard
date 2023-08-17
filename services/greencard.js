@@ -1,8 +1,12 @@
 import fetch from "node-fetch"
+import { load } from 'cheerio';
 import pg from 'pg'
 
 var bulletin = []
 var notifyClientCopy
+
+const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 
 export function getGreencardStatus() {
   return {
@@ -33,37 +37,48 @@ export async function getStatus(production) {
   try {
     await dbClient.connect()
     let result = await dbClient.query(`select value from configurations where key = $1`, ['GREENCARD'])
-    await dbClient.end()
   
     bulletin = JSON.parse(result.rows[0].value)
+
+    let month = new Date(bulletin.at(-1).label)
+    month.setMonth(month.getMonth() + 1)
+
+    let url = `https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin/${month.getFullYear()}/visa-bulletin-for-${monthFull[month.getMonth()]}-${month.getFullYear()}.html`
+    let content = await (await fetch(url)).text()
+
+    let $ = load(content)
+
+    if (! $('title').text().includes('404')) {
+      let newMonth = (month.getMonth() + 1).toString()
+      if (newMonth.length == 1) newMonth = `0${newMonth}`
+
+      let data = {label: `${month.getFullYear()}/${newMonth}`}
+
+      try {
+        let element = $('td').filter(function() {
+          return $(this).text().trim() == '1st'
+        }).first().parent()
+  
+        for (let i = 0; i < 3; i++) {
+          let children = element.children()
+          let pd = $(children[2]).text()
+          data[`eb${i + 1}`] = new Date(pd).getTime()
+  
+          element = element.next()
+        }
+      } catch (e) {
+        console.error(e)
+      }
+
+      bulletin.push(data)
+      await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
+    }
+    
   } catch (e) {
     console.error(e)
+  } finally {
+    await dbClient.end()
   }
-
-
-
-  // try {
-  //   let now = new Date()
-  //   now.setMonth(now.getMonth() + 3)
-  //   let endDate = `${now.getFullYear()}-${now.getMonth()}`
-  //   let url = `https://visa.careerengine.us/api/historic/visa/trends?ref=https://www.google.com/&&Type=employment&LatestMonth=${endDate}&Country=china&DateRangeMonths=12&Preferences=1st,2nd,3rd&Lang=en`
-    
-  //   let dataStr = await (await fetch(url)).text()
-  //   console.log(dataStr)
-  //   let data = JSON.parse(dataStr)
-
-  //   for (let i = 0; i < data.EmploymentData.DateLabels.length; i ++) {
-  //     let label = 'data.EmploymentData.DateLabels[i]'
-
-  //     let res = {label: label}
-  //     res[`eb1`] = data.EmploymentData.Data.china_1st[i]
-  //     res[`eb2`] = data.EmploymentData.Data.china_2nd[i]
-  //     res[`eb3`] = data.EmploymentData.Data.china_3rd[i]
-  //     bulletin.push(res)
-  //   }
-  // } catch (e) {
-  //   console.error(e)
-  // }
   
   notifyClientCopy(getGreencardStatus())
 }
