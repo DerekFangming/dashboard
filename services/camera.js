@@ -1,6 +1,7 @@
 import Recorder, { RecorderEvents } from 'rtsp-video-recorder'
 import Stream from 'node-rtsp-stream'
 import fs from 'fs'
+import { addAlert, HOUR_MS } from './alert.js'
 
 var started = false
 var lastProgress = new Date()
@@ -52,7 +53,9 @@ function startRecording() {
     started = false
   })
   
-  recorder.on(RecorderEvents.ERROR, (payload) => {})
+  recorder.on(RecorderEvents.ERROR, (payload) => {
+    addAlert('camera', 'error', 'Camera error: ' + payload, HOUR_MS * 2)
+  })
   
   recorder.on(RecorderEvents.PROGRESS, (payload) => {
     lastProgress = new Date()

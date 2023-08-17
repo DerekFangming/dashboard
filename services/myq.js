@@ -1,4 +1,5 @@
 import { myQApi } from "@hjdhjd/myq"
+import { addAlert, HOUR_MS } from './alert.js'
 
 const myq = new myQApi('synfm123@gmail.com', process.env.MYQ_PASSWORD)
 
@@ -26,6 +27,9 @@ function callMyq(notifyClients) {
     } else {
       updateState(notifyClients, 'unknown')
     }
+  }).catch (function(e){
+    console.error(e)
+    addAlert('myq', 'error', 'Failed to myQ: ' + e.message, HOUR_MS * 1)
   })
 }
 

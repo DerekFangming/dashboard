@@ -1,4 +1,6 @@
+import { addAlert, HOUR_MS } from './alert.js'
 import fetch from "node-fetch"
+import { load } from 'cheerio'
 
 var citation = '0'
 var notifyClientCopy
@@ -20,12 +22,22 @@ export function startScholar(notifyClients) {
 }
 
 export async function getStatus() {
-  const html = (await (await fetch('https://scholar.google.com/citations?user=6hwtOK4AAAAJ&hl=en')).text())
+  try {
+    const content = await (await fetch('https://scholar.google.com/citations?user=6hwtOK4AAAAJ&hl=en')).text()
+    let $ = load(content)
 
-  var regex = /years to all publications.*?gsc_rsb_std">(.*?)<\/td>/g
-  var match = regex.exec(html)
-
-  citation = match[1]
+    let elements = $('td.gsc_rsb_std')
+    for (let e of elements) {
+      let str = $(e).text()
+      if (str.length >= 3) {
+        citation = str
+        break
+      }
+    }
+  } catch (e) {
+    console.error(e)
+    addAlert('scholar', 'error', 'Failed to parse citation content: ' + e.message, HOUR_MS * 2)
+  }
 
   notifyClientCopy(getScholarStatus())
 }

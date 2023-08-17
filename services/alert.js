@@ -1,8 +1,5 @@
-import { getNicehashAlerts } from './nicehash.js'
-
 var alerts = new Map()
 var alertsUpdated = false
-var trashAlert
 
 const HOUR_MS = 3600000
 export { HOUR_MS }
@@ -38,19 +35,12 @@ export function startAlerts(notifyClients) {
 
     if (now.getDay() == 3 && now.getHours() > 12) {
       const diff = Math.floor(Math.ceil(Math.abs(now - bothWendesday) / 86400000) / 7)
+      let expiry = HOUR_MS * (24 - now.getHours())
       if (diff % 2 == 0) {
-        trashAlert = {
-          "level": "info",
-          "msg": "Both trash and recycle will be collected tomorrow"
-        }
+        addAlert('trash', 'info', 'Both trash and recycle will be collected tomorrow', expiry)
       } else {
-        trashAlert = {
-          "level": "info",
-          "msg": "Trash will be collected tomorrow"
-        }
+        addAlert('trash', 'info', 'Trash will be collected tomorrow', expiry)
       }
-    } else {
-      trashAlert = undefined
     }
   }, 3600000)
 }

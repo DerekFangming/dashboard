@@ -1,4 +1,5 @@
 import axios from "axios"
+import { addAlert, HOUR_MS } from './alert.js'
 
 const appId = Buffer.from('YTA4NWVkMjRmMGUyNmMxNzljOTBkMjExYjE3NmFmYTk=', 'base64').toString('ascii')
 const tempOffset = 273.15
@@ -30,6 +31,9 @@ function updateWeather(notifyClients) {
     }
 
     notifyClients(getWeather())
+  }).catch (function(e){
+    console.error(e)
+    addAlert('weather', 'error', 'Failed to weather: ' + e.message, HOUR_MS * 1)
   })
 }
 
