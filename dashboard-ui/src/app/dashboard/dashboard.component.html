@@ -1,4 +1,4 @@
-<div *ngIf="mode=='ipad'" class="container-fluid bg-green">
+<div *ngIf="mode=='large'" class="container-fluid bg-green">
   <div class="row">
     <div class="col-4">
       
@@ -38,8 +38,8 @@
       
     </div>
 
-    <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
-      <canvas id="camera" style="margin-left:0px;" [ngStyle]="{'height': focusLiveStream ? '770px' : '512px' }" (click)="liveStreamClicked()"></canvas>
+    <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green d-flex justify-content-center'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
+      <canvas id="camera"  [ngStyle]="{'height': focusLiveStream ? '770px' : '512px' }" (click)="liveStreamClicked()"></canvas>
     </div>
   </div>
 
@@ -71,10 +71,10 @@
 </div>
 
 
-<div *ngIf="mode=='fridge'" class="container-fluid bg-green">
+<div *ngIf="mode=='medium'" class="container-fluid bg-green">
   <div class="row">
-    <div class="col">
-      <canvas id="camera" style="margin-left:-16px;width:720px;"></canvas>
+    <div class="col d-flex justify-content-center">
+      <canvas id="camera" style="max-width:100%"></canvas>
     </div>
   </div>
 
@@ -132,8 +132,71 @@
       </div>
     </div>
   </div>
-      
-      
+</div>
+
+<div *ngIf="mode=='small'" class="container-fluid bg-green">
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      <canvas id="camera" style="max-width:100%"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 my-0">
+      <app-card type="server" [data]="server" [phoneMode]="true" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
+    </div>
+    <div class="col border px-0 my-0">
+      <app-card type="scholar" [data]="scholar" [phoneMode]="true" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 my-0">
+      <app-card type="garage" [data]="myq" [phoneMode]="true" icon="https://img.icons8.com/wired/64/000000/garage-door.png"></app-card>
+    </div>
+    <div class="col border px-0 my-0">
+      <app-card type="door" [data]="alexa" [phoneMode]="true" icon="https://img.icons8.com/ios/64/null/door-opened.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.voo" [phoneMode]="true" icon="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg"></app-card>
+    </div>
+    <div class="col-12 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.btc" [phoneMode]="true" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
+    </div>
+    <div class="col-12 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.eth" [phoneMode]="true" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 bg-green">
+      <div class="card desktop-status my-2 border-0 bg-green">
+        <div class="row no-gutters">
+          <div class="col">
+            <div class="card-block px-2">
+              <div style="height: 300px"><canvas id="greencardChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col border px-0 bg-green">
+      <div class="card desktop-status my-2 border-0 bg-green">
+        <div class="row no-gutters">
+          <div class="col">
+            <div class="card-block px-2">
+              <div style="height: 300px"><canvas id="weatherChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 

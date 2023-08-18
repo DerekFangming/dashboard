@@ -1,32 +1,32 @@
 <div class="card border-0" [ngClass]="getBackground()">
   <div class="row no-gutters mx-1 my-2">
-    <div class="col-auto">
-      <img [src]="icon" height="64" width="64"/>
+    <div class="col-auto d-flex align-items-center">
+      <img [src]="icon" [attr.height]="phoneMode ? 32 : 64" [attr.width]="phoneMode ? 32 : 64"/>
     </div>
     <div class="col px-0 text-truncate">
-      <div class="card-block" style="height:60px;">
-        <ng-container *ngIf="type == 'server'">
+      <div class="card-block d-flex align-items-center" style="height:60px;">
+        <div *ngIf="type == 'server'">
           <p *ngIf="data" class="lead mb-0">CPU: {{data.cpu.toFixed(2)}} %</p>
           <p *ngIf="data" class="lead mb-0">MEM: {{data.mem.toFixed(2)}} %</p>
           <p *ngIf="!data" class="lead mb-0">Disconnected</p>
-        </ng-container>
-        <ng-container *ngIf="type == 'scholar'">
+        </div>
+        <div *ngIf="type == 'scholar'">
           <p *ngIf="data" class="display-3 mb-0" style="height:70px;overflow:hidden;">{{ data.citation }}</p>
-        </ng-container>
-        <ng-container *ngIf="type == 'garage'">
+        </div>
+        <div *ngIf="type == 'garage'">
           <p *ngIf="!data" class="c mb-0">Unknown</p>
           <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data.state }}</p>
-        </ng-container>
-        <ng-container *ngIf="type == 'door'">
+        </div>
+        <div *ngIf="type == 'door'">
           <p *ngIf="!data" class="lead mb-0">Closed</p>
           <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data.door }}</p>
-        </ng-container>
-        <ng-container *ngIf="type == 'stock'">
+        </div>
+        <div *ngIf="type == 'stock'">
           <p *ngIf="data" class="lead mb-0">${{ data.c }}</p>
           <i *ngIf="data" class="fa fa-lg" [ngClass]="data.dp >= 0 ? 'fa-arrow-circle-up' : 'fa-arrow-circle-down'" [ngStyle]="{'color': data.dp >= 0 ? '#198754' : '#fc0000' }">
             <span class="fs-6 ms-1">${{data.d}}&nbsp;&nbsp;{{data.dp}}%</span> 
           </i>
-        </ng-container>
+        </div>
       </div>
     </div>
   </div>

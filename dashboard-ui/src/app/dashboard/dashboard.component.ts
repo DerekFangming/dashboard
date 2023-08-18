@@ -41,8 +41,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if (window.screen.width == 720) {
-      this.mode = 'fridge'
+    if (window.screen.width >= 1366 || (window.screen.height == 1366 && window.screen.width == 1024)) {
+      this.mode = 'large' //ipad
+    } else if (window.screen.width < 1366 && window.screen.width >= 700) {
+      this.mode = 'medium' // fridge
+    } else {
+      this.mode = 'small'
     }
     this.connect()
   }
@@ -131,7 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   showInfo() {
-    alert(`Window height: ${window.screen.height}, width: ${window.screen.width}`)
+    this.notifier.notify('success', `Window height: ${window.screen.height}, width: ${window.screen.width}`)
   }
 
   updateGreencardChart() {

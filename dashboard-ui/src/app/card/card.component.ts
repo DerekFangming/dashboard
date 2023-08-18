@@ -10,6 +10,7 @@ export class CardComponent implements OnInit {
   @Input() type: string
   @Input() icon: string
   @Input() data: any
+  @Input() phoneMode: boolean
 
   constructor() { }
 
