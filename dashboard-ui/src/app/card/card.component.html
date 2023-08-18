@@ -23,8 +23,8 @@
         </ng-container>
         <ng-container *ngIf="type == 'stock'">
           <p *ngIf="data" class="lead mb-0">${{ data.c }}</p>
-          <i *ngIf="data" class="fa fa-lg" [ngClass]="data.dp >= 0 ? 'fa-arrow-circle-up' : 'fa-arrow-circle-down'" [ngStyle]="{'color': data.dp >= 0 ? '#198754' : '#dc3545' }">
-            <span class="fs-6 ms-1">${{data.d}}&nbsp;&nbsp;{{data.dp}}%</span>
+          <i *ngIf="data" class="fa fa-lg" [ngClass]="data.dp >= 0 ? 'fa-arrow-circle-up' : 'fa-arrow-circle-down'" [ngStyle]="{'color': data.dp >= 0 ? '#198754' : '#fc0000' }">
+            <span class="fs-6 ms-1">${{data.d}}&nbsp;&nbsp;{{data.dp}}%</span> 
           </i>
         </ng-container>
       </div>

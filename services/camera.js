@@ -53,9 +53,7 @@ function startRecording() {
     started = false
   })
   
-  recorder.on(RecorderEvents.ERROR, (payload) => {
-    addAlert('camera', 'error', 'Camera error: ' + payload, HOUR_MS * 2)
-  })
+  recorder.on(RecorderEvents.ERROR, (payload) => {})
   
   recorder.on(RecorderEvents.PROGRESS, (payload) => {
     lastProgress = new Date()
