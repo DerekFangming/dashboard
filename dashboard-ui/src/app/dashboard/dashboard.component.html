@@ -6,9 +6,6 @@
         <div class="col border px-0 my-0">
           <app-card type="server" [data]="server" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
         </div>
-        <div class="col border px-0 my-0">
-          <app-card type="scholar" [data]="scholar" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
-        </div>
       </div>
 
       <div class="row">
@@ -17,6 +14,12 @@
         </div>
         <div class="col border px-0 my-0">
           <app-card type="door" [data]="alexa" icon="https://img.icons8.com/ios/64/null/door-opened.png"></app-card>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col border px-0 my-0">
+          <app-card type="scholar" [data]="scholar" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
         </div>
       </div>
   
@@ -38,7 +41,8 @@
       
     </div>
 
-    <div class="px-0" [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green d-flex justify-content-center'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
+    <div class="px-0" style="overflow:hidden;"
+      [ngClass]="focusLiveStream ? 'px-0' : 'col-8 bg-green d-flex justify-content-center'" [ngStyle]="focusLiveStream ? {'position':'absolute', 'z-index':'10'} : {}">
       <canvas id="camera"  [ngStyle]="{'height': focusLiveStream ? '770px' : '512px' }" (click)="liveStreamClicked()"></canvas>
     </div>
   </div>
@@ -79,10 +83,10 @@
   </div>
 
   <div class="row">
-    <div class="col border px-0 my-0">
+    <div class="col-8 border px-0 my-0">
       <app-card type="server" [data]="server" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
     </div>
-    <div class="col border px-0 my-0">
+    <div class="col-4 border px-0 my-0">
       <app-card type="scholar" [data]="scholar" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
     </div>
   </div>
@@ -145,6 +149,9 @@
     <div class="col border px-0 my-0">
       <app-card type="server" [data]="server" [phoneMode]="true" icon="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/64/000000/external-server-online-marketing-xnimrodx-lineal-xnimrodx-2.png"></app-card>
     </div>
+  </div>
+
+  <div class="row">
     <div class="col border px-0 my-0">
       <app-card type="scholar" [data]="scholar" [phoneMode]="true" icon="https://img.icons8.com/ios/64/null/quote-right.png"></app-card>
     </div>

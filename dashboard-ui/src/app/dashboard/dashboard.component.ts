@@ -55,7 +55,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const s = this.document.createElement('script');
     s.type = 'text/javascript';
     s.innerHTML = `player = new JSMpeg.Player('ws://10.0.1.${environment.production ? '100' : '50'}:9999', { canvas: document.getElementById('camera')})`
-    console.log(s.innerHTML)
     this.elementRef.nativeElement.appendChild(s);
   }
 
