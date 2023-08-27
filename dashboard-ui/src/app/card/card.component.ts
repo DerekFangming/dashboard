@@ -31,7 +31,7 @@ export class CardComponent implements OnInit {
       if (this.data.state == 'closed') return 'bg-green'
       if (this.data.state == 'closing' || this.data.state == 'opening') return 'bg-yellow'
       return 'bg-red'
-    } else if (this.type == 'alexa') {
+    } else if (this.type == 'door') {
       if (this.data == null) return 'bg-green'
       if (this.data.door == 'locked') return 'bg-green'
       if (this.data.door == 'unlocked') return 'bg-yellow'

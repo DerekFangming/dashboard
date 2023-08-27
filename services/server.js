@@ -32,14 +32,14 @@ export function startServerStatus(notifyClients, production) {
         
       data =  data.toString()
       if (data.includes('Incoming') && data.includes('Outgoing')) {
-          var myRegexp = new RegExp('Curr: (.*?\\/s)', 'g');
+          var myRegexp = new RegExp('Curr: (.*?\\/s)', 'g')
           var matches = myRegexp.exec(data);
           
           if (!matches || matches.length < 2) return
-          networkIn = matches[1]
+          networkIn = kbToMb(matches[1])
           
-          matches = myRegexp.exec(data);
-          if (matches && matches.length >= 2) networkOut = matches[1]
+          matches = myRegexp.exec(data)
+          if (matches && matches.length >= 2) networkOut = kbToMb(matches[1])
       }
     })
 
@@ -71,6 +71,15 @@ function getStatus(notifyClients, production) {
   mem = Math.round(mem * 100) / 100
 
   notifyClients(getServerStatus())
+}
+
+function kbToMb(speed) {
+  speed = speed.trim()
+  let arr = speed.split(' ')
+  if (arr.length != 2 || arr[1] == 'MBit/s') return speed
+
+  let s = parseFloat(arr[0]) / 1000
+  return s.toFixed(2) + ' MBit/s'
 }
   
 

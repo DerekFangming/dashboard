@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
 
     for (let dp of this.greencard) {
-      label.push(dp.label)// x axis
+      label.push(dp.label)
       eb1.push(dp.eb1 ? dp.eb1 : max + ONE_MONTH)
       eb2.push(dp.eb2)
       eb3.push(dp.eb3)
@@ -210,10 +210,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             min: min - ONE_MONTH,
             max: max + ONE_MONTH,
             ticks: {font: {size: 15, weight: 'bold'},
-            // callback: function(l, i, t){
-            //   console.log(typeof l)
-            //   return l
-            // }
             },
           },
         }
