@@ -226,7 +226,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     let label = [], temp = [], wind = [], icon = []
     for (let w of this.weather) {
-      label.push(w.time)
+      let hour = new Date(w.time).getHours() + 1
+      label.push(`${hour % 12} ${hour >= 12 && hour < 24 ? 'PM' : 'AM'}`)
       temp.push(w.temp)
       wind.push(w.wind)
       let img = new Image(30, 30)
