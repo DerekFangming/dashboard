@@ -177,8 +177,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           backgroundColor: "#ff7373",
           borderColor: "#ff7373",
           label: "EB3",
-          pointRadius: 0,
-          tension: 0.5
+          pointRadius: 0
         },
         {
           data: eb2,
@@ -186,8 +185,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           backgroundColor: "#36a2eb",
           borderColor: "#36a2eb",
           label: "EB2",
-          pointRadius: 0,
-          tension: 0.5
+          pointRadius: 0
         },
         {
           data: nfmPD,
@@ -195,8 +193,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           backgroundColor: "#666666",
           borderColor: "#666666",
           label: "PD",
-          pointRadius: 0,
-          tension: 0.5
+          pointRadius: 0
         }]
       },
       options: {
@@ -252,8 +249,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           yAxisID: 'yTemp',
           pointStyle: function(context) {
             return icon[context.dataIndex]
-          },
-          tension: 0.5
+          }
         }, 
         {
           data: wind,
@@ -262,8 +258,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           borderColor: "#00ced1",
           label: "Wind (mph)",
           yAxisID: 'yWind',
-          pointRadius: 0,
-          tension: 0.5
+          pointRadius: 0
         }]
       },
       options: {
