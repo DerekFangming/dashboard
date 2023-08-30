@@ -29,19 +29,9 @@ export function startAlerts(notifyClients) {
   }, 5000)
 
   // Check hourly for trash collection
+  trashStatus()
   setInterval(function() {
-    let bothWendesday = new Date(1646805600000)
-    let now = new Date()
-
-    if (now.getDay() == 3 && now.getHours() > 12) {
-      const diff = Math.floor(Math.ceil(Math.abs(now - bothWendesday) / 86400000) / 7)
-      let expiry = HOUR_MS * (24 - now.getHours())
-      if (diff % 2 == 0) {
-        addAlert('trash', 'info', 'Both trash and recycle will be collected tomorrow', expiry)
-      } else {
-        addAlert('trash', 'info', 'Trash will be collected tomorrow', expiry)
-      }
-    }
+    trashStatus()
   }, 3600000)
 }
 
@@ -54,4 +44,19 @@ export function addAlert(alertKey, level, msg, timeout = 60000) {
       msg: `[${new Date().toLocaleString()}] ${msg}`
     }
   })
+}
+
+function trashStatus() {
+  let bothWendesday = new Date(1646805600000)
+  let now = new Date()
+
+  if (now.getDay() == 3 && now.getHours() > 12) {
+    const diff = Math.floor(Math.ceil(Math.abs(now - bothWendesday) / 86400000) / 7)
+    let expiry = HOUR_MS * (24 - now.getHours())
+    if (diff % 2 == 0) {
+      addAlert('trash', 'info', 'Both trash and recycle will be collected tomorrow', expiry)
+    } else {
+      addAlert('trash', 'info', 'Trash will be collected tomorrow', expiry)
+    }
+  }
 }
