@@ -49,10 +49,11 @@ export function addAlert(alertKey, level, msg, timeout = 60000) {
 function trashStatus() {
   let bothWendesday = new Date(1646805600000)
   let now = new Date()
+  now.setHours(now.getHours() - 6) // Simulates CST time
 
-  if (now.getDay() == 3 && now.getHours() > 12) {
+  if (now.getUTCDay() == 3 && now.getUTCHours() > 12) {
     const diff = Math.floor(Math.ceil(Math.abs(now - bothWendesday) / 86400000) / 7)
-    let expiry = HOUR_MS * (24 - now.getHours())
+    let expiry = HOUR_MS * (24 - now.getUTCHours())
     if (diff % 2 == 0) {
       addAlert('trash', 'info', 'Both trash and recycle will be collected tomorrow', expiry)
     } else {
