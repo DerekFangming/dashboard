@@ -49,6 +49,12 @@ export async function getStatus(production) {
 
     let $ = load(content)
 
+    if ($('title').text().includes('404')) {
+      url = `https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin/${month.getFullYear() + 1}/visa-bulletin-for-${monthFull[month.getMonth()]}-${month.getFullYear()}.html`
+      content = await (await fetch(url)).text()
+      $ = load(content)
+    }
+
     if (! $('title').text().includes('404')) {
       let newMonth = (month.getMonth() + 1).toString()
       if (newMonth.length == 1) newMonth = `0${newMonth}`
