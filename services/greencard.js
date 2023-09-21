@@ -1,7 +1,7 @@
 import { addAlert, HOUR_MS } from './alert.js'
 import fetch from "node-fetch"
 import { load } from 'cheerio'
-import pg from 'pg'
+import { getDBClient } from './db.js'
 
 var bulletin = []
 var notifyClientCopy
@@ -24,16 +24,9 @@ export function startGreencard(notifyClients, production) {
   }, 86400000)// refresh every day
 }
 
-export async function getStatus(production) {
+async function getStatus(production) {
   bulletin = []
-
-  const dbClient = new pg.Client({
-    user: 'postgres',
-    host: production ? 'localhost' : '10.0.1.100',
-    database: 'test',
-    password: process.env.DATABASE_PASSWORD,
-    port: 5432,
-  })
+  const dbClient = getDBClient(production)
 
   try {
     await dbClient.connect()

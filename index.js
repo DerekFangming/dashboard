@@ -16,6 +16,7 @@ import { startTesla } from './services/tesla.js'
 import { startScholar, getScholarStatus } from './services/scholar.js'
 import { startCamera, restartLiveStream } from './services/camera.js'
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
+import { startZillow, getZillowStatus } from './services/zillow.js'
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
@@ -41,7 +42,7 @@ wss.on('connection', function connection(client) {
   clients.push(client)
 
   let merged = {...getMyqStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
-    ...getAlerts(), ...getScholarStatus(), ...getGreencardStatus()}
+    ...getAlerts(), ...getScholarStatus(), ...getGreencardStatus(), ...getZillowStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -68,6 +69,7 @@ startAlerts(notifyClients)
 startScholar(notifyClients)
 startCamera(production)
 startGreencard(notifyClients, production)
+startZillow(notifyClients, production)
 
 
 function notifyClients(msg) {

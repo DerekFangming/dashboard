@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   scholar: any
   alexa: any
   greencard: any
+  zillow: any
 
   mode = 'ipad'
   focusLiveStream = false
@@ -84,6 +85,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if ('alerts' in status) that.alerts = status.alerts
       if ('scholar' in status) that.scholar = status.scholar
       if ('alexa' in status) that.alexa = status.alexa
+      if ('zillow' in status) that.zillow = status.zillow
       if ('greencard' in status) {
         that.greencard = status.greencard
         that.updateGreencardChart()
