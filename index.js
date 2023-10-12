@@ -61,7 +61,7 @@ wss.on('connection', function connection(client) {
 // startSmartthings(notifyClients, production)
 
 // =============== Active services ===============
-startMyq(notifyClients, production)
+// startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
