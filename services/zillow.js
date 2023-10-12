@@ -2,7 +2,7 @@ import axios from "axios"
 import { getDBClient } from './db.js'
 import { addAlert, HOUR_MS } from './alert.js'
 
-const apiKey = Buffer.from('OGQxZjQ0Y2NjMG1zaDM3OWUyYjk2M2Y4ZGZkZXAxMTA0YmFqc25mZTc0NDNkMDZiZjk=', 'base64').toString('ascii')
+const apiKey = Buffer.from('MGZmZGVlY2Q0MDhkYzM2MGU5YTUyNjJiZjEzZDAzOTY=', 'base64').toString('ascii')
 
 var amount = 0
 var notifyClientCopy
@@ -37,15 +37,14 @@ async function getStatus(production) {
     for (var p in data.properties) {
       let response = await axios.request({
         method: 'GET',
-        url: 'https://zillow-data-v2.p.rapidapi.com/properties/detail',
-        params: {zpid: p},
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'zillow-data-v2.p.rapidapi.com'
+        url: 'https://api.bridgedataoutput.com/api/v2/zestimates_v2/zestimates',
+        params: {
+          access_token: apiKey,
+          zpid: p
         }
       })
 
-      data.properties[p] = response.data.data.zestimate
+      data.properties[p] = response.data.bundle[0].zestimate
     }
 
     now.setDate(now.getDate() + 3)
