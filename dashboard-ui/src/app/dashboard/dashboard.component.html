@@ -27,17 +27,19 @@
       </div>
   
       <div class="row">
-        <div class="col border px-0 my-0">
+        <div class="col-6 border px-0 my-0">
           <app-card type="stock" [data]="stock == null ? null : stock.voo" icon="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg"></app-card>
         </div>
-      </div>
-      <div class="row">
-        <div class="col border px-0 my-0">
-          <app-card type="stock" [data]="stock == null ? null : stock.btc" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
+        <div class="col-6 border px-0 my-0">
+          <app-card type="stock" [data]="stock == null ? null : stock.intel" icon="https://img.icons8.com/external-tal-revivo-light-tal-revivo/64/external-intel-corporation-an-american-multinational-corporation-and-technology-company-logo-light-tal-revivo.png"></app-card>
         </div>
       </div>
+
       <div class="row">
-        <div class="col border px-0 my-0">
+        <div class="col-6 border px-0 my-0">
+          <app-card type="stock" [data]="stock == null ? null : stock.btc" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
+        </div>
+        <div class="col-6 border px-0 my-0">
           <app-card type="stock" [data]="stock == null ? null : stock.eth" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
         </div>
       </div>
@@ -74,7 +76,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 
@@ -144,6 +145,7 @@
   </div>
 </div>
 
+<!-- Mobile view -->
 <div *ngIf="mode=='small'" class="container-fluid bg-green">
   <div class="row">
     <div class="col d-flex justify-content-center">
@@ -176,13 +178,16 @@
   </div>
 
   <div class="row">
-    <div class="col-12 border px-0 my-0">
+    <div class="col-6 border px-0 my-0">
       <app-card type="stock" [data]="stock == null ? null : stock.voo" [phoneMode]="true" icon="https://cdn.freebiesupply.com/logos/large/2x/s-p-1-logo-svg-vector.svg"></app-card>
     </div>
-    <div class="col-12 border px-0 my-0">
+    <div class="col-6 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.intel" [phoneMode]="true" icon="https://img.icons8.com/external-tal-revivo-light-tal-revivo/64/external-intel-corporation-an-american-multinational-corporation-and-technology-company-logo-light-tal-revivo.png"></app-card>
+    </div>
+    <div class="col-6 border px-0 my-0">
       <app-card type="stock" [data]="stock == null ? null : stock.btc" [phoneMode]="true" icon="https://img.icons8.com/dotty/64/000000/bitcoin.png"></app-card>
     </div>
-    <div class="col-12 border px-0 my-0">
+    <div class="col-6 border px-0 my-0">
       <app-card type="stock" [data]="stock == null ? null : stock.eth" [phoneMode]="true" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
     </div>
   </div>

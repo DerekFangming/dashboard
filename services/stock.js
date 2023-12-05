@@ -6,20 +6,23 @@ const token = Buffer.from('YzhqMXFhMmFkM2lmZzh0YzczZTA=', 'base64').toString('as
 var voo = {c: 0.0, d: 0.0, dp: 0.0}
 var btc = {c: 0.0, d: 0.0, dp: 0.0}
 var eth = {c: 0.0, d: 0.0, dp: 0.0}
+var intel = {c: 0.0, d: 0.0, dp: 0.0}
 
 export function getStock() {
   return {stock: {
     voo: voo,
     btc: btc,
-    eth: eth
+    eth: eth,
+    intel: intel,
   }}
 }
+
 
 export function startStock(notifyClients, production) {
   updateStock()
   setInterval(function() {
     updateStock()
-  }, production ? 15000 : 1800000)
+  }, production ? 20000 : 1800000)
 
   setInterval(function() {
     notifyClients(getStock())
@@ -53,5 +56,14 @@ function updateStock() {
   }).catch (function(e){
     console.error(e)
     addAlert('stock', 'error', 'Failed to load ETH: ' + e.message, HOUR_MS * 1)
+  })
+  
+  axios.get('https://finnhub.io/api/v1/quote?symbol=INTC&token=' + token).then(function (response) {
+    intel.c = response.data.c.toFixed(2)
+    intel.d = response.data.d.toFixed(2)
+    intel.dp = response.data.dp.toFixed(2)
+  }).catch (function(e){
+    console.error(e)
+    addAlert('stock', 'error', 'Failed to load INTC: ' + e.message, HOUR_MS * 1)
   })
 }

@@ -1,7 +1,9 @@
 import { myQApi } from "@hjdhjd/myq"
 import { addAlert, HOUR_MS } from './alert.js'
 
-const myq = new myQApi('synfm123@gmail.com', process.env.MYQ_PASSWORD)
+const myq = new myQApi()
+
+
 
 var state = 'unknown'
 
@@ -12,7 +14,8 @@ export function getMyqStatus() {
   }
 }
 
-export function startMyq(notifyClients, production) {
+export async function startMyq(notifyClients, production) {
+  await myq.login('synfm123@gmail.com', process.env.MYQ_PASSWORD)
   callMyq(notifyClients)
   setInterval(function() {
     callMyq(notifyClients)
