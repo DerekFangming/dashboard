@@ -20,11 +20,21 @@ export function startGreencard(notifyClients, production) {
 
   getStatus(production)
   setInterval(function() {
-    getStatus(production)
-  }, 86400000)// refresh every day
+    // Refresh every hour between 2nd - 14th, in other dates, refresh once daily at noon CST
+    let now = new Date()
+    if (now.getDate() > 2 && now.getDate() < 14) {
+      console.log(`[${now.toLocaleString()}] Refresh hourly between 2nd and 14th`)
+      getStatus(production)
+    } else if (now.getUTCHours() == 18) {
+      console.log(`[${now.toLocaleString()}] Refresh once a day outside of 2nd and 14th`)
+      getStatus(production)
+    }
+
+  }, 3600000)// refresh every hour
 }
 
 async function getStatus(production) {
+
   bulletin = []
   const dbClient = getDBClient(production)
 
@@ -74,6 +84,10 @@ async function getStatus(production) {
       bulletin.push(data)
       if (bulletin.length > 12) bulletin.shift()
       await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(bulletin), 'GREENCARD'])
+
+      notifyClientCopy(getGreencardStatus())
+      addAlert('greencardBulletin', 'info', 'Green card bulletin information released', HOUR_MS * 12)
+      axios.get(`https://fmning.com/tools/api/notifications?message=Green card bulletin information released`).then( res => {})
     }
     
   } catch (e) {
@@ -83,5 +97,4 @@ async function getStatus(production) {
     await dbClient.end()
   }
   
-  notifyClientCopy(getGreencardStatus())
 }
