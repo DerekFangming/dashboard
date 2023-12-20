@@ -83,10 +83,7 @@ function startCleanupJob(production) {
       let diffDays = Math.ceil(diffTime / 86400000)
 
       if (diffDays >= 30) {
-        console.log(`Deleting file because exceeded 30 days(${diffDays}): ${filePath}`)
         fs.rmSync(filePath, { recursive: true, force: true });
-      } else {
-        console.log(`Won't delete file because with 30 days(${diffDays}): ${filePath}`)
       }
     }
   }, production ? 86400000 : 30000)
