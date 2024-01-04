@@ -33,8 +33,8 @@
           <p *ngIf="data" class="display-5 mb-0" style="height:60px;overflow:hidden;">{{ (data/1000000.0).toFixed(3) }}</p>
         </div>
         <div *ngIf="type == 'garage'">
-          <p *ngIf="!data" class="c mb-0">Unknown</p>
-          <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data.state }}</p>
+          <p *ngIf="!data" class="lead mb-0">Closed</p>
+          <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data }}</p>
         </div>
         <div *ngIf="type == 'door'">
           <p *ngIf="!data" class="lead mb-0">Closed</p>

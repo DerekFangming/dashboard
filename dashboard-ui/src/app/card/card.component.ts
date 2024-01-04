@@ -28,13 +28,14 @@ export class CardComponent implements OnInit {
       return 'bg-dark-green'
     } else if (this.type == 'garage') {
       if (this.data == null) return 'bg-green'
-      if (this.data.state == 'closed') return 'bg-green'
-      if (this.data.state == 'closing' || this.data.state == 'opening') return 'bg-yellow'
+      if (this.data == 'closed') return 'bg-green'
+      if (this.data == 'open') return 'bg-yellow'
       return 'bg-red'
     } else if (this.type == 'door') {
       if (this.data == null) return 'bg-green'
       if (this.data.door == 'locked') return 'bg-green'
       if (this.data.door == 'unlocked') return 'bg-yellow'
+      if (this.data.door == 'jammed') return 'bg-red'
       return 'bg-red'
     }
     return 'bg-green'

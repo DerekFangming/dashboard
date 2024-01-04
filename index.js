@@ -86,7 +86,32 @@ function notifyClients(msg) {
 }
 
 app.post('/api/alexa', async (req, res) => {
-  notifyClients({alexa: req.body})
+  let raw = req.body
+  notifyClients({alexaDebug: raw})
+
+
+  if (!raw.hasOwnProperty('code')) {
+    notifyClients({alexa: raw})
+  } else {
+    switch(raw.code) {
+      case 0:
+        notifyClients({alexa: {door: 'locked'}})
+        break
+      case 1:
+        notifyClients({alexa: {door: 'unlocked'}})
+        break
+      case 2:
+        notifyClients({alexa: {door: 'jammed'}})
+        break
+      case 3:
+        notifyClients({garage: 'closed'})
+        break
+      case 4:
+        notifyClients({garage: 'open'})
+        break
+    }
+  }
+
   res.status(200).json({})
 })
 
