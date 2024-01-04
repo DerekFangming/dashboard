@@ -38,7 +38,7 @@
         </div>
         <div *ngIf="type == 'door'">
           <p *ngIf="!data" class="lead mb-0">Closed</p>
-          <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data.door }}</p>
+          <p *ngIf="data" class="lead mb-0 text-capitalize">{{ data }}</p>
         </div>
         <div *ngIf="type == 'stock'">
           <p *ngIf="data" class="lead mb-0">${{ data.c }}</p>

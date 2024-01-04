@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   env = environment
 
-  myq: any
+  door: any
   weather: any
   server: any
   stock: any
@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       console.log('received: %s', data.data)
       let status = JSON.parse(data.data)
 
-      if ('myq' in status) that.myq = status.myq
+      if ('door' in status) that.door = status.door
       if ('server' in status) that.server = status.server
       if ('stock' in status) that.stock = status.stock
       if ('alerts' in status) that.alerts = status.alerts

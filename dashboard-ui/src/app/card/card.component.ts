@@ -33,9 +33,9 @@ export class CardComponent implements OnInit {
       return 'bg-red'
     } else if (this.type == 'door') {
       if (this.data == null) return 'bg-green'
-      if (this.data.door == 'locked') return 'bg-green'
-      if (this.data.door == 'unlocked') return 'bg-yellow'
-      if (this.data.door == 'jammed') return 'bg-red'
+      if (this.data == 'locked') return 'bg-green'
+      if (this.data == 'unlocked') return 'bg-yellow'
+      if (this.data == 'jammed') return 'bg-red'
       return 'bg-red'
     }
     return 'bg-green'

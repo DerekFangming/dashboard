@@ -23,10 +23,8 @@ export function startGreencard(notifyClients, production) {
     // Refresh every hour between 2nd - 14th, in other dates, refresh once daily at noon CST
     let now = new Date()
     if (now.getDate() > 2 && now.getDate() < 14) {
-      console.log(`[${now.toLocaleString()}] Refresh hourly between 2nd and 14th`)
       getStatus(production)
     } else if (now.getUTCHours() == 18) {
-      console.log(`[${now.toLocaleString()}] Refresh once a day outside of 2nd and 14th`)
       getStatus(production)
     }
 

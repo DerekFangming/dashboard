@@ -59,9 +59,9 @@ wss.on('connection', function connection(client) {
 // startNicehash(notifyClients, production)
 // startHelium(notifyClients, production)
 // startSmartthings(notifyClients, production)
+// startMyq(notifyClients, production)
 
 // =============== Active services ===============
-// startMyq(notifyClients, production)
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
@@ -86,30 +86,26 @@ function notifyClients(msg) {
 }
 
 app.post('/api/alexa', async (req, res) => {
-  let raw = req.body
-  notifyClients({alexaDebug: raw})
-
-
-  if (!raw.hasOwnProperty('code')) {
-    notifyClients({alexa: raw})
-  } else {
-    switch(raw.code) {
-      case 0:
-        notifyClients({alexa: {door: 'locked'}})
-        break
-      case 1:
-        notifyClients({alexa: {door: 'unlocked'}})
-        break
-      case 2:
-        notifyClients({alexa: {door: 'jammed'}})
-        break
-      case 3:
-        notifyClients({garage: 'closed'})
-        break
-      case 4:
-        notifyClients({garage: 'open'})
-        break
-    }
+  
+  switch(req.body.code) {
+    case 0:
+      notifyClients({door: 'locked'})
+      break
+    case 1:
+      notifyClients({door: 'unlocked'})
+      break
+    case 2:
+      notifyClients({door: 'jammed'})
+      break
+    case 3:
+      notifyClients({garage: 'closed'})
+      break
+    case 4:
+      notifyClients({garage: 'open'})
+      break
+    default:
+      notifyClients({alexaUnknown: req.body})
+      break
   }
 
   res.status(200).json({})
