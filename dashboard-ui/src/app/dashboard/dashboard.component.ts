@@ -54,10 +54,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const s = this.document.createElement('script');
-    s.type = 'text/javascript';
-    s.innerHTML = `player = new JSMpeg.Player('ws://10.0.1.${environment.production ? '100' : '50'}:7101', { canvas: document.getElementById('camera')})`
-    this.elementRef.nativeElement.appendChild(s);
+    let isPublic = window.location.href.includes('fmning')
+    let streamUrl = isPublic ? '98.156.161.67' : environment.production ? '10.0.1.100' : '10.0.1.50'
+    console.log(isPublic)
+    
+    const s = this.document.createElement('script')
+    s.type = 'text/javascript'
+    s.innerHTML = `player = new JSMpeg.Player('ws://${streamUrl}:7101', { canvas: document.getElementById('camera')})`
+    this.elementRef.nativeElement.appendChild(s)
   }
 
   connect() {
