@@ -7,7 +7,7 @@ var started = false
 var lastProgress = new Date()
 var recorder = null
 const rtspURL = `rtsp://synfm:camera@10.0.1.101/live`
-const wsPort = 7101
+const wsPort = 9999
 var stream
 var recordingPath = ''
 
