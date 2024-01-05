@@ -55,11 +55,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     let isPublic = window.location.href.includes('fmning')
-    let cameraStreamUrl = isPublic ? 'dashboard.fmning.com/camera' : environment.production ? '10.0.1.100:9999' : '10.0.1.50:9999'
+    let cameraStreamUrl = isPublic ? 'wss://dashboard.fmning.com/camera' : environment.production ? 'ws://10.0.1.100:9999' : 'ws://10.0.1.50:9999'
     
     const s = this.document.createElement('script')
     s.type = 'text/javascript'
-    s.innerHTML = `player = new JSMpeg.Player('ws://${cameraStreamUrl}', { canvas: document.getElementById('camera')})`
+    s.innerHTML = `player = new JSMpeg.Player('${cameraStreamUrl}', { canvas: document.getElementById('camera')})`
     this.elementRef.nativeElement.appendChild(s)
   }
 
