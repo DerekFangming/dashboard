@@ -20,8 +20,8 @@
               <p class="lead mb-0">Out:</p>
             </div>
             <div class="col-5 px-0">
-              <p class="lead mb-0">{{data.networkIn}}</p>
-              <p class="lead mb-0">{{data.networkOut}}</p>
+              <p class="lead mb-0">{{data.networkIn ? data.networkIn : '0.00 Bit/s'}} </p>
+              <p class="lead mb-0">{{data.networkOut ? data.networkOut : '0.00 Bit/s'}} </p>
             </div>
           </div>
           <p *ngIf="!data" class="lead mb-0">Disconnected</p>

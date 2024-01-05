@@ -17,6 +17,7 @@ import { startScholar, getScholarStatus } from './services/scholar.js'
 import { startCamera, restartLiveStream } from './services/camera.js'
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
+import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
@@ -42,7 +43,7 @@ wss.on('connection', function connection(client) {
   clients.push(client)
 
   let merged = {...getMyqStatus(), ...getWeather(), ...getServerStatus(), ...getStock(),
-    ...getAlerts(), ...getScholarStatus(), ...getGreencardStatus(), ...getZillowStatus()}
+    ...getAlerts(), ...getScholarStatus(), ...getGreencardStatus(), ...getZillowStatus(), ...getAlexaStatus()}
   client.send(JSON.stringify(merged))
 
   client.on('message', function message(data) {
@@ -70,6 +71,7 @@ startScholar(notifyClients)
 startCamera(production)
 startGreencard(notifyClients, production)
 startZillow(notifyClients, production)
+startAlexa(notifyClients)
 
 
 function notifyClients(msg) {
@@ -86,28 +88,7 @@ function notifyClients(msg) {
 }
 
 app.post('/api/alexa', async (req, res) => {
-  
-  switch(req.body.code) {
-    case 0:
-      notifyClients({door: 'locked'})
-      break
-    case 1:
-      notifyClients({door: 'unlocked'})
-      break
-    case 2:
-      notifyClients({door: 'jammed'})
-      break
-    case 3:
-      notifyClients({garage: 'closed'})
-      break
-    case 4:
-      notifyClients({garage: 'open'})
-      break
-    default:
-      notifyClients({alexaUnknown: req.body})
-      break
-  }
-
+  setAlexaCode(req.body.code)
   res.status(200).json({})
 })
 
