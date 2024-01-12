@@ -2,6 +2,7 @@ import { addAlert, HOUR_MS } from './alert.js'
 import fetch from "node-fetch"
 import { load } from 'cheerio'
 import { getDBClient } from './db.js'
+import axios from "axios"
 
 var bulletin = []
 var notifyClientCopy
@@ -77,6 +78,7 @@ async function getStatus(production) {
       } catch (e) {
         console.error(e)
         addAlert('greencard', 'error', 'Failed to parse greencard content: ' + e.message, HOUR_MS * 2)
+        return
       }
 
       bulletin.push(data)
@@ -85,6 +87,8 @@ async function getStatus(production) {
 
       notifyClientCopy(getGreencardStatus())
       addAlert('greencardBulletin', 'info', 'Green card bulletin information released', HOUR_MS * 12)
+
+      console.log("calling alex with data: " + JSON.stringify(data))
       axios.get(`https://fmning.com/tools/api/notifications?message=Green card bulletin information released`).then( res => {})
     }
     
