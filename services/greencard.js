@@ -119,7 +119,6 @@ async function checkCaseStatus() {
   setTimeout(function (){checkCaseStatus()}, nextCheckDelay * 1000)
 
   // click button
-  console.log('case ID ' + caseID)
   await browser.findElement(By.css(`input[type='text']`)).sendKeys(caseID)
   await browser.findElement(By.css(`button[type='submit']`)).click()
 

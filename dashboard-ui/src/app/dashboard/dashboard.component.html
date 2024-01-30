@@ -126,6 +126,15 @@
   </div>
 
   <div class="row">
+    <div class="col-8 border px-0 my-0">
+      <app-card type="greencardCase" [data]="greencardCase" icon="https://img.icons8.com/carbon-copy/100/40C057/bank-card-front-side--v1.png"></app-card>
+    </div>
+    <div class="col-4 border px-0 my-0">
+      <app-card type="stock" [data]="stock == null ? null : stock.intel" icon="https://img.icons8.com/external-tal-revivo-light-tal-revivo/64/external-intel-corporation-an-american-multinational-corporation-and-technology-company-logo-light-tal-revivo.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-6 border px-0 bg-green">
       <div class="card desktop-status my-2 border-0 bg-green">
         <div class="row no-gutters">
@@ -195,6 +204,12 @@
     </div>
     <div class="col-6 border px-0 my-0">
       <app-card type="stock" [data]="stock == null ? null : stock.eth" [phoneMode]="true" icon="https://img.icons8.com/wired/64/000000/ethereum.png"></app-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col border px-0 my-0">
+      <app-card type="greencardCase" [data]="greencardCase" [phoneMode]="true" icon="https://img.icons8.com/carbon-copy/100/40C057/bank-card-front-side--v1.png"></app-card>
     </div>
   </div>
 
