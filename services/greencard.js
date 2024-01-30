@@ -5,19 +5,26 @@ import { getDBClient } from './db.js'
 import axios from "axios"
 
 var bulletin = []
-var notifyClientCopy
+var notifyClientCopy, caseStatus, caseLastChecked
 
 const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 
 export function getGreencardStatus() {
   return {
-    greencard: bulletin
+    greencard: bulletin,
+    greencardCase: {
+      status: caseStatus,
+      lastCheck: caseLastChecked
+    }
   }
 }
 
 export function startGreencard(notifyClients, production) {
   notifyClientCopy = notifyClients
+
+  caseStatus = 'Fingerprint Fee Was Received'
+  caseLastChecked = new Date()
 
   getStatus(production)
   setInterval(function() {

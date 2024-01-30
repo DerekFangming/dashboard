@@ -41,4 +41,8 @@ export class CardComponent implements OnInit {
     return 'bg-green'
   }
 
+  parseLocalDate(date) {
+    return (new Date(date)).toLocaleString()
+  }
+
 }

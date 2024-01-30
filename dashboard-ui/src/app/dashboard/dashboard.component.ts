@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   scholar: any
   alexa: any
   greencard: any
+  greencardCase: any
   zillow: any
   garage: any
 
@@ -95,6 +96,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         that.greencard = status.greencard
         that.updateGreencardChart()
       }
+      if ('greencardCase' in status) that.greencardCase = status.greencardCase
       
       if ('weather' in status) {
         that.weather = status.weather
