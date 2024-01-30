@@ -3,12 +3,14 @@ import fetch from "node-fetch"
 import { load } from 'cheerio'
 import { getDBClient } from './db.js'
 import axios from "axios"
+import {Builder, By, Key} from "selenium-webdriver"
 
 var bulletin = []
-var notifyClientCopy, caseStatus, caseLastChecked
+var notifyClientCopy, caseStatus, caseLastChecked, browser
 
 const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+const caseID = Buffer.from('TVNDMjQ5MDM0NjY3Nw==', 'base64').toString('ascii')
 
 export function getGreencardStatus() {
   return {
@@ -20,11 +22,8 @@ export function getGreencardStatus() {
   }
 }
 
-export function startGreencard(notifyClients, production) {
+export async function startGreencard(notifyClients, production) {
   notifyClientCopy = notifyClients
-
-  caseStatus = 'Fingerprint Fee Was Received'
-  caseLastChecked = new Date()
 
   getStatus(production)
   setInterval(function() {
@@ -37,6 +36,10 @@ export function startGreencard(notifyClients, production) {
     }
 
   }, 3600000)// refresh every hour
+
+  browser = await new Builder().forBrowser(production ? 'firefox' : 'chrome').build()
+  await browser.get('https://egov.uscis.gov/')
+  setTimeout(function (){checkCaseStatus()}, 5000)
 }
 
 async function getStatus(production) {
@@ -106,4 +109,51 @@ async function getStatus(production) {
     await dbClient.end()
   }
   
+}
+
+async function checkCaseStatus() {
+  caseLastChecked = new Date()
+
+  // schedule next check
+  let nextCheckDelay = 3600 + Math.floor(Math.random() * 3600)
+  setTimeout(function (){checkCaseStatus()}, nextCheckDelay * 1000)
+
+  // click button
+  console.log('case ID ' + caseID)
+  await browser.findElement(By.css(`input[type='text']`)).sendKeys(caseID)
+  await browser.findElement(By.css(`button[type='submit']`)).click()
+
+  // check status after delay
+  setTimeout(async function (){
+    console.log('Evaluating status')
+    caseLastChecked = new Date()
+
+    let header = browser.findElement(By.id(`landing-page-header`))
+    let status = await header.getText()
+    if (header != null && status != '' && status != 'Check Case Status') {
+      if (caseStatus == null) {
+        caseStatus = status
+        console.log('Initial status is: ' + caseStatus)
+      } else if (caseStatus != status) {
+        console.log('New status : ' + caseStatus)
+        caseStatus = status
+        
+        let message = 'Green card case status updated: ' + currentStatus
+        axios.get('https://fmning.com/tools/api/notifications?message' + encodeURI(message))
+        .then((res) => {})
+        .catch((error) => {
+          console.error(error)
+        })
+      } else {
+        console.log('Status is the same: ' + caseStatus)
+      }
+    }
+    
+
+    notifyClientCopy({greencardCase: {
+      status: caseStatus,
+      lastCheck: caseLastChecked
+    }}) 
+  }, 300000)
+
 }
