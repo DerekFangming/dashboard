@@ -112,47 +112,51 @@ async function getStatus(production) {
 }
 
 async function checkCaseStatus() {
-  caseLastChecked = new Date()
-
-  // schedule next check
-  let nextCheckDelay = 3600 + Math.floor(Math.random() * 3600)
-  setTimeout(function (){checkCaseStatus()}, nextCheckDelay * 1000)
-
-  // click button
-  await browser.findElement(By.css(`input[type='text']`)).sendKeys(caseID)
-  await browser.findElement(By.css(`button[type='submit']`)).click()
-
-  // check status after delay
-  setTimeout(async function (){
-    console.log('Evaluating status')
+  try {
     caseLastChecked = new Date()
 
-    let header = browser.findElement(By.id(`landing-page-header`))
-    let status = await header.getText()
-    if (header != null && status != '' && status != 'Check Case Status') {
-      if (caseStatus == null) {
-        caseStatus = status
-        console.log('Initial status is: ' + caseStatus)
-      } else if (caseStatus != status) {
-        console.log('New status : ' + caseStatus)
-        caseStatus = status
-        
-        let message = 'Green card case status updated: ' + currentStatus
-        axios.get('https://fmning.com/tools/api/notifications?message' + encodeURI(message))
-        .then((res) => {})
-        .catch((error) => {
-          console.error(error)
-        })
-      } else {
-        console.log('Status is the same: ' + caseStatus)
+    // schedule next check
+    let nextCheckDelay = 3600 + Math.floor(Math.random() * 3600)
+    setTimeout(function (){checkCaseStatus()}, nextCheckDelay * 1000)
+  
+    // click button
+    await browser.findElement(By.css(`input[type='text']`)).sendKeys(caseID)
+    await browser.findElement(By.css(`button[type='submit']`)).click()
+  
+    // check status after delay
+    setTimeout(async function (){
+      console.log('Evaluating status')
+      caseLastChecked = new Date()
+  
+      let header = browser.findElement(By.id(`landing-page-header`))
+      let status = await header.getText()
+      if (header != null && status != '' && status != 'Check Case Status') {
+        if (caseStatus == null) {
+          caseStatus = status
+          console.log('Initial status is: ' + caseStatus)
+        } else if (caseStatus != status) {
+          console.log('New status : ' + caseStatus)
+          caseStatus = status
+          
+          let message = 'Green card case status updated: ' + currentStatus
+          axios.get('https://fmning.com/tools/api/notifications?message' + encodeURI(message))
+          .then((res) => {})
+          .catch((error) => {
+            console.error(error)
+          })
+        } else {
+          console.log('Status is the same: ' + caseStatus)
+        }
       }
-    }
-    
-
-    notifyClientCopy({greencardCase: {
-      status: caseStatus,
-      lastCheck: caseLastChecked
-    }}) 
-  }, 300000)
+      
+      notifyClientCopy({greencardCase: {
+        status: caseStatus,
+        lastCheck: caseLastChecked
+      }}) 
+    }, 30000)
+  } catch (e) {
+    console.log(e)
+    addAlert('greencardCase', 'error', 'Failed to get greencard case: ' + e.message, HOUR_MS * 2)
+  }
 
 }
