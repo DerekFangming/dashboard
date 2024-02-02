@@ -49,7 +49,7 @@
         <div *ngIf="type == 'greencardCase'">
           <p *ngIf="!data" class="lead mb-0">No status was found</p>
           <p *ngIf="data && data.status" class="lead mb-0 text-capitalize"><b>{{ data.status }}</b></p>
-          <p *ngIf="data && data.lastCheck" class="lead mb-0"><small>Last checked {{ parseLocalDate(data.lastCheck) }}</small></p>
+          <p *ngIf="data && data.lastCheck" class="lead mb-0"><small>Last {{ parseLocalDate(data.lastCheck) }}, next {{ parseLocalDate(data.nextCheck) }}</small></p>
         </div>
       </div>
     </div>

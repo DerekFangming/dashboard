@@ -6,7 +6,7 @@ import axios from "axios"
 import {Builder, By, Key} from "selenium-webdriver"
 
 var bulletin = []
-var notifyClientCopy, caseStatus, caseLastChecked, browser
+var notifyClientCopy, caseStatus, caseLastChecked, caseNextCheck, browser
 
 const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
@@ -17,7 +17,8 @@ export function getGreencardStatus() {
     greencard: bulletin,
     greencardCase: {
       status: caseStatus,
-      lastCheck: caseLastChecked
+      lastCheck: caseLastChecked,
+      nextCheck: caseNextCheck
     }
   }
 }
@@ -39,6 +40,12 @@ export async function startGreencard(notifyClients, production) {
 
   browser = await new Builder().forBrowser(production ? 'firefox' : 'chrome').build()
   await browser.get('https://egov.uscis.gov/')
+
+  caseNextCheck = new Date()
+  setInterval(function() {
+    browser.executeScript(`document.querySelectorAll('h1')[0].innerText = 'Next check in ${Math.ceil((caseNextCheck - new Date()) / 1000)} s'`)
+  }, 10000)
+  
   setTimeout(function (){checkCaseStatus()}, 5000)
 }
 
@@ -114,9 +121,11 @@ async function getStatus(production) {
 async function checkCaseStatus() {
   try {
     caseLastChecked = new Date()
+    caseNextCheck = new Date()
 
     // schedule next check
     let nextCheckDelay = 3600 + Math.floor(Math.random() * 3600)
+    caseNextCheck.setSeconds(caseNextCheck.getSeconds() + nextCheckDelay);
     setTimeout(function (){checkCaseStatus()}, nextCheckDelay * 1000)
   
     // click button
@@ -125,7 +134,6 @@ async function checkCaseStatus() {
   
     // check status after delay
     setTimeout(async function (){
-      console.log('Evaluating status')
       caseLastChecked = new Date()
   
       let header = browser.findElement(By.id(`landing-page-header`))
@@ -151,9 +159,10 @@ async function checkCaseStatus() {
       
       notifyClientCopy({greencardCase: {
         status: caseStatus,
-        lastCheck: caseLastChecked
+        lastCheck: caseLastChecked,
+        nextCheck: caseNextCheck
       }}) 
-    }, 30000)
+    }, 120000)
   } catch (e) {
     console.log(e)
     addAlert('greencardCase', 'error', 'Failed to get greencard case: ' + e.message, HOUR_MS * 2)

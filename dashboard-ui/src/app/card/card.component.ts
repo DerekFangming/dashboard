@@ -42,7 +42,13 @@ export class CardComponent implements OnInit {
   }
 
   parseLocalDate(date) {
-    return (new Date(date)).toLocaleString()
+    let d = new Date(date)
+    return `${this.leadingZeros(d.getMonth() + 1)}/${this.leadingZeros(d.getDate())} - ${this.leadingZeros(d.getHours())}:${this.leadingZeros(d.getMinutes())}:${this.leadingZeros(d.getSeconds())}`
+  }
+
+  leadingZeros(i) {
+    if (i < 10) return `0${i}`
+    return `${i}`
   }
 
 }
