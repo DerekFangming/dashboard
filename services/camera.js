@@ -20,9 +20,9 @@ export function startCamera(production) {
     startCleanupJob(production)
   }
 
-  setInterval(function() {
-    restartLiveStream()
-  }, 1800000)
+  // setInterval(function() {
+  //   restartLiveStream()
+  // }, 1800000)
 }
 
 function startLiveStream() {
@@ -33,6 +33,9 @@ function startLiveStream() {
     ffmpegOptions: {
       '-loglevel': 'error',
       '-r': 30,
+      '-drop_pkts_on_overflow': 1,
+      '-attempt_recovery': 1,
+      '-recover_any_error': 1,
     }
   })
 }
@@ -100,6 +103,9 @@ export function restartLiveStream() {
     ffmpegOptions: {
       '-loglevel': 'error',
       '-r': 30,
+      '-drop_pkts_on_overflow': 1,
+      '-attempt_recovery': 1,
+      '-recover_any_error': 1,
     }
   })
 
