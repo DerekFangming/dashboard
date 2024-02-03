@@ -31,7 +31,7 @@ function startLiveStream() {
     streamUrl: rtspURL,
     wsPort: wsPort,
     ffmpegOptions: {
-      '-stats': '',
+      '-loglevel': 'error',
       '-r': 30,
     }
   })
@@ -98,7 +98,7 @@ export function restartLiveStream() {
     streamUrl: rtspURL,
     wsPort: wsPort,
     ffmpegOptions: {
-      '-stats': '',
+      '-loglevel': 'error',
       '-r': 30,
     }
   })
