@@ -146,7 +146,7 @@ async function checkCaseStatus() {
           console.log('New status : ' + caseStatus)
           caseStatus = status
           
-          let message = 'Green card case status updated: ' + currentStatus
+          let message = 'Green card case status updated: ' + caseStatus
           axios.get('https://fmning.com/tools/api/notifications?message' + encodeURI(message))
           .then((res) => {})
           .catch((error) => {
