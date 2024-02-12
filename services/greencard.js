@@ -7,6 +7,7 @@ import {Builder, By, Key} from "selenium-webdriver"
 
 var bulletin = []
 var notifyClientCopy, caseStatus, caseLastChecked, caseNextCheck, browser
+var loadingCount = 0
 
 const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
@@ -47,6 +48,20 @@ export async function startGreencard(notifyClients, production) {
   }, 10000)
   
   setTimeout(function (){checkCaseStatus()}, 5000)
+
+  setInterval(async function() {
+    loadingCount ++
+    try {
+      await browser.findElement(By.css(`span[title='Loading data. Please wait.']`))
+      if (loadingCount == 10) {
+        await browser.get('https://egov.uscis.gov/')
+        loadingCount = 0
+      }
+    } catch (e) {
+      loadingCount = 0
+    }
+  }, 60000)
+
 }
 
 async function getStatus(production) {
