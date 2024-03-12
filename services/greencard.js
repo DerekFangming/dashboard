@@ -103,7 +103,11 @@ async function getStatus(production) {
         for (let i = 0; i < 3; i++) {
           let children = element.children()
           let pd = $(children[2]).text()
-          data[`eb${i + 1}`] = new Date(pd).getTime()
+          let pdDate = new Date(pd).getTime()
+          if (pdDate == null) {
+            throw new Error(`eb${i + 1} date is not found`)
+          }
+          data[`eb${i + 1}`] = pdDate
   
           element = element.next()
         }
