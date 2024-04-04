@@ -14,10 +14,19 @@ import { startAlerts, getAlerts } from './services/alert.js'
 import { startHelium, getHeliumStatus } from './services/helium.js'
 import { startTesla } from './services/tesla.js'
 import { startScholar, getScholarStatus } from './services/scholar.js'
-import { startCamera, restartLiveStream } from './services/camera.js'
+import { startCamera, restartLiveStream, restartTest } from './services/camera.js'
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
+
+var oldLog = console.log;
+console.log = function (message) {
+  oldLog(`==>${message}<==`)
+  if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
+    oldLog(`RTSP is dead. We should restart here`)
+    restartTest()
+  }
+}
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
@@ -94,6 +103,8 @@ app.post('/api/alexa', async (req, res) => {
 
 app.get('/test', async (req, res) => {
   // notifyClients({notification: "messages op: " + req.query.op})
+
+  console.log('rtsp://synfm:camera@10.0.1.101/live: Connection timed out')
   res.status(200).json({})
 })
 

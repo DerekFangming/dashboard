@@ -93,6 +93,10 @@ function startCleanupJob(production) {
   }, production ? 86400000 : 30000)
 }
 
+export function restartTest() {
+  console.log('Restart camera confirmed')
+}
+
 export function restartLiveStream() {
   stream.stop()
   

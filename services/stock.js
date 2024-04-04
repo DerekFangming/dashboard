@@ -36,7 +36,6 @@ function updateStock() {
     voo.d = response.data.d.toFixed(2)
     voo.dp = response.data.dp.toFixed(2)
   }).catch (function(e){
-    console.error(e)
     addAlert('stock', 'error', 'Failed to load VOO: ' + e.message, HOUR_MS * 1)
   })
   
@@ -47,7 +46,6 @@ function updateStock() {
     btc.d = response.data.d.toFixed(2)
     btc.dp = response.data.dp.toFixed(2)
   }).catch (function(e){
-    console.error(e)
     addAlert('stock', 'error', 'Failed to load BTC: ' + e.message, HOUR_MS * 1)
   })
   
@@ -57,7 +55,6 @@ function updateStock() {
     eth.d = response.data.d.toFixed(2)
     eth.dp = response.data.dp.toFixed(2)
   }).catch (function(e){
-    console.error(e)
     addAlert('stock', 'error', 'Failed to load ETH: ' + e.message, HOUR_MS * 1)
   })
   
@@ -67,7 +64,6 @@ function updateStock() {
     intel.d = response.data.d.toFixed(2)
     intel.dp = response.data.dp.toFixed(2)
   }).catch (function(e){
-    console.error(e)
     addAlert('stock', 'error', 'Failed to load INTC: ' + e.message, HOUR_MS * 1)
   })
 }
