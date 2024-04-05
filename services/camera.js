@@ -94,7 +94,7 @@ function startCleanupJob(production) {
 }
 
 export function restartTest() {
-  console.log('Restart camera confirmed')
+  console.error('Restart camera confirmed')
 }
 
 export function restartLiveStream() {

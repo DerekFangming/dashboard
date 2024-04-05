@@ -19,11 +19,11 @@ import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
 
-var oldLog = console.log;
-console.log = function (message) {
-  oldLog(`==>${message}<==`)
+var oldError = console.error
+console.error = function (message) {
+  oldError(`==>${message}<==`)
   if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
-    oldLog(`RTSP is dead. We should restart here`)
+    oldError(`RTSP is dead. We should restart here`)
     restartTest()
   }
 }
@@ -104,7 +104,7 @@ app.post('/api/alexa', async (req, res) => {
 app.get('/test', async (req, res) => {
   // notifyClients({notification: "messages op: " + req.query.op})
 
-  console.log('rtsp://synfm:camera@10.0.1.101/live: Connection timed out')
+  console.error('rtsp://synfm:camera@10.0.1.101/live: Connection timed out')
   res.status(200).json({})
 })
 
