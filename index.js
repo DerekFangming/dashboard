@@ -28,6 +28,15 @@ console.error = function (message) {
   }
 }
 
+var oldWarn = console.warn
+console.warn = function (message) {
+  oldWarn(`-->${message}<--`)
+  if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
+    oldWarn(`RTSP is dead. We should restart here`)
+    restartTest()
+  }
+}
+
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
 const server = http.createServer()
