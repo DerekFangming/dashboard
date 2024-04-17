@@ -4,23 +4,71 @@ import { addAlert, HOUR_MS } from './alert.js'
 
 const apiKey = Buffer.from('MGZmZGVlY2Q0MDhkYzM2MGU5YTUyNjJiZjEzZDAzOTY=', 'base64').toString('ascii')
 
-var amount = 0
+var total = 0
+var cost = 0
 var notifyClientCopy
 
 export function getZillowStatus() {
-  return {zillow: amount}
+  return {zillow: {
+    total: total,
+    cost: cost
+  }}
 }
 
 export function startZillow(notifyClients, production) {
   notifyClientCopy = notifyClients
 
-  getStatus(production)
+  getTotal(production)
   setInterval(function() {
-    getStatus(production)
+    getTotal(production)
   }, 86400000)// refresh every day
+
+  getCost(production)
+  setInterval(function() {
+    getCost(production)
+  }, 604800000)// refresh every 7 days
+
 }
 
-async function getStatus(production) {
+async function getCost(production) {
+  const dbClient = getDBClient(production)
+  try {
+    await dbClient.connect()
+    let result = await dbClient.query(`select value from configurations where key = $1`, ['ZILLOW_COST'])
+  
+    let data = JSON.parse(result.rows[0].value)
+    let totalBalance = 0
+    for (let entry of data) {
+      let months = monthDiff(new Date(entry.start), new Date())
+
+      let balance = entry.balance
+      while (months > 0) {
+        months --
+        let interest = (balance * entry.rate) / 12
+        let principal = entry.total - interest 
+        balance = balance - principal
+      }
+
+      totalBalance += balance
+    }
+    cost = Math.round(totalBalance)
+
+  } catch (e) {
+    addAlert('zillow', 'error', 'Failed to load zillow cost: ' + e.message, HOUR_MS * 2)
+  } finally {
+    await dbClient.end()
+  }
+}
+  
+function monthDiff(d1, d2) {
+  var months;
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}
+
+async function getTotal(production) {
   const dbClient = getDBClient(production)
 
   try {
@@ -30,7 +78,7 @@ async function getStatus(production) {
     let data = JSON.parse(result.rows[0].value)
     let now = new Date()
     if (data.nextCheck != null && data.nextCheck > now.getTime()) {
-      setAmount(data.properties)
+      setTotal(data.properties)
       return
     }
 
@@ -51,9 +99,9 @@ async function getStatus(production) {
     data.nextCheck = now.getTime()
 
     await dbClient.query(`update configurations set value = $1 where key = $2`, [JSON.stringify(data), 'ZILLOW'])
-    setAmount(data.properties)
+    setTotal(data.properties)
   } catch (e) {
-    addAlert('zillow', 'error', 'Failed to load zillow: ' + e.message, HOUR_MS * 2)
+    addAlert('zillow', 'error', 'Failed to load zillow total: ' + e.message, HOUR_MS * 2)
   } finally {
     await dbClient.end()
   }
@@ -61,9 +109,9 @@ async function getStatus(production) {
   notifyClientCopy(getZillowStatus())
 }
 
-function setAmount(properties) {
-  amount = 0
+function setTotal(properties) {
+  total = 0
   for (var p in properties) {
-    amount += properties[p]
+    total += properties[p]
   }
 }

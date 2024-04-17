@@ -30,7 +30,8 @@
           <p *ngIf="data" class="display-3 mb-0" style="height:70px;overflow:hidden;">{{ data.citation }}</p>
         </div>
         <div *ngIf="type == 'zillow'">
-          <p *ngIf="data" class="display-5 mb-0" style="height:60px;overflow:hidden;">{{ (data/1000000.0).toFixed(3) }}</p>
+          <p *ngIf="data" class="display-6 mb-0">{{ (data.total/1000000.0).toFixed(3) }}</p>
+          <p *ngIf="data" class="lead mb-0">{{ 'Base: ' + (data.cost/1000000.0).toFixed(3) + ', Net: ' + ((data.total - data.cost)/1000000.0).toFixed(3) }}</p>
         </div>
         <div *ngIf="type == 'garage'">
           <p *ngIf="!data" class="lead mb-0">Closed</p>
