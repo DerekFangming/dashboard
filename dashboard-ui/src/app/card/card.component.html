@@ -31,7 +31,7 @@
         </div>
         <div *ngIf="type == 'zillow'">
           <p *ngIf="data" class="display-6 mb-0">{{ (data.total/1000000.0).toFixed(3) }}</p>
-          <p *ngIf="data" class="lead mb-0">{{ 'Base: ' + (data.cost/1000000.0).toFixed(3) + ', Net: ' + ((data.total - data.cost)/1000000.0).toFixed(3) }}</p>
+          <p *ngIf="data" class="mb-0">{{ 'B: ' + (data.cost/1000000.0).toFixed(2) + ', N: ' + ((data.total - data.cost)/1000000.0).toFixed(2) }}</p>
         </div>
         <div *ngIf="type == 'garage'">
           <p *ngIf="!data" class="lead mb-0">Closed</p>
