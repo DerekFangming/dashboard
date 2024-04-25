@@ -16,8 +16,12 @@ export function startCamera(production) {
   startLiveStream()
   
   if (production) {
-    startRecording()
-    startCleanupJob(production)
+    try {
+      startRecording()
+      startCleanupJob(production)
+    } catch (e) {
+      addAlert('camera', 'error', 'Failed to start camera: ' + e.message, HOUR_MS * 96)
+    }
   }
 
   // setInterval(function() {
