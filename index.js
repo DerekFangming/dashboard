@@ -19,23 +19,23 @@ import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
 
-var oldError = console.error
-console.error = function (message) {
-  oldError(`==>${message}<==`)
-  if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
-    oldError(`RTSP is dead. We should restart here`)
-    restartTest()
-  }
-}
+// var oldError = console.error
+// console.error = function (message) {
+//   oldError(`==>${message}<==`)
+//   if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
+//     oldError(`RTSP is dead. We should restart here`)
+//     restartTest()
+//   }
+// }
 
-var oldWarn = console.warn
-console.warn = function (message) {
-  oldWarn(`-->${message}<--`)
-  if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
-    oldWarn(`RTSP is dead. We should restart here`)
-    restartTest()
-  }
-}
+// var oldWarn = console.warn
+// console.warn = function (message) {
+//   oldWarn(`-->${message}<--`)
+//   if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
+//     oldWarn(`RTSP is dead. We should restart here`)
+//     restartTest()
+//   }
+// }
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())

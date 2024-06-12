@@ -11,7 +11,7 @@ var loadingCount = 0
 
 const monthFull = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 const monthAbbr = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-const caseID = Buffer.from('TVNDMjQ5MDM0NjY3Nw==', 'base64').toString('ascii')
+const caseID = Buffer.from('TVNDMjQ5MDM0NjY3OQ==', 'base64').toString('ascii')
 
 export function getGreencardStatus() {
   return {
