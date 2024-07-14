@@ -7,11 +7,14 @@ RUN npm i -g @vercel/ncc
 RUN npm i -g @angular/cli@latest
 
 RUN npm run build
-RUN ncc build index.js -o dist
+#RUN ncc build index.js -o dist
 
 
 FROM node:22-alpine3.19
 
 WORKDIR /app
-COPY --from=builder /app/dist .
+#COPY --from=builder /app/dist .
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/services ./services
+COPY --from=builder /app/index.js ./index.js
 CMD ["node", "."]
