@@ -39,28 +39,28 @@ export async function startGreencard(notifyClients, production) {
 
   }, 3600000)// refresh every hour
 
-  browser = await new Builder().forBrowser(production ? 'firefox' : 'chrome').build()
-  await browser.get('https://egov.uscis.gov/')
+  // browser = await new Builder().forBrowser(production ? 'firefox' : 'chrome').build()
+  // await browser.get('https://egov.uscis.gov/')
 
-  caseNextCheck = new Date()
-  setInterval(function() {
-    browser.executeScript(`document.querySelectorAll('h1')[0].innerText = 'Next check in ${Math.ceil((caseNextCheck - new Date()) / 1000)} s'`)
-  }, 10000)
+  // caseNextCheck = new Date()
+  // setInterval(function() {
+  //   browser.executeScript(`document.querySelectorAll('h1')[0].innerText = 'Next check in ${Math.ceil((caseNextCheck - new Date()) / 1000)} s'`)
+  // }, 10000)
   
-  setTimeout(function (){checkCaseStatus()}, 5000)
+  // setTimeout(function (){checkCaseStatus()}, 5000)
 
-  setInterval(async function() {
-    loadingCount ++
-    try {
-      await browser.findElement(By.css(`span[title='Loading data. Please wait.']`))
-      if (loadingCount == 10) {
-        await browser.get('https://egov.uscis.gov/')
-        loadingCount = 0
-      }
-    } catch (e) {
-      loadingCount = 0
-    }
-  }, 60000)
+  // setInterval(async function() {
+  //   loadingCount ++
+  //   try {
+  //     await browser.findElement(By.css(`span[title='Loading data. Please wait.']`))
+  //     if (loadingCount == 10) {
+  //       await browser.get('https://egov.uscis.gov/')
+  //       loadingCount = 0
+  //     }
+  //   } catch (e) {
+  //     loadingCount = 0
+  //   }
+  // }, 60000)
 
 }
 
