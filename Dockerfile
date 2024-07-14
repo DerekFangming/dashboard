@@ -12,6 +12,8 @@ RUN npm run build
 
 FROM node:22-alpine3.19
 
+RUN apk add --no-cache ffmpeg
+
 WORKDIR /app
 #COPY --from=builder /app/dist .
 COPY --from=builder /app/public ./public
