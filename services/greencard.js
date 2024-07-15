@@ -125,7 +125,7 @@ async function getStatus(production) {
       addAlert('greencardBulletin', 'info', 'Green card bulletin information released', HOUR_MS * 12)
 
       console.log("calling alex with data: " + JSON.stringify(data))
-      axios.get(`https://fmning.com/tools/api/notifications?message=Green card bulletin information released`).then( res => {})
+      axios.get(`https://tools.fmning.com/api/notifications?message=Green card bulletin information released`).then( res => {})
     }
     
   } catch (e) {
@@ -166,7 +166,7 @@ async function checkCaseStatus() {
           caseStatus = status
           
           let message = 'Green card case status updated: ' + caseStatus
-          axios.get('https://fmning.com/tools/api/notifications?message=' + encodeURI(message))
+          axios.get('https://tools.fmning.com/api/notifications?message=' + encodeURI(message))
           .then((res) => {})
           .catch((error) => {
             console.error(error)
