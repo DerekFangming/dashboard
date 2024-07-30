@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, TemplateRef, ViewChild, afterNextRender } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, Inject, OnInit } from '@angular/core'
 import { Chart, registerables } from 'chart.js'
 import { CommonModule, DOCUMENT } from '@angular/common'
 import 'chartjs-adapter-moment';
@@ -41,8 +41,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   mode = 'ipad'
   focusLiveStream = false
-
-  @ViewChild('errModal', { static: true}) errModal: TemplateRef<any> | undefined
 
   constructor(@Inject(DOCUMENT) private document: any, private elementRef:ElementRef, private notifierService: NotificationsService) {
     Chart.register(...registerables);

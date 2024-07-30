@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterOutlet } from '@angular/router'
 import { SimpleNotificationsModule } from 'angular2-notifications'
 
