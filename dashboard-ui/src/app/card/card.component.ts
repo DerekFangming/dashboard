@@ -1,16 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'
+import { Component, Input, OnInit } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { RouterOutlet } from '@angular/router'
 
 @Component({
   selector: 'app-card',
+  standalone: true,
+  imports: [RouterOutlet, FormsModule, CommonModule, CardComponent],
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+  styleUrl: './card.component.css'
 })
 export class CardComponent implements OnInit {
 
-  @Input() type: string
-  @Input() icon: string
+  @Input() type: string | undefined
+  @Input() icon: string | undefined
   @Input() data: any
-  @Input() phoneMode: boolean
+  @Input() phoneMode: boolean | undefined
 
   constructor() { }
 
@@ -41,12 +46,12 @@ export class CardComponent implements OnInit {
     return 'bg-green'
   }
 
-  parseLocalDate(date) {
+  parseLocalDate(date: any) {
     let d = new Date(date)
     return `${this.leadingZeros(d.getMonth() + 1)}/${this.leadingZeros(d.getDate())} - ${this.leadingZeros(d.getHours())}:${this.leadingZeros(d.getMinutes())}:${this.leadingZeros(d.getSeconds())}`
   }
 
-  leadingZeros(i) {
+  leadingZeros(i: any) {
     if (i < 10) return `0${i}`
     return `${i}`
   }
