@@ -248,7 +248,7 @@
       <div class="card" [ngClass]="a.level == 'info' ? 'bg-green' : a.level == 'warn' ? 'bg-yellow' : 'bg-red'">
         <div class="card-body py-2">
           <div class="text-center">
-            <p class="card-text mb-0 lead"><span class=" mr-2"><b>{{a.msg}}</b></span></p>
+            <p class="card-text mb-0 lead"><span class="me-2"><b>{{a.msg}}</b></span></p>
           </div>
         </div>
       </div>
@@ -259,9 +259,9 @@
 <div class="fixed-bottom">
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="reloadPage()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
-      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="restartLiveStream()"><i class="fa fa-lg fa-camera" aria-hidden="true"></i></button>
-      <button type="button" class="btn btn-outline-secondary pull-right me-2 mb-2" (click)="showInfo()"><i class="fa fa-lg fa-info px-2" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-outline-secondary float-end me-2 mb-2" (click)="reloadPage()"><i class="fa fa-lg fa-refresh" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-outline-secondary float-end me-2 mb-2" (click)="restartLiveStream()"><i class="fa fa-lg fa-camera" aria-hidden="true"></i></button>
+      <button type="button" class="btn btn-outline-secondary float-end me-2 mb-2" (click)="showInfo()"><i class="fa fa-lg fa-info px-2" aria-hidden="true"></i></button>
     </div>
   </div>
 </div>
