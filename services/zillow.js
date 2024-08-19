@@ -2,8 +2,7 @@ import axios from "axios"
 import { getDBClient } from './db.js'
 import { addAlert, HOUR_MS } from './alert.js'
 
-const apiKey = Buffer.from('MGZmZGVlY2Q0MDhkYzM2MGU5YTUyNjJiZjEzZDAzOTY=', 'base64').toString('ascii')
-
+var apiKey = ''
 var total = 0
 var cost = 0
 var notifyClientCopy
@@ -15,8 +14,19 @@ export function getZillowStatus() {
   }}
 }
 
-export function startZillow(notifyClients, production) {
+export async function startZillow(notifyClients, production) {
   notifyClientCopy = notifyClients
+
+  const dbClient = getDBClient(production)
+  try {
+    await dbClient.connect()
+    let result = await dbClient.query(`select value from configurations where key = $1`, ['ZILLOW_API_KEY'])
+    apiKey = result.rows[0].value
+  } catch (e) {
+    addAlert('zillow', 'error', 'Failed to load zillow API leu: ' + e.message, HOUR_MS * 2)
+  } finally {
+    await dbClient.end()
+  }
 
   getTotal(production)
   setInterval(function() {
@@ -34,7 +44,7 @@ async function getCost(production) {
   const dbClient = getDBClient(production)
   try {
     await dbClient.connect()
-    let result = await dbClient.query(`select value from configurations where key = $1`, ['ZILLOW_COST'])
+    let result = await dbClient.query(`select value from configurations where key = $1`, ['REAL_ESTATE'])
   
     let data = JSON.parse(result.rows[0].value)
     let totalBalance = 0
@@ -45,7 +55,7 @@ async function getCost(production) {
       while (months > 0) {
         months --
         let interest = (balance * entry.rate) / 12
-        let principal = entry.total - interest 
+        let principal = entry.monthly - interest 
         balance = balance - principal
       }
 

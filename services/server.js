@@ -26,31 +26,31 @@ export function startServerStatus(notifyClients, production) {
     getStatus(notifyClients, production)
   }, production ? 5000 : 30000)
 
-  if (production) {
-    const child = cp.spawn('nload', ['-k', 'eth0'], { shell: true })
-    child.stdout.on('data', (data) => {
+  // if (production) {
+  //   const child = cp.spawn('nload', ['-k', 'eth0'], { shell: true })
+  //   child.stdout.on('data', (data) => {
         
-      data =  data.toString()
-      if (data.includes('Incoming') && data.includes('Outgoing')) {
-          var myRegexp = new RegExp('Curr: (.*?\\/s)', 'g')
-          var matches = myRegexp.exec(data);
+  //     data =  data.toString()
+  //     if (data.includes('Incoming') && data.includes('Outgoing')) {
+  //         var myRegexp = new RegExp('Curr: (.*?\\/s)', 'g')
+  //         var matches = myRegexp.exec(data);
           
-          if (!matches || matches.length < 2) return
-          networkIn = kbToMb(matches[1])
+  //         if (!matches || matches.length < 2) return
+  //         networkIn = kbToMb(matches[1])
           
-          matches = myRegexp.exec(data)
-          if (matches && matches.length >= 2) networkOut = kbToMb(matches[1])
-      }
-    })
+  //         matches = myRegexp.exec(data)
+  //         if (matches && matches.length >= 2) networkOut = kbToMb(matches[1])
+  //     }
+  //   })
 
-    child.stderr.on('data', (data) => {
-      addAlert('server', 'error', 'Failed to load network status: ' + data, HOUR_MS * 2)
-    });
+  //   child.stderr.on('data', (data) => {
+  //     addAlert('server', 'error', 'Failed to load network status: ' + data, HOUR_MS * 2)
+  //   });
     
-    child.on('close', (code) => {
-      addAlert('serverClosed', 'error', 'Network process stopped with code ' + code, HOUR_MS * 5)
-    });
-  }
+  //   child.on('close', (code) => {
+  //     addAlert('serverClosed', 'error', 'Network process stopped with code ' + code, HOUR_MS * 5)
+  //   });
+  // }
 }
 
 function getStatus(notifyClients, production) {
