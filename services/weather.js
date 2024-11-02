@@ -18,7 +18,7 @@ export function startWeather(notifyClients, production) {
 }
 
 function updateWeather(notifyClients) {
-  axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=30.35&lon=-97.60&exclude=minutely,daily&appid=' + appId).then(function (response) {
+  axios.get('https://api.openweathermap.org/data/3.0/onecall?lat=30.35&lon=-97.60&exclude=minutely,daily&appid=' + appId).then(function (response) {
     weather = []
 
     let counter = 0
