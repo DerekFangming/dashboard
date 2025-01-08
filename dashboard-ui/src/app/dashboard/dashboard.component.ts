@@ -179,7 +179,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     if (this.greencardChart != null) this.greencardChart.destroy()
 
-    let barCanvasEle: any = document.getElementById('greencardChart')
+    let barCanvasEle: any = this.document.getElementById('greencardChart')
+    if (barCanvasEle == null) return // Fix server side rendering
     this.greencardChart = new Chart(barCanvasEle.getContext('2d'), {
       type: 'line',
       data: {
@@ -247,16 +248,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       label.push(`${hour % 12} ${hour >= 12 && hour < 24 ? 'PM' : 'AM'}`)
       temp.push(w.temp)
       wind.push(w.wind)
-      let img = new Image(30, 30)
+      let img = this.document.createElement("img")
+      img.height = 30
+      img.width = 30
       img.src = `https://openweathermap.org/img/wn/${w.icon}.png`
       icon.push(img)
     }
 
     if (this.weatherChart != null) this.weatherChart.destroy()
-    const img = new Image(30, 30);
-    img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStkCgp2U1hHVVtWcf_SD4tVyLqA49lhgygEed0PPPKOZxcevudk3NZ1trGyhpAAMIJysc&usqp=CAU';
+      let img = this.document.createElement("img")
+      img.height = 30
+      img.width = 30
+      img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStkCgp2U1hHVVtWcf_SD4tVyLqA49lhgygEed0PPPKOZxcevudk3NZ1trGyhpAAMIJysc&usqp=CAU';
 
-    let barCanvasEle: any = document.getElementById('weatherChart')
+    let barCanvasEle: any = this.document.getElementById('weatherChart')
+    if (barCanvasEle == null) return // Fix server side rendering
     this.weatherChart = new Chart(barCanvasEle.getContext('2d'), {
       type: 'line',
       data: {
