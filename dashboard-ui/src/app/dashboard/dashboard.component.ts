@@ -72,7 +72,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   connect() {
-    this.ws = new WebSocket(environment.socketAddress)
+    let wsHost = environment.socketAddress
+    if (this.document.location.hostname == 'localhost' || this.document.location.hostname.startsWith('10.0')) {
+      wsHost = `ws://${this.document.location.hostname}:9002`
+    }
+    console.log('Connecting to ' + wsHost)
+    this.ws = new WebSocket(wsHost)
     let that = this
 
     this.ws.onopen = function (event) {
