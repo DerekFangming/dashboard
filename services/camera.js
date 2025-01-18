@@ -6,7 +6,7 @@ import { addAlert, HOUR_MS } from './alert.js'
 var started = false
 var lastProgress = new Date()
 var recorder = null
-const rtspURL = `rtsp://synfm:camera@10.0.1.101/live`
+const rtspURL = `rtsp://admin:${process.env.DATABASE_PASSWORD}@10.0.1.101:554/h264Preview_01_main`
 const wsPort = 9999
 var stream
 var recordingPath = ''
@@ -15,14 +15,14 @@ export function startCamera(production) {
   recordingPath = production ? '/media/archive/Camera' : 'D:/Github/dashboard/videos'
   startLiveStream()
   
-  if (production) {
-    try {
-      startRecording()
-      startCleanupJob(production)
-    } catch (e) {
-      addAlert('camera', 'error', 'Failed to start camera: ' + e.message, HOUR_MS * 96)
-    }
-  }
+  // if (production) {
+  //   try {
+  //     startRecording()
+  //     startCleanupJob(production)
+  //   } catch (e) {
+  //     addAlert('camera', 'error', 'Failed to start camera: ' + e.message, HOUR_MS * 96)
+  //   }
+  // }
 
   // setInterval(function() {
   //   restartLiveStream()
