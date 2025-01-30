@@ -2,6 +2,9 @@ var alerts = new Map()
 var alertsUpdated = false
 
 const HOUR_MS = 3600000
+const TIMEZONE_OFFSET = -6 // CST
+const BOTH_COLLECTION_DAY = '2025/01/27'
+
 export { HOUR_MS }
 
 export function getAlerts() {
@@ -47,12 +50,17 @@ export function addAlert(alertKey, level, msg, timeout = 60000) {
 }
 
 function trashStatus() {
-  let bothMonday = new Date(1704434400000)
   let now = new Date()
-  now.setHours(now.getHours() - 6) // Simulates CST time
+  now.setHours(now.getHours() + TIMEZONE_OFFSET)
 
-  if (now.getUTCDay() == 3 && now.getUTCHours() > 12) {
-    const diff = Math.floor(Math.ceil(Math.abs(now - bothMonday) / 86400000) / 7)
+  let bothCollectionDay = new Date(BOTH_COLLECTION_DAY)
+  bothCollectionDay.setHours(bothCollectionDay.getHours() - 24)
+  let bothCollectionDayMs = bothCollectionDay.getTime()
+
+  bothCollectionDay.setHours(bothCollectionDay.getHours() + TIMEZONE_OFFSET)
+  let notifyDay = bothCollectionDay.getUTCDay()
+  if (now.getUTCDay() == notifyDay && now.getUTCHours() > 12) {
+    const diff = Math.floor(Math.ceil(Math.abs(now.getTime() - bothCollectionDayMs) / 86400000) / 7)
     let expiry = HOUR_MS * (24 - now.getUTCHours())
     if (diff % 2 == 0) {
       addAlert('trash', 'info', 'Both trash and recycle will be collected tomorrow', expiry)
