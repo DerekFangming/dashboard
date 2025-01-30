@@ -18,24 +18,9 @@ import { startCamera, restartLiveStream, restartTest } from './services/camera.j
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
-
-// var oldError = console.error
-// console.error = function (message) {
-//   oldError(`==>${message}<==`)
-//   if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
-//     oldError(`RTSP is dead. We should restart here`)
-//     restartTest()
-//   }
-// }
-
-// var oldWarn = console.warn
-// console.warn = function (message) {
-//   oldWarn(`-->${message}<--`)
-//   if (message.startsWith('rtsp') && message.includes('Connection timed out')) {
-//     oldWarn(`RTSP is dead. We should restart here`)
-//     restartTest()
-//   }
-// }
+import psList from 'ps-list'
+import os from 'os-utils'
+import * as cp from 'child_process'
 
 const app = express()
 app.use(bodyParser.json({limit: '100mb'}), cors())
@@ -113,8 +98,37 @@ app.post('/api/alexa', async (req, res) => {
 app.get('/test', async (req, res) => {
   // notifyClients({notification: "messages op: " + req.query.op})
 
-  console.error('rtsp://synfm:camera@10.0.1.101/live: Connection timed out')
+  console.log(await psList())
   res.status(200).json({})
+})
+
+app.get('/testProcesses', async (req, res) => {
+  res.status(200).json((await psList()).sort((a, b) => a.memory > b.memory ? -1 : 1))
+})
+
+app.get('/testMem', async (req, res) => {
+  res.status(200).json({
+    total: os.totalmem(),
+    free: os.freemem()
+  })
+})
+
+app.get('/testCmd/:cmd', async (req, res) => {
+  let cmd = req.params.cmd
+  try {
+    let result = cp.execSync(cmd).toString()
+
+    res.status(200).json({
+      cmd: cmd,
+      result: result
+    })
+  } catch (e) {
+    res.status(200).json({
+      cmd: cmd,
+      error: e.toString()
+    })
+  }
+  
 })
 
 app.post('/testJson', async (req, res) => {
