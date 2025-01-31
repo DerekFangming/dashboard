@@ -18,7 +18,7 @@ import { startCamera, restartLiveStream, restartTest } from './services/camera.j
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
-import psList from 'ps-list'
+import si from 'systeminformation'
 import os from 'os-utils'
 import * as cp from 'child_process'
 
@@ -97,13 +97,34 @@ app.post('/api/alexa', async (req, res) => {
 
 app.get('/test', async (req, res) => {
   // notifyClients({notification: "messages op: " + req.query.op})
-
-  console.log(await psList())
   res.status(200).json({})
 })
 
-app.get('/testProcesses', async (req, res) => {
-  res.status(200).json((await psList()).sort((a, b) => a.memory > b.memory ? -1 : 1))
+app.get('/internet', async (req, res) => {
+  let internet = await si.networkStats()
+  let txTotal = internet.reduce((total, i) => total + i.tx_sec, 0)
+  let rxTotal = internet.reduce((total, i) => total + i.rx_sec, 0)
+
+  res.status(200).json({
+    upload: `${(txTotal/1024).toFixed(2)} kb/s`,
+    download: `${(rxTotal/1024).toFixed(2)} kb/s`,
+    detail: internet
+  })
+})
+
+app.get('/processes', async (req, res) => {
+  let processes = await si.processes()
+  processes.list = processes.list.sort((a, b) => a.mem > b.mem ? -1 : 1)
+
+  res.status(200).json(processes)
+})
+
+app.get('/cpu', async (req, res) => {
+  res.status(200).json(await si.currentLoad())
+})
+
+app.get('/memory', async (req, res) => {
+  res.status(200).json(await si.mem())
 })
 
 app.get('/testMem', async (req, res) => {
