@@ -69,7 +69,7 @@ wss.on('connection', function connection(client) {
 startWeather(notifyClients, production)
 startServerStatus(notifyClients, production)
 startStock(notifyClients, production)
-startAlerts(notifyClients)
+startAlerts(notifyClients, production)
 startScholar(notifyClients)
 startCamera(production)
 startGreencard(notifyClients, production)

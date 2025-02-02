@@ -11,7 +11,7 @@ export function getAlerts() {
   return {alerts: Array.from(alerts.entries()).map(([k, v]) => v.alert)}
 }
 
-export function startAlerts(notifyClients) {
+export function startAlerts(notifyClients, production) {
 
   // Check every 5 seconds for all alerts
   setInterval(function() {
@@ -32,9 +32,9 @@ export function startAlerts(notifyClients) {
   }, 5000)
 
   // Check hourly for trash collection
-  trashStatus()
+  trashStatus(production)
   setInterval(function() {
-    trashStatus()
+    trashStatus(production)
   }, 3600000)
 }
 
@@ -49,8 +49,9 @@ export function addAlert(alertKey, level, msg, timeout = 60000) {
   })
 }
 
-function trashStatus() {
+function trashStatus(production) {
   let now = new Date()
+  if (production) now.setDate(now.getDate() - 1)// Hack due to server timezone
   now.setHours(now.getHours() + TIMEZONE_OFFSET)
 
   let bothCollectionDay = new Date(BOTH_COLLECTION_DAY)

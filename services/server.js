@@ -1,6 +1,3 @@
-
-import os from 'os-utils'
-import fs from 'fs'
 import si from 'systeminformation'
 
 var cpu = 0.0
@@ -37,22 +34,6 @@ async function getStatus(notifyClients, production) {
 
   networkOut = byteToReadableSpeed(txTotal)
   networkIn = byteToReadableSpeed(rxTotal)
-
-  // os.cpuUsage(function(v){
-  //   cpu = v * 100
-  //   cpu = Math.round(cpu * 100) / 100
-  // })
-
-  // var memUsed = 0.0
-  // var memTotal = os.totalmem()
-  // if (production) {
-  //   memUsed = Number(/Active:[ ]+(\d+)/.exec(fs.readFileSync('/proc/meminfo', 'utf8'))[1]) / 1000
-  // } else {
-  //   memUsed = memTotal - os.freemem()
-  // }
-
-  // mem = memUsed / memTotal * 100
-  // mem = Math.round(mem * 100) / 100
 
   notifyClients(getServerStatus())
 }

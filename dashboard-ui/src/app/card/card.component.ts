@@ -25,7 +25,9 @@ export class CardComponent implements OnInit {
   getBackground() {
     if (this.type == 'server') {
       if (this.data == null) return 'bg-red'
-      if (parseInt(this.data.cpu) > 50 || parseInt(this.data.mem) > 50 || this.data.networkIn.includes('Mb') || this.data.networkOut.includes('Mb')) return 'bg-yellow'
+      if (parseInt(this.data.cpu) > 50 || parseInt(this.data.mem) > 50 || 
+        (this.data.networkIn.includes('Mb') && parseInt(this.data.networkIn) > 5) ||
+        (this.data.networkOut.includes('Mb') && parseInt(this.data.networkOut) > 5)) return 'bg-yellow'
       return 'bg-green'
     } else if (this.type == 'stock') {
       if (this.data == null) return 'bg-green'
