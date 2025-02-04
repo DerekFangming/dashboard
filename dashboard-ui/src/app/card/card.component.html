@@ -12,16 +12,16 @@
               <p class="lead mb-0">MEM:</p>
             </div>
             <div class="col-3 pe-0">
-              <p class="lead mb-0">{{data.cpu}} %</p>
-              <p class="lead mb-0">{{data.mem}} %</p>
+              <p class="lead mb-0">{{data.cpu.toFixed(2)}} %</p>
+              <p class="lead mb-0">{{data.mem.toFixed(2)}} %</p>
             </div>
             <div class="col-2">
               <p class="lead mb-0">In:</p>
               <p class="lead mb-0">Out:</p>
             </div>
             <div class="col-5 px-0">
-              <p class="lead mb-0">{{data.networkIn}} </p>
-              <p class="lead mb-0">{{data.networkOut}} </p>
+              <p class="lead mb-0">{{byteToReadableSpeed(data.download)}} </p>
+              <p class="lead mb-0">{{byteToReadableSpeed(data.upload)}} </p>
             </div>
           </div>
           <p *ngIf="!data" class="lead mb-0">Disconnected</p>

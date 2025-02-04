@@ -2,15 +2,15 @@ import si from 'systeminformation'
 
 var cpu = 0.0
 var mem = 0.0
-var networkIn = '0.00 b/s'
-var networkOut = '0.00 b/s'
+var download = 0
+var upload = 0
 
 export function getServerStatus() {
   return { server: {
       cpu: cpu,
       mem: mem,
-      networkIn: networkIn,
-      networkOut: networkOut
+      download: download,
+      upload: upload
     }
   }
 }
@@ -23,33 +23,14 @@ export function startServerStatus(notifyClients, production) {
 }
 
 async function getStatus(notifyClients, production) {
-  cpu = (await si.currentLoad()).currentLoad.toFixed(2)
+  cpu = (await si.currentLoad()).currentLoad
 
   let memory = await si.mem()
-  mem = (100 - (memory.available / memory.total * 100)).toFixed(2)
+  mem = (100 - (memory.available / memory.total * 100))
 
   let networkStats = await si.networkStats()
-  let txTotal = networkStats.reduce((total, i) => total + i.tx_sec, 0)
-  let rxTotal = networkStats.reduce((total, i) => total + i.rx_sec, 0)
-
-  networkOut = byteToReadableSpeed(txTotal)
-  networkIn = byteToReadableSpeed(rxTotal)
+  upload = networkStats.reduce((total, i) => total + i.tx_sec, 0)
+  download = networkStats.reduce((total, i) => total + i.rx_sec, 0)
 
   notifyClients(getServerStatus())
 }
-
-function byteToReadableSpeed(b) {
-  if (b < 1000) {
-    return `${b.toFixed(2)} b/s`
-  }
-
-  b = b / 1024
-  if (b < 1000) {
-    return `${b.toFixed(2)} Kb/s`
-  }
-
-  b = b / 1024
-  return `${b.toFixed(2)} Mb/s`
-}
-  
-

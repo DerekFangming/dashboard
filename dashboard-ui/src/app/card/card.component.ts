@@ -17,6 +17,8 @@ export class CardComponent implements OnInit {
   @Input() data: any
   @Input() phoneMode: boolean | undefined
 
+  networkWarnLimit = 5 * 1024 * 1024
+
   constructor() { }
 
   ngOnInit(): void {
@@ -25,9 +27,7 @@ export class CardComponent implements OnInit {
   getBackground() {
     if (this.type == 'server') {
       if (this.data == null) return 'bg-red'
-      if (parseInt(this.data.cpu) > 50 || parseInt(this.data.mem) > 50 || 
-        (this.data.networkIn.includes('Mb') && parseInt(this.data.networkIn) > 5) ||
-        (this.data.networkOut.includes('Mb') && parseInt(this.data.networkOut) > 5)) return 'bg-yellow'
+      if (this.data.cpu > 50 || this.data.mem > 50 || this.data.upload > this.networkWarnLimit || this.data.download > this.networkWarnLimit) return 'bg-yellow'
       return 'bg-green'
     } else if (this.type == 'stock') {
       if (this.data == null) return 'bg-green'
@@ -59,5 +59,21 @@ export class CardComponent implements OnInit {
     if (i < 10) return `0${i}`
     return `${i}`
   }
+
+
+  byteToReadableSpeed(b: number) {
+    if (b < 1000) {
+      return `${b.toFixed(2)} b/s`
+    }
+  
+    b = b / 1024
+    if (b < 1000) {
+      return `${b.toFixed(2)} Kb/s`
+    }
+  
+    b = b / 1024
+    return `${b.toFixed(2)} Mb/s`
+  }
+    
 
 }
