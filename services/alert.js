@@ -3,7 +3,7 @@ var alertsUpdated = false
 
 const HOUR_MS = 3600000
 const TIMEZONE_OFFSET = -6 // CST
-const BOTH_COLLECTION_DAY = '2025/01/27'
+const BOTH_COLLECTION_DAY = '2025-01-27T06:00:00.000Z'
 
 export { HOUR_MS }
 
@@ -51,7 +51,6 @@ export function addAlert(alertKey, level, msg, timeout = 60000) {
 
 function trashStatus(production) {
   let now = new Date()
-  if (production) now.setDate(now.getDate() - 1)// Hack due to server timezone
   now.setHours(now.getHours() + TIMEZONE_OFFSET)
 
   let bothCollectionDay = new Date(BOTH_COLLECTION_DAY)
@@ -60,7 +59,7 @@ function trashStatus(production) {
 
   bothCollectionDay.setHours(bothCollectionDay.getHours() + TIMEZONE_OFFSET)
   let notifyDay = bothCollectionDay.getUTCDay()
-  if (now.getUTCDay() == notifyDay && now.getUTCHours() > 12) {
+  if (now.getUTCDay() == notifyDay && now.getUTCHours() >= 10) {
     const diff = Math.floor(Math.ceil(Math.abs(now.getTime() - bothCollectionDayMs) / 86400000) / 7)
     let expiry = HOUR_MS * (24 - now.getUTCHours())
     if (diff % 2 == 0) {
