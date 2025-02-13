@@ -5,14 +5,14 @@ const token = Buffer.from('YzhqMXFhMmFkM2lmZzh0YzczZTA=', 'base64').toString('as
 
 var voo = {c: 0.0, d: 0.0, dp: 0.0}
 var btc = {c: 0.0, d: 0.0, dp: 0.0}
-var eth = {c: 0.0, d: 0.0, dp: 0.0}
+var sail = {c: 0.0, d: 0.0, dp: 0.0}
 var intel = {c: 0.0, d: 0.0, dp: 0.0}
 
 export function getStock() {
   return {stock: {
     voo: voo,
     btc: btc,
-    eth: eth,
+    sail: sail,
     intel: intel,
   }}
 }
@@ -49,13 +49,13 @@ function updateStock() {
     addAlert('stock', 'error', 'Failed to load BTC: ' + e.message, HOUR_MS * 1)
   })
   
-  axios.get('https://finnhub.io/api/v1/quote?symbol=ETH-USD&token=' + token).then(function (response) {
+  axios.get('https://finnhub.io/api/v1/quote?symbol=SAIL&token=' + token).then(function (response) {
     if (invalidResponse(response)) return
-    eth.c = response.data.c.toFixed(2)
-    eth.d = response.data.d.toFixed(2)
-    eth.dp = response.data.dp.toFixed(2)
+    sail.c = response.data.c.toFixed(2)
+    sail.d = response.data.d.toFixed(2)
+    sail.dp = response.data.dp.toFixed(2)
   }).catch (function(e){
-    addAlert('stock', 'error', 'Failed to load ETH: ' + e.message, HOUR_MS * 1)
+    addAlert('stock', 'error', 'Failed to load SAIL: ' + e.message, HOUR_MS * 1)
   })
   
   axios.get('https://finnhub.io/api/v1/quote?symbol=INTC&token=' + token).then(function (response) {
