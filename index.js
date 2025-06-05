@@ -64,6 +64,7 @@ wss.on('connection', function connection(client) {
 // startHelium(notifyClients, production)
 // startSmartthings(notifyClients, production)
 // startMyq(notifyClients, production)
+// startZillow(notifyClients, production)
 
 // =============== Active services ===============
 startWeather(notifyClients, production)
@@ -73,7 +74,6 @@ startAlerts(notifyClients, production)
 startScholar(notifyClients)
 startCamera(production)
 startGreencard(notifyClients, production)
-startZillow(notifyClients, production)
 startAlexa(notifyClients)
 
 
