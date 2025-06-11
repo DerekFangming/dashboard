@@ -18,6 +18,7 @@ import { startCamera, restartLiveStream, restartTest } from './services/camera.j
 import { startGreencard, getGreencardStatus } from './services/greencard.js'
 import { startZillow, getZillowStatus } from './services/zillow.js'
 import { getAlexaStatus, startAlexa, setAlexaCode } from './services/alexa.js'
+import { starInstockMonitor } from './services/instock-monitor.js'
 import si from 'systeminformation'
 import os from 'os-utils'
 import * as cp from 'child_process'
@@ -65,16 +66,21 @@ wss.on('connection', function connection(client) {
 // startSmartthings(notifyClients, production)
 // startMyq(notifyClients, production)
 // startZillow(notifyClients, production)
-
-// =============== Active services ===============
+// startCamera(production)
 // startWeather(notifyClients, production)
 // startServerStatus(notifyClients, production)
 // startStock(notifyClients, production)
-startAlerts(notifyClients, production)
-startScholar(notifyClients)
-// startCamera(production)
-startGreencard(notifyClients, production)
 // startAlexa(notifyClients)
+
+// =============== Active services ===============
+startAlerts(notifyClients, production)
+// startScholar(notifyClients)
+// startGreencard(notifyClients, production)
+
+// local
+if (!production) {
+  starInstockMonitor(notifyClients)
+}
 
 
 function notifyClients(msg) {
