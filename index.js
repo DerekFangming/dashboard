@@ -67,14 +67,14 @@ wss.on('connection', function connection(client) {
 // startZillow(notifyClients, production)
 
 // =============== Active services ===============
-startWeather(notifyClients, production)
-startServerStatus(notifyClients, production)
-startStock(notifyClients, production)
+// startWeather(notifyClients, production)
+// startServerStatus(notifyClients, production)
+// startStock(notifyClients, production)
 startAlerts(notifyClients, production)
 startScholar(notifyClients)
-startCamera(production)
+// startCamera(production)
 startGreencard(notifyClients, production)
-startAlexa(notifyClients)
+// startAlexa(notifyClients)
 
 
 function notifyClients(msg) {
