@@ -70,12 +70,12 @@ wss.on('connection', function connection(client) {
 // startWeather(notifyClients, production)
 // startServerStatus(notifyClients, production)
 // startStock(notifyClients, production)
-// startAlexa(notifyClients)
 
 // =============== Active services ===============
 startAlerts(notifyClients, production)
-// startScholar(notifyClients)
-// startGreencard(notifyClients, production)
+startAlexa(notifyClients)
+startScholar(notifyClients)
+startGreencard(notifyClients, production)
 
 // local
 if (!production) {

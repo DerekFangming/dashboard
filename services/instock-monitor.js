@@ -5,15 +5,15 @@ import { load } from 'cheerio'
 
 export async function starInstockMonitor(notifyClients) {
 
-    setInterval(async function() {
-        let res = await checker.availability('027', '00588161')
-        console.log(new Date() + ' - Checking ikea stock, result: ' + JSON.stringify(res))
+    // setInterval(async function() {
+    //     let res = await checker.availability('027', '00588161')
+    //     console.log(new Date() + ' - Checking ikea stock, result: ' + JSON.stringify(res))
     
-        if (res.stock > 0) {
-            console.log(new Date() + ' - Ikea INSTOCK: ' + res.stock)
-            axios.get(`https://tools.fmning.com/api/notifications?message=Ikea closet is in stock`).then( res => {})
-        }
-    }, 900000)// 15 minutes
+    //     if (res.stock > 0) {
+    //         console.log(new Date() + ' - Ikea INSTOCK: ' + res.stock)
+    //         axios.get(`https://tools.fmning.com/api/notifications?message=Ikea closet is in stock`).then( res => {})
+    //     }
+    // }, 900000)// 15 minutes
 
 
     setInterval(async function() {
