@@ -60,15 +60,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (typeof window !== "undefined") {
-      let isPublic = window.location.href.includes('fmning')
-      let cameraStreamUrl = isPublic ? 'wss://dashboard.fmning.com/camera' : environment.production ? 'ws://10.0.1.100:9999' : 'ws://10.0.1.50:9999'
+    // if (typeof window !== "undefined") {
+    //   let isPublic = window.location.href.includes('fmning')
+    //   let cameraStreamUrl = isPublic ? 'wss://dashboard.fmning.com/camera' : environment.production ? 'ws://10.0.1.100:9999' : 'ws://10.0.1.50:9999'
       
-      const s = this.document.createElement('script')
-      s.type = 'text/javascript'
-      s.innerHTML = `player = new JSMpeg.Player('${cameraStreamUrl}', { canvas: document.getElementById('camera')})`
-      this.elementRef.nativeElement.appendChild(s)
-    }
+    //   const s = this.document.createElement('script')
+    //   s.type = 'text/javascript'
+    //   s.innerHTML = `player = new JSMpeg.Player('${cameraStreamUrl}', { canvas: document.getElementById('camera')})`
+    //   this.elementRef.nativeElement.appendChild(s)
+    // }
   }
 
   connect() {

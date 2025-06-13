@@ -1,41 +1,35 @@
-var garage
-var door
-var unknown
+import axios from "axios"
+import { getDBClient } from './db.js'
+
+var url
 var notifyClientCopy
 
 export function getAlexaStatus() {
-  return {...garage, ...door, ...unknown}
+  return {}
 }
 
-export function startAlexa(notifyClients) {
+export async function startAlexa(notifyClients, production) {
   notifyClientCopy = notifyClients
+  
+  const dbClient = getDBClient(production)
+  try {
+    await dbClient.connect()
+    let result = await dbClient.query(`select value from configurations where key = $1`, ['TEMPERATURE_WEBHOOK_URL'])
+    url = result.rows[0].value
+  } catch (e) {
+    addAlert('zillow', 'error', 'Failed to load zillow API leu: ' + e.message, HOUR_MS * 2)
+  } finally {
+    await dbClient.end()
+  }
 }
 
 export function setAlexaCode(code) {
-  switch(code) {
-    case 0:
-      door = {door: 'locked'}
-      notifyClientCopy(door)
-      break
-    case 1:
-      door = {door: 'unlocked'}
-      notifyClientCopy(door)
-      break
-    case 2:
-      door = {door: 'jammed'}
-      notifyClientCopy(door)
-      break
-    case 3:
-      garage = {garage: 'closed'}
-      notifyClientCopy(garage)
-      break
-    case 4:
-      garage = {garage: 'open'}
-      notifyClientCopy(garage)
-      break
-    default:
-      unknown = {alexaUnknown: code}
-      notifyClientCopy(unknown)
-      break
+  notifyClientCopy({
+    receivedCode: code
+  })
+
+  if (code >= 70 && code <= 80) {
+    axios.post(url, {temperature: code})
   }
+
 }

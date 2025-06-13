@@ -73,7 +73,7 @@ wss.on('connection', function connection(client) {
 
 // =============== Active services ===============
 startAlerts(notifyClients, production)
-startAlexa(notifyClients)
+startAlexa(notifyClients, production)
 startScholar(notifyClients)
 startGreencard(notifyClients, production)
 
